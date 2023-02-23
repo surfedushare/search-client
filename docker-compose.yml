@@ -1,31 +1,7 @@
-version: '3.1'
+version: '3.4'
 
 
 services:
-
-  postgres:
-    image: postgres:12
-    volumes:
-      - postgres_database:/var/lib/postgresql/data
-      - ./postgres/conf/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=edushare
-    healthcheck:
-        test: psql -U postgres edushare -c "SELECT 'DBD::Pg ping test'"
-    labels:
-      nl.surfcatalog.db: "postgres"
-    ports:
-      - "127.0.0.1:5432:5432"
-
-  adminer:
-    image: adminer
-    depends_on:
-      - postgres
-    ports:
-      - "127.0.0.1:6543:8080"
 
   opensearch:
     image: opensearchproject/opensearch:1.2.0
@@ -34,22 +10,7 @@ services:
       - ./opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml
       - ./opensearch/config/decompound_word_list.nl.txt:/usr/share/opensearch/config/decompound_word_list.nl.txt
     ports:
-      - 127.0.0.1:9200:9200
-
-  redis:
-    image: redis
-    command: redis-server
-    ports:
-      - "6379:6379"
-
-  tika:
-    image: 017973353230.dkr.ecr.eu-central-1.amazonaws.com/harvester-tika:latest
-    volumes:
-      - ./tika/tika-config.xml:/config/tika-config.xml
-      - ./tika/tika-extras:/tika-extras
-    ports:
-      - "9998:9998"
+      - "127.0.0.1:9200:9200"
 
 volumes:
-  postgres_database:
   opensearch-data:
