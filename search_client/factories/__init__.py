@@ -1,0 +1,1 @@
+from search_client.factories.learning_material import generate_nl_material

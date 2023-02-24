@@ -1,0 +1,4 @@
+open_search:
+  url: "http://localhost:9200"
+  alias_prefix: "test"
+  protocol: "http"

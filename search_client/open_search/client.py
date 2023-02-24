@@ -1,30 +1,26 @@
 from collections import defaultdict
 
-from django.conf import settings
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
-from project.configuration import SEARCH_FIELDS
-from surf.vendor.search.serializers import SearchResultSerializer
+from search_client.constants import DocumentTypes, SEARCH_FIELDS
+from search_client.serializers import LearningMaterialResultSerializer, ResearchProductResultSerializer
 
 
 class SearchApiClient:
 
-    def __init__(self, host=settings.OPENSEARCH_HOST):
+    def __init__(self, protocol: str, host: str, document_type: DocumentTypes, alias_prefix: str,
+                 verify_certs: bool = True, basic_auth: tuple[str, str] = None):
 
-        protocol = settings.OPENSEARCH_PROTOCOL
+        protocol = protocol
         protocol_config = {}
         if protocol == "https":
             protocol_config = {
                 "scheme": "https",
                 "port": 443,
                 "use_ssl": True,
-                "verify_certs": settings.OPENSEARCH_VERIFY_CERTS,
+                "verify_certs": verify_certs,
             }
-
-        if settings.IS_AWS:
-            http_auth = ("supersurf", settings.OPENSEARCH_PASSWORD)
-        else:
-            http_auth = (None, None)
+        http_auth = basic_auth or (None, None,)
 
         self.client = OpenSearch(
             [host],
@@ -32,16 +28,17 @@ class SearchApiClient:
             connection_class=RequestsHttpConnection,
             **protocol_config
         )
-        self.index_nl = settings.OPENSEARCH_NL_INDEX
-        self.index_en = settings.OPENSEARCH_EN_INDEX
-        self.index_unk = settings.OPENSEARCH_UNK_INDEX
+        self.document_type = document_type
+        self.alias_prefix = alias_prefix
+        self.index_nl = f"{alias_prefix}-nl"
+        self.index_en = f"{alias_prefix}-en"
+        self.index_unk = f"{alias_prefix}-unk"
         self.languages = {
             "nl": self.index_nl,
             "en": self.index_en
         }
 
-    @staticmethod
-    def parse_search_result(search_result):
+    def parse_search_result(self, search_result):
         """
         Parses the search result into the correct format that the frontend uses
 
@@ -75,13 +72,21 @@ class SearchApiClient:
 
         # Transform hits into records
         result['records'] = [
-            SearchApiClient.parse_search_hit(hit)
+            self.parse_search_hit(hit)
             for hit in hits['hits']
         ]
         return result
 
-    @staticmethod
-    def parse_search_hit(hit, transform=True):
+    def get_result_serializer(self):
+        match self.document_type:
+            case DocumentTypes.LEARNING_MATERIAL:
+                return LearningMaterialResultSerializer()
+            case DocumentTypes.RESEARCH_PRODUCT:
+                return ResearchProductResultSerializer()
+            case _:
+                raise TypeError(f"Unknown document type for result serialization: {self.document_type}")
+
+    def parse_search_hit(self, hit, transform=True):
         """
         Parses the search hit into the format that is also used by the edurep endpoint.
         It's mostly just mapping the variables we need into the places that we expect them to be.
@@ -89,7 +94,7 @@ class SearchApiClient:
         :return record: parsed record
         """
         data = hit["_source"]
-        serializer = SearchResultSerializer()
+        serializer = self.get_result_serializer()
         # Basic mapping between field and data (excluding any method fields with a source of "*")
         field_mapping = {
             field.source: field_name if transform else field.source
@@ -205,7 +210,7 @@ class SearchApiClient:
         if search_text:
             query_string = {
                 "simple_query_string": {
-                    "fields": SEARCH_FIELDS,
+                    "fields": SEARCH_FIELDS[self.document_type],
                     "query": search_text,
                     "default_operator": "and"
                 }
@@ -234,7 +239,7 @@ class SearchApiClient:
                 }
             }
 
-        indices = self.parse_index_language(self, filters)
+        indices = self.parse_index_language(filters)
 
         if drilldown_names:
             body["aggs"] = self.parse_aggregations(drilldown_names, filters)
@@ -329,7 +334,7 @@ class SearchApiClient:
         result = dict()
         result["records_total"] = hits["total"]["value"]
         result["results"] = [
-            SearchApiClient.parse_search_hit(hit, transform=False)
+            self.parse_search_hit(hit, transform=False)
             for hit in hits["hits"]
         ]
         return result
@@ -340,7 +345,7 @@ class SearchApiClient:
                 "bool": {
                     "must": {
                         "multi_match": {
-                            "fields": [field for field in SEARCH_FIELDS if "authors" not in field],
+                            "fields": [field for field in SEARCH_FIELDS[self.document_type] if "authors" not in field],
                             "query": author_name,
                         },
                     },
@@ -358,7 +363,7 @@ class SearchApiClient:
         result = dict()
         result["records_total"] = hits["total"]["value"]
         result["results"] = [
-            SearchApiClient.parse_search_hit(hit, transform=False)
+            self.parse_search_hit(hit, transform=False)
             for hit in hits["hits"]
         ]
         return result
@@ -459,7 +464,6 @@ class SearchApiClient:
         search_type = ordering
         return {search_type: {"order": order}}
 
-    @staticmethod
     def parse_index_language(self, filters):
         """
         Select the index to search on based on language.
@@ -471,5 +475,5 @@ class SearchApiClient:
         language_item = [filter_item for filter_item in filters if filter_item['external_id'] == 'language.keyword']
         if not language_item:
             return indices
-        language_indices = [f"{settings.SITE_SLUG}-{language}" for language in language_item[0]['items']]
+        language_indices = [f"{self.alias_prefix}-{language}" for language in language_item[0]['items']]
         return language_indices if len(language_indices) else indices

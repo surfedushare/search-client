@@ -1,41 +1,25 @@
-import os
-import boto3
-from botocore.exceptions import ClientError
-from urllib.parse import urlparse
-
-from django.conf import settings
 from rest_framework import serializers
 
-from project.serializers import PersonSerializer, OrganisationSerializer, LabelSerializer, ProjectSerializer
+
+class PersonSerializer(serializers.Serializer):
+
+    name = serializers.CharField()
+    email = serializers.CharField(required=False, allow_null=True)
 
 
-PREVIEW_SMALL = "preview-200x150.png"
-PREVIEW_ORIGINAL = "preview.png"
-s3_client = boto3.client("s3")
+class OrganisationSerializer(serializers.Serializer):
+
+    name = serializers.CharField()
 
 
-def get_preview_absolute_uri(url, duration=7200):
-    """
-    Generate a presigned URL to share the S3 object where this resource is stored.
-    If the application is not connected to S3 it simply returns a local path.
-    """
-    if url is None:
-        return None
+class ProjectSerializer(serializers.Serializer):
 
-    if settings.AWS_HARVESTER_BUCKET_NAME is None:
-        if "s3.amazonaws.com" not in url:
-            return url
-        return "http://localhost:8000/" + os.path.join("media", "harvester", urlparse(url).path.strip("/"))
+    name = serializers.CharField()
 
-    # Generate a presigned URL for the S3 object
-    lookup_params = {
-        "Bucket": settings.AWS_HARVESTER_BUCKET_NAME,
-        "Key": urlparse(url).path.strip("/")
-    }
-    try:
-        return s3_client.generate_presigned_url("get_object", Params=lookup_params, ExpiresIn=duration)
-    except ClientError:
-        return None
+
+class LabelSerializer(serializers.Serializer):
+
+    label = serializers.CharField()
 
 
 class BaseSearchResultSerializer(serializers.Serializer):
@@ -51,7 +35,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
     harvest_source = serializers.CharField()
 
 
-class EdusourcesSearchResultSerializer(BaseSearchResultSerializer):
+class LearningMaterialResultSerializer(BaseSearchResultSerializer):
 
     files = serializers.ListField(
         child=serializers.ListField(
@@ -72,19 +56,12 @@ class EdusourcesSearchResultSerializer(BaseSearchResultSerializer):
     is_part_of = serializers.ListField(child=serializers.CharField())
     consortium = serializers.CharField(allow_blank=True, allow_null=True)
 
-    previews = serializers.SerializerMethodField()
+    previews = serializers.DictField()
 
     view_count = serializers.IntegerField()
     applaud_count = serializers.IntegerField()
     avg_star_rating = serializers.IntegerField()
     count_star_rating = serializers.IntegerField()
-
-    def get_previews(self, obj):
-        previews = obj.get("previews", {})
-        return {
-            image_key: get_preview_absolute_uri(url)
-            for image_key, url in previews.items()
-        }
 
 
 class RelationSerializer(serializers.Serializer):
@@ -98,17 +75,10 @@ class RelationSerializer(serializers.Serializer):
     parents = serializers.ListField(child=serializers.CharField())
 
 
-class NPPOSearchResultSerializer(BaseSearchResultSerializer):
+class ResearchProductResultSerializer(BaseSearchResultSerializer):
 
     type = serializers.CharField(source="technical_type")
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
     research_object_type = serializers.CharField()
     extension = serializers.DictField()
     relations = RelationSerializer()
-
-
-SearchResultSerializer = None
-if settings.PROJECT == "edusources":
-    SearchResultSerializer = EdusourcesSearchResultSerializer
-elif settings.PROJECT == "nppo":
-    SearchResultSerializer = NPPOSearchResultSerializer
