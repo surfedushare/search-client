@@ -4,12 +4,15 @@ from opensearchpy import OpenSearch
 
 from configuration import create_configuration
 
+from search_client import SearchClient
 from search_client.constants import DocumentTypes, LANGUAGES
 from search_client.open_search.configuration import create_open_search_index_configuration
 
 
 class BaseOpenSearchTestCase(TestCase):
 
+    instance = None
+    document_type = None
     search = None
     config = None
 
@@ -35,6 +38,12 @@ class BaseOpenSearchTestCase(TestCase):
                 ignore=400,
                 body=cls.index_body('nl')
             )
+        cls.instance = SearchClient(
+            cls.config.open_search.protocol,
+            cls.config.open_search.url,
+            cls.document_type,
+            cls.config.open_search.alias_prefix
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -42,4 +51,6 @@ class BaseOpenSearchTestCase(TestCase):
             cls.search.indices.delete(
                 cls.get_alias(language)
             )
+        cls.search.close()
+        cls.instance.client.close()
         super().tearDownClass()

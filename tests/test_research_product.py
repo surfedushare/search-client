@@ -1,75 +1,47 @@
-from unittest.mock import patch
 from dateutil.parser import parse
 from datetime import datetime
 
-# from project.configuration import create_open_search_index_configuration
-
 from tests.base import BaseOpenSearchTestCase
 from search_client import SearchClient, DocumentTypes
-from search_client.factories import generate_nl_material
-from search_client.serializers import LearningMaterialResultSerializer, ResearchProductResultSerializer
+from search_client.factories import generate_nl_product
 
 
-class TestSearchClient(BaseOpenSearchTestCase):
+class TestResearchProductSearchClient(BaseOpenSearchTestCase):
+
+    document_type = DocumentTypes.RESEARCH_PRODUCT
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
-        math_and_education_studies = [
-            "7afbb7a6-c29b-425c-9c59-6f79c845f5f0",  # math
-            "0861c43d-1874-4788-b522-df8be575677f"  # onderwijskunde
-        ]
-        biology_studies = [
-            "2b363227-8633-4652-ad57-c61f1efc02c8"
-        ]
-        biology_and_education_studies = biology_studies + [
-            "0861c43d-1874-4788-b522-df8be575677f"
-        ]
-
-        cls.instance = SearchClient(
-            cls.config.open_search.protocol,
-            cls.config.open_search.url,
-            DocumentTypes.LEARNING_MATERIAL,
-            cls.config.open_search.alias_prefix
-        )
         cls.search.index(
             index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      studies=math_and_education_studies),
+            body=generate_nl_product(source="surfsharekit")
         )
         cls.search.index(
             id="abc",
             index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      studies=math_and_education_studies, external_id="abc",
-                                      title="De wiskunde van Pythagoras", description="Groots zijn zijn getallen")
+            body=generate_nl_product(source="surfsharekit", external_id="abc",
+                                     title="De wiskunde van Pythagoras", description="Groots is zijn onderzoek")
         )
         cls.search.index(
             index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      copyright="cc-by-40", topic="biology", publisher_date="2018-04-16T22:35:09+02:00",
-                                      studies=biology_and_education_studies),
+            body=generate_nl_product(source="surfsharekit", copyright="cc-by-40", topic="biology",
+                                     publisher_date="2018-04-16T22:35:09+02:00"),
         )
         cls.search.index(
             index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      topic="biology", publisher_date="2019-04-16T22:35:09+02:00",
-                                      studies=biology_and_education_studies),
+            body=generate_nl_product(source="surfsharekit", topic="biology",
+                                     publisher_date="2019-04-16T22:35:09+02:00"),
         )
         cls.search.index(
             index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], technical_type="video", source="surfsharekit",
-                                      topic="biology", studies=biology_studies),
+            body=generate_nl_product(technical_type="video", source="surfsharekit", topic="biology"),
             refresh=True  # always put refresh on the last material
         )
 
     def get_value_from_record(self, record, key):
-        if settings.PROJECT == "edusources" and key != "published_at":
-            value = record[key]
-        elif settings.PROJECT == "edusources" and key == "published_at":
-            value = parse(record[key], ignoretz=True)
-        elif key == "authors":
+        if key == "authors":
             value = record["relations"]["authors"]
         elif key == "publishers":
             value = record["relations"]["parties"]
@@ -80,14 +52,12 @@ class TestSearchClient(BaseOpenSearchTestCase):
         elif key == "published_at":
             value = parse(record["published_at"], ignoretz=True)
         else:
-            raise ValueError(f"No translation for key '{key}' in NPPO project")
+            raise ValueError(f"No translation for key '{key}'")
         return value
 
     def assert_value_from_record(self, record, key, expectation, assertion=None, message=None):
         assertion = assertion or self.assertEqual
-        if settings.PROJECT == "edusources":
-            pass
-        elif key == "publishers":
+        if key == "publishers":
             expectation = [
                 {"name": name}
                 for name in expectation
@@ -104,8 +74,7 @@ class TestSearchClient(BaseOpenSearchTestCase):
 
     def test_basic_search(self):
         search_result = self.instance.search('')
-        search_result_filter = self.instance.search(
-            '', filters=[{"external_id": "technical_type", "items": ["video"]}])
+        search_result_filter = self.instance.search('', filters=[{"external_id": "technical_type", "items": ["video"]}])
         # did we get _anything_ from search?
         self.assertIsNotNone(search_result)
         self.assertIsNotNone(search_result_filter)
@@ -229,43 +198,6 @@ class TestSearchClient(BaseOpenSearchTestCase):
         search_biologie = self.instance.search("biologie")
         self.assertEqual(search_biologie_none_date, search_biologie)
 
-    # @skipIf(settings.PROJECT == "nppo", "studies not supported by NPPO")
-    # def test_search_studies(self):
-    #     search_result = self.instance.search('')
-    #     search_result_filter_1 = self.instance.search(
-    #         '',
-    #         filters=[{
-    #             "external_id": "studies",
-    #             "items": ['0861c43d-1874-4788-b522-df8be575677f']
-    #         }]
-    #     )
-    #     search_result_filter_2 = self.instance.search(
-    #         '',
-    #         filters=[{
-    #             "external_id": "studies",
-    #             "items": ['2b363227-8633-4652-ad57-c61f1efc02c8']
-    #         }]
-    #     )
-    #     search_result_filter_3 = self.instance.search(
-    #         '',
-    #         filters=[{
-    #             "external_id": "studies",
-    #             "items": ['0861c43d-1874-4788-b522-df8be575677f', '2b363227-8633-4652-ad57-c61f1efc02c8']
-    #         }]
-    #     )
-    #     self.assertNotEqual(search_result, search_result_filter_1)
-    #     self.assertNotEqual(search_result, search_result_filter_2)
-    #     self.assertNotEqual(search_result_filter_1, search_result_filter_2)
-    #     self.assertGreater(search_result['recordcount'], 0)
-    #     self.assertGreater(search_result_filter_1['recordcount'], 0)
-    #     self.assertGreater(search_result_filter_2['recordcount'], 0)
-    #     self.assertGreater(
-    #         search_result_filter_1['recordcount'] + search_result_filter_2['recordcount'],
-    #         search_result_filter_3['recordcount'],
-    #         "Expected at least 1 material to appear in both search_result_filter_1 and search_result_filter_2, "
-    #         "which would make the sum of those results larger than filtering on both studies together"
-    #     )
-
     def test_drilldown_search(self):
         search_biologie = self.instance.search("biologie", drilldown_names=["technical_type"])
         self.assertIsNotNone(search_biologie)
@@ -273,18 +205,6 @@ class TestSearchClient(BaseOpenSearchTestCase):
         for key, value in search_biologie['drilldowns'].items():
             self.assertIn("-", key)
             self.assertGreater(value, 0)
-
-    # @skipIf(settings.PROJECT == "nppo", "studies not supported by NPPO")
-    # def test_drilldown_search_studies(self):
-    #     search_with_discipline_drilldown = self.instance.search(
-    #         '',
-    #         drilldown_names=["studies"]
-    #     )
-    #     self.assertIsNotNone(search_with_discipline_drilldown)
-    #     self.assertTrue(search_with_discipline_drilldown['drilldowns'])
-    #     for key, value in search_with_discipline_drilldown['drilldowns'].items():
-    #         self.assertIn('studies-', key)
-    #         self.assertGreater(value, 0)
 
     def test_drilldown_with_filters(self):
         search = self.instance.search(
@@ -380,7 +300,7 @@ class TestSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result['recordcount'], 1, "Expected one result when searching for one id")
         material = result['records'][0]
 
-        self.assertEqual(material['title'], 'Didactiek van wiskundig denken')
+        self.assertEqual(material['title'], 'Onderzoek over wiskundig denken')
         self.assertEqual(
             material['url'],
             "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT"
@@ -452,53 +372,10 @@ class TestSearchClient(BaseOpenSearchTestCase):
         unknown_mistake = self.instance.search('sdfkhjsdgaqegkjwfgklsd')
         self.assertEqual(unknown_mistake["did_you_mean"], {})
 
-    # def test_composed_word_search(self):
-    #     # Github Actions does not support mounting docker volumes
-    #     # So it is impossible to mount a decompound dictionary and truly test this
-    #     # Instead we test that indices will get created correctly and composed word search should function
-    #     dutch_index = create_open_search_index_configuration("nl", "dutch-decompound-words.txt")
-    #     self.assertIn("dutch_dictionary_decompound", dutch_index["settings"]["analysis"]["analyzer"])
-    #     decompound_analyser = dutch_index["settings"]["analysis"]["analyzer"]["dutch_dictionary_decompound"]
-    #     self.assertEqual(decompound_analyser, {
-    #         'type': 'custom',
-    #         'tokenizer': 'standard',
-    #         'filter': [
-    #             'lowercase',
-    #             'dutch_stop',
-    #             'dutch_synonym',
-    #             'dictionary_decompound'
-    #         ]
-    #     })
-    #     self.assertIn("dictionary_decompound", dutch_index["settings"]["analysis"]["filter"])
-    #     decompound_filter = dutch_index["settings"]["analysis"]["filter"]["dictionary_decompound"]
-    #     self.assertEqual(decompound_filter, {
-    #         'type': 'dictionary_decompounder',
-    #         'word_list_path': 'dutch-decompound-words.txt',
-    #         'updateable': True
-    #     })
-    #     for text_field in ["title", "text", "description"]:
-    #         self.assertEqual(dutch_index["mappings"]["properties"][text_field]['fields']['analyzed']["analyzer"],
-    #                          "custom_dutch")
-    #         self.assertEqual(dutch_index["mappings"]["properties"][text_field]['fields']['analyzed']["search_analyzer"],
-    #                          "dutch_dictionary_decompound")
-    #
-    #     english_index = create_open_search_index_configuration("en")
-    #     self.assertNotIn("dutch_dictionary_decompound", english_index["settings"]["analysis"]["analyzer"])
-    #     self.assertNotIn("dictionary_decompound", english_index["settings"]["analysis"]["filter"])
-    #     for text_field in ["title", "text", "description"]:
-    #         self.assertEqual(
-    #             english_index["mappings"]["properties"][text_field]['fields']['analyzed']["analyzer"],
-    #             "english"
-    #         )
-    #         self.assertEqual(
-    #             english_index["mappings"]["properties"][text_field]['fields']['analyzed']["search_analyzer"],
-    #             "english"
-    #         )
-
     def test_more_like_this(self):
         more_like_this = self.instance.more_like_this("abc", "nl")
         self.assertEqual(more_like_this["records_total"], 4)
-        self.assertEqual(more_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
+        self.assertEqual(more_like_this["results"][0]["title"], "Onderzoek over wiskundig denken")
         none_like_this = self.instance.more_like_this("does-not-exist", "nl")
         self.assertEqual(none_like_this["records_total"], 0)
         self.assertEqual(none_like_this["results"], [])
@@ -523,32 +400,29 @@ class TestSearchClient(BaseOpenSearchTestCase):
                 "research_themes": ["theme"]
             }
         }
-        with patch("surf.vendor.search.api.SearchResultSerializer", LearningMaterialResultSerializer):
-            record = self.instance.parse_search_hit(hit)
-            self.assertIn("authors", record, "Expected authors to be part of main record for Edusources")
-            self.assertIn("disciplines", record, "Expected disciplines to be part of main record for Edusources")
-            self.assertEqual(record["title"], "title")
-            self.assertEqual(record["description"], "description")
-            self.assertEqual(record["authors"], authors)
-            self.assertEqual(record["disciplines"], ["discipline"])
-            self.assertNotIn("keywords", record, "Expected data not given in Edusources to not be included")
-            self.assertNotIn("is_part_of", record, "Expected data not given in Edusources to not be included")
-            self.assertNotIn("has_parts", record, "Expected data not given in Edusources to not be included")
-        with patch("surf.vendor.search.api.SearchResultSerializer", ResearchProductResultSerializer):
-            record = self.instance.parse_search_hit(hit)
-            self.assertIn("relations", record, "Expected NPPO record to have a relations key")
-            self.assertNotIn("authors", record, "Expected authors to be absent in main record for NPPO")
-            self.assertNotIn("themes", record, "Expected themes to be absent in main record for NPPO")
-            self.assertIn("authors", record["relations"], "Expected authors to be part of relations for NPPO")
-            self.assertIn("themes", record["relations"], "Expected themes to be part of relations for NPPO")
-            self.assertEqual(record["title"], "title")
-            self.assertEqual(record["description"], "description")
-            self.assertEqual(record["relations"]["authors"], authors)
-            self.assertEqual(record["relations"]["themes"], [{"label": "theme"}])
-            self.assertEqual(record["relations"]["keywords"], [], "Expected data not given in NPPO to have a default")
-            self.assertEqual(record["relations"]["parents"], [], "Expected data not given in NPPO to have a default")
-            self.assertEqual(record["relations"]["children"], [], "Expected data not given in NPPO to have a default")
-            # Checking an edge case where keywords may be None
-            hit["_source"]["keywords"] = None
-            record = self.instance.parse_search_hit(hit)
-            self.assertEqual(record["relations"]["keywords"], [])
+        record = self.instance.parse_search_hit(hit)
+        self.assertIn("relations", record, "Expected research products record to have a relations key")
+        self.assertNotIn("authors", record, "Expected authors to be absent in main record for tr")
+        self.assertNotIn("themes", record, "Expected themes to be absent in main record for research products")
+        self.assertIn("authors", record["relations"], "Expected authors to be part of relations for research products")
+        self.assertIn("themes", record["relations"], "Expected themes to be part of relations for research products")
+        self.assertEqual(record["title"], "title")
+        self.assertEqual(record["description"], "description")
+        self.assertEqual(record["relations"]["authors"], authors)
+        self.assertEqual(record["relations"]["themes"], [{"label": "theme"}])
+        self.assertEqual(
+            record["relations"]["keywords"], [],
+            "Expected data not given in research products to have a default"
+        )
+        self.assertEqual(
+            record["relations"]["parents"], [],
+            "Expected data not given in research products to have a default"
+        )
+        self.assertEqual(
+            record["relations"]["children"], [],
+            "Expected data not given in research products to have a default"
+        )
+        # Checking an edge case where keywords may be None
+        hit["_source"]["keywords"] = None
+        record = self.instance.parse_search_hit(hit)
+        self.assertEqual(record["relations"]["keywords"], [])
