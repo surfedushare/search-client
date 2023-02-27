@@ -8,12 +8,10 @@ from search_client.serializers import LearningMaterialResultSerializer, Research
 
 class SearchApiClient:
 
-    def __init__(self, protocol: str, host: str, document_type: DocumentTypes, alias_prefix: str,
+    def __init__(self, host: str, document_type: DocumentTypes, alias_prefix: str,
                  verify_certs: bool = True, basic_auth: tuple[str, str] = None):
-
-        protocol = protocol
         protocol_config = {}
-        if protocol == "https":
+        if host.startswith("https"):
             protocol_config = {
                 "scheme": "https",
                 "port": 443,
