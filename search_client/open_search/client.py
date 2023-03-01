@@ -1,15 +1,16 @@
 from collections import defaultdict
 
+from rest_framework.serializers import Serializer
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
 from search_client.constants import DocumentTypes, SEARCH_FIELDS
 from search_client.serializers import LearningMaterialResultSerializer, ResearchProductResultSerializer
 
 
-class SearchApiClient:
+class SearchClient:
 
     def __init__(self, host: str, document_type: DocumentTypes, alias_prefix: str,
-                 verify_certs: bool = True, basic_auth: tuple[str, str] = None):
+                 verify_certs: bool = True, basic_auth: tuple[str, str] = None) -> None:
         protocol_config = {}
         if host.startswith("https"):
             protocol_config = {
@@ -36,7 +37,10 @@ class SearchApiClient:
             "en": self.index_en
         }
 
-    def parse_search_result(self, search_result):
+    def __str__(self) -> str:
+        return f"<SearchClient({self.client})>"
+
+    def parse_search_result(self, search_result: dict) -> dict:
         """
         Parses the search result into the correct format that the frontend uses
 
@@ -75,7 +79,7 @@ class SearchApiClient:
         ]
         return result
 
-    def get_result_serializer(self):
+    def get_result_serializer(self) -> Serializer | None:
         match self.document_type:
             case DocumentTypes.LEARNING_MATERIAL:
                 return LearningMaterialResultSerializer()
@@ -84,11 +88,12 @@ class SearchApiClient:
             case _:
                 raise TypeError(f"Unknown document type for result serialization: {self.document_type}")
 
-    def parse_search_hit(self, hit, transform=True):
+    def parse_search_hit(self, hit: dict, transform: bool = True) -> dict:
         """
         Parses the search hit into the format that is also used by the edurep endpoint.
         It's mostly just mapping the variables we need into the places that we expect them to be.
         :param hit: result from search
+        :param transform: will apply a transformation based on serializer fields when set to True
         :return record: parsed record
         """
         data = hit["_source"]
@@ -127,7 +132,7 @@ class SearchApiClient:
 
         return record
 
-    def autocomplete(self, query):
+    def autocomplete(self, query: str) -> list[str]:
         """
         Use the suggest query to get typing hints during searching.
 
@@ -162,7 +167,7 @@ class SearchApiClient:
         options_with_prefix.sort(key=lambda option: len(option))
         return options_with_prefix
 
-    def drilldowns(self, drilldown_names, search_text=None, filters=None):
+    def drilldowns(self, drilldown_names: list[str], search_text: str = None, filters: list[dict] = None) -> dict:
         """
         This function is named drilldowns is because it's also named drilldowns in the original edurep search code.
         It passes on information to search, and returns the search without the records.
@@ -172,11 +177,12 @@ class SearchApiClient:
         search_results["records"] = []
         return search_results
 
-    def search(self, search_text, drilldown_names=None, filters=None, ordering=None, page=1, page_size=5):
+    def search(self, search_text: str, drilldown_names: list[str] = None, filters: list[dict] = None,
+               ordering: str = None, page: int = 1, page_size: int = 5) -> dict:
         """
         Build and send a query to search engine and parse it before returning.
 
-        :param search_text: A list of strings to search for.
+        :param search_text: A string to search for.
         :param drilldown_names: A list of the 'drilldowns' (filters) that are to be counted by engine.
         :param filters: The filters that are applied for this search.
         :param ordering: Sort the results by this ordering (or use default search ordering otherwise)
@@ -258,7 +264,7 @@ class SearchApiClient:
         )
         return self.parse_search_result(result)
 
-    def get_materials_by_id(self, external_ids, page=1, page_size=10, **kwargs):
+    def get_materials_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10, **kwargs) -> dict:
         """
         Retrieve specific materials from search engine through their external id.
 
@@ -303,11 +309,11 @@ class SearchApiClient:
         results["records"] = records
         return results
 
-    def stats(self):
+    def stats(self) -> dict:
         stats = self.client.count(index=",".join([self.index_nl, self.index_en, self.index_unk]))
         return stats.get("count", 0)
 
-    def more_like_this(self, external_id, language):
+    def more_like_this(self, external_id: str, language: str) -> dict:
         index = self.languages.get(language, self.index_unk)
         body = {
             "query": {
@@ -337,7 +343,7 @@ class SearchApiClient:
         ]
         return result
 
-    def author_suggestions(self, author_name):
+    def author_suggestions(self, author_name: str) -> dict:
         body = {
             "query": {
                 "bool": {
@@ -367,7 +373,7 @@ class SearchApiClient:
         return result
 
     @staticmethod
-    def parse_filters(filters):
+    def parse_filters(filters: list[dict]) -> list[dict]:
         """
         Parse filters from the frontend format into the search engine format.
         Not every filter is handled by search engine  in the same way so it's a lot of manual parsing.
@@ -376,7 +382,7 @@ class SearchApiClient:
         :return: the filters in the format for a search query.
         """
         if not filters:
-            return {}
+            return []
         filter_items = []
         for filter_item in filters:
             # skip filter_items that are empty
@@ -405,7 +411,7 @@ class SearchApiClient:
                 })
         return filter_items
 
-    def parse_aggregations(self, aggregation_names, filters):
+    def parse_aggregations(self, aggregation_names: list[str], filters: list[dict]) -> dict:
         """
         Parse the aggregations so search engine can count the items properly.
 
@@ -451,7 +457,7 @@ class SearchApiClient:
         return aggregation_items
 
     @staticmethod
-    def parse_ordering(ordering):
+    def parse_ordering(ordering: str) -> dict:
         """
         Parse the frontend ordering format ('asc', 'desc' or None) into the type that search engine expects.
         """
@@ -462,7 +468,7 @@ class SearchApiClient:
         search_type = ordering
         return {search_type: {"order": order}}
 
-    def parse_index_language(self, filters):
+    def parse_index_language(self, filters: list[dict]) -> list[str]:
         """
         Select the index to search on based on language.
         """
