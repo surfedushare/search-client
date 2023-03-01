@@ -56,7 +56,7 @@ class LearningMaterialResultSerializer(BaseSearchResultSerializer):
     is_part_of = serializers.ListField(child=serializers.CharField())
     consortium = serializers.CharField(allow_blank=True, allow_null=True)
 
-    previews = serializers.DictField()
+    previews = serializers.DictField(default=None)
 
     view_count = serializers.IntegerField()
     applaud_count = serializers.IntegerField()
