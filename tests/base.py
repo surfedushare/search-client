@@ -39,7 +39,6 @@ class BaseOpenSearchTestCase(TestCase):
                 body=cls.index_body('nl')
             )
         cls.instance = SearchClient(
-            cls.config.open_search.protocol,
             cls.config.open_search.url,
             cls.document_type,
             cls.config.open_search.alias_prefix
