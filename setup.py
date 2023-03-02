@@ -24,6 +24,7 @@ setuptools.setup(
         "python-dateutil",
         "djangorestframework",
         "pytz",
+        "requests-aws4auth",
     ],
     python_requires="~=3.10",
     include_package_data=True,
