@@ -8,7 +8,7 @@ class DocumentTypes(Enum):
 
 SEARCH_FIELDS = {
     DocumentTypes.LEARNING_MATERIAL: [
-        "title^10", "title.analyzed^10", "title.folded^10",
+        "title^2", "title.analyzed^2", "title.folded^2",
         "text", "text.analyzed", "text.folded",
         "description", "description.analyzed", "description.folded",
         "keywords", "keywords.folded",
