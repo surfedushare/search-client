@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from search_client import DocumentTypes
-from search_client.open_search.configuration import create_open_search_index_configuration
+from search_client.opensearch.configuration import create_open_search_index_configuration
 
 
 class BaseDecompoundWordsTestCase(TestCase):
