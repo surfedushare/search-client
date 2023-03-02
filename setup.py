@@ -16,10 +16,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/surfedushare/search-client",
     packages=setuptools.find_packages(
-        exclude=[
-            "service", "service.*",
-            "environments", "environments.*",
-        ]
+        exclude=["tests*"]
     ),
     install_requires=[
         "Django>=3.2",
