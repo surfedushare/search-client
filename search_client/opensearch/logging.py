@@ -28,7 +28,7 @@ def create_opensearch_handler(host: str, index_name: str, index_frequency: Opens
     is_aws = "amazonaws" in host
     handler = {
         'level': 'DEBUG',
-        'class': 'utils.logging.OpensearchHandler',
+        'class': 'search_client.opensearch.logging.OpensearchHandler',
         'hosts': [host],
         'es_index_name': index_name,
         'es_additional_fields': {'container_id': container_id},
