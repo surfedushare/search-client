@@ -10,7 +10,7 @@ pytz==2022.7.1
 requests-aws4auth==1.0
 
 # Tools
-tox==3.24.5
+tox==3.28.0
 invoke==1.7.3
 ipython==8.10.0
 ipdb==0.13.3
