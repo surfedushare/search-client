@@ -7,7 +7,9 @@ Some changes:
  - Add session based AWS authentication
  - Use standard JSONSerializer and let exceptions propagate
  - Fix mutable defaults
+ - Update hosts format
 """
+from __future__ import annotations
 
 import logging
 import datetime
@@ -19,24 +21,21 @@ from opensearchpy import OpenSearch, RequestsHttpConnection, JSONSerializer
 from requests_aws4auth import AWS4Auth
 
 
-def create_opensearch_handler(index_name, index_frequency, environment, password):
+def create_opensearch_handler(host: str, index_name: str, index_frequency: OpensearchHandler.IndexNameFrequency,
+                              container_id: str, password: str):
     assert not index_name.startswith("logs"), \
         "Index names starting with 'logs' have a special meaning and won't work"
-    is_aws = environment.aws.is_aws  # AWS requires signing requests
-    opensearch_host = environment.open_search.host
-    opensearch_protocol = environment.open_search.protocol
-    opensearch_domain = opensearch_host.split(":")[0]
-    opensearch_port = 443 if opensearch_protocol == 'https' else 9200
+    is_aws = "amazonaws" in host
     handler = {
         'level': 'DEBUG',
         'class': 'utils.logging.OpensearchHandler',
-        'hosts': [{'host': opensearch_domain, 'port': opensearch_port}],
+        'hosts': [host],
         'es_index_name': index_name,
-        'es_additional_fields': {'container_id': environment.container.id},
+        'es_additional_fields': {'container_id': container_id},
         'flush_frequency_in_sec': 5,
         'index_name_frequency': index_frequency,
         'auth_type': OpensearchHandler.AuthType.NO_AUTH,  # gets overridden for AWS
-        'use_ssl': opensearch_protocol == 'https',
+        'use_ssl': host.startswith('https'),
     }
     if is_aws:
         handler.update({
@@ -72,7 +71,7 @@ class OpensearchHandler(logging.Handler):
         YEARLY = 3
 
     # Defaults for the class
-    __DEFAULT_OPENSEARCH_HOST = ({'host': 'localhost', 'port': 9200},)
+    __DEFAULT_OPENSEARCH_HOST = ('http://localhost:9200',)
     __DEFAULT_AUTH_USER = ''
     __DEFAULT_AUTH_PASSWD = ''
     __DEFAULT_AWS_SESSION = None
