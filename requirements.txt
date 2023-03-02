@@ -3,7 +3,7 @@ opensearch-py==2.0.0
 python-dateutil==2.8.1
 
 # Legacy
-djangorestframework==3.11.2
+djangorestframework==3.14.0
 pytz==2022.7.1
 
 # AWS
