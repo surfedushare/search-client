@@ -29,3 +29,8 @@ SEARCH_FIELDS = {
 
 
 LANGUAGES = ["nl", "en", "unk"]
+
+
+EDUREP_LEGACY_ID_PREFIXES = {
+    "edurep_delen:": "WikiwijsDelen:urn:uuid:"
+}

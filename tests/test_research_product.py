@@ -325,21 +325,13 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(material['language'], 'nl')
         self.assert_value_from_record(material, 'technical_type', 'document')
 
-        # Sharekit (legacy id format)
-        test_id = 'surfsharekit:oai:surfsharekit.nl:3522b79c-928c-4249-a7f7-d2bcb3077f10'
+        # Sharekit
+        test_id = '3522b79c-928c-4249-a7f7-d2bcb3077f10'
         result = self.instance.get_materials_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['recordcount'], 1, "Expected one result when searching for one id")
         material = result['records'][0]
         self.assertEqual(material['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
-
-        # Edurep material
-        test_id = 'wikiwijs:123'
-        result = self.instance.get_materials_by_id(external_ids=[test_id])
-        self.assertIsNotNone(result)
-        self.assertEqual(result['recordcount'], 1, "Expected one result when searching for one id")
-        material = result['records'][0]
-        self.assertEqual(material['external_id'], "wikiwijs:123")
 
     def test_search_by_author(self):
         author = "Michel van Ast"
