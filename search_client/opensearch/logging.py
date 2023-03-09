@@ -25,7 +25,7 @@ def create_opensearch_handler(host: str, index_name: str, index_frequency: Opens
                               container_id: str, password: str):
     assert not index_name.startswith("logs"), \
         "Index names starting with 'logs' have a special meaning and won't work"
-    is_aws = "amazonaws" in host
+    is_aws = "amazonaws.com" in host
     handler = {
         'level': 'DEBUG',
         'class': 'search_client.opensearch.logging.OpensearchHandler',
