@@ -44,9 +44,11 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
                                       studies=biology_and_education_studies),
         )
         cls.search.index(
+            id="WikiwijsDelen:urn:uuid:abc",
             index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      topic="biology", publisher_date="2019-04-16T22:35:09+02:00",
+            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit", topic="biology",
+                                      external_id="WikiwijsDelen:urn:uuid:abc",
+                                      publisher_date="2019-04-16T22:35:09+02:00",
                                       studies=biology_and_education_studies),
         )
         cls.search.index(
@@ -371,8 +373,8 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(material['language'], 'nl')
         self.assert_value_from_record(material, 'technical_type', 'document')
 
-        # Sharekit (legacy id format)
-        test_id = 'surfsharekit:oai:surfsharekit.nl:3522b79c-928c-4249-a7f7-d2bcb3077f10'
+        # Sharekit
+        test_id = '3522b79c-928c-4249-a7f7-d2bcb3077f10'
         result = self.instance.get_materials_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['recordcount'], 1, "Expected one result when searching for one id")
@@ -386,6 +388,14 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result['recordcount'], 1, "Expected one result when searching for one id")
         material = result['records'][0]
         self.assertEqual(material['external_id'], "wikiwijs:123")
+
+        # Edurep legacy format
+        test_id = 'edurep_delen:abc'
+        result = self.instance.get_materials_by_id(external_ids=[test_id])
+        self.assertIsNotNone(result)
+        self.assertEqual(result['recordcount'], 1, "Expected one result when searching for one id")
+        material = result['records'][0]
+        self.assertEqual(material['external_id'], "WikiwijsDelen:urn:uuid:abc")
 
     def test_search_by_author(self):
         author = "Michel van Ast"
