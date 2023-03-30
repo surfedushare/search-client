@@ -397,11 +397,14 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertNotIn("authors", record, "Expected authors to be absent in main record for tr")
         self.assertNotIn("themes", record, "Expected themes to be absent in main record for research products")
         self.assertIn("authors", record["relations"], "Expected authors to be part of relations for research products")
-        self.assertIn("themes", record["relations"], "Expected themes to be part of relations for research products")
+        self.assertIn(
+            "research_themes", record["relations"],
+            "Expected themes to be part of relations for research products"
+        )
         self.assertEqual(record["title"], "title")
         self.assertEqual(record["description"], "description")
         self.assertEqual(record["relations"]["authors"], authors)
-        self.assertEqual(record["relations"]["themes"], [{"label": "theme"}])
+        self.assertEqual(record["relations"]["research_themes"], [{"label": "theme"}])
         self.assertEqual(
             record["relations"]["keywords"], [],
             "Expected data not given in research products to have a default"
