@@ -339,7 +339,7 @@ class SearchClient:
         )
         hits = search_result.pop("hits")
         result = dict()
-        result["records_total"] = hits["total"]["value"]
+        result["records_total"] = result["results_total"] = hits["total"]["value"]
         result["results"] = [
             self.parse_search_hit(hit, transform=False)
             for hit in hits["hits"]
@@ -368,7 +368,7 @@ class SearchClient:
         )
         hits = search_result.pop("hits")
         result = dict()
-        result["records_total"] = hits["total"]["value"]
+        result["records_total"] = result["results_total"] = hits["total"]["value"]
         result["results"] = [
             self.parse_search_hit(hit, transform=False)
             for hit in hits["hits"]
