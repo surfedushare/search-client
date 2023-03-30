@@ -33,15 +33,13 @@ class BaseSearchResultSerializer(serializers.Serializer):
     copyright = serializers.CharField()
     video = serializers.DictField()
     harvest_source = serializers.CharField()
+    provider = serializers.DictField()
+    previews = serializers.DictField(default=None)
+    files = serializers.ListField(child=serializers.CharField())
 
 
 class LearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    files = serializers.ListField(
-        child=serializers.ListField(
-            child=serializers.CharField()
-        )
-    )
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.DictField())
     studies = serializers.ListField(child=serializers.DictField())
@@ -55,8 +53,6 @@ class LearningMaterialResultSerializer(BaseSearchResultSerializer):
     has_parts = serializers.ListField(child=serializers.CharField())
     is_part_of = serializers.ListField(child=serializers.CharField())
     consortium = serializers.CharField(allow_blank=True, allow_null=True)
-
-    previews = serializers.DictField(default=None)
 
     view_count = serializers.IntegerField()
     applaud_count = serializers.IntegerField()
