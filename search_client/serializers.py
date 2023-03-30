@@ -65,7 +65,7 @@ class RelationSerializer(serializers.Serializer):
     authors = PersonSerializer(many=True)
     keywords = LabelSerializer(many=True)
     parties = OrganisationSerializer(many=True)
-    themes = LabelSerializer(many=True)
+    research_themes = LabelSerializer(many=True)
     projects = ProjectSerializer(many=True)
     children = serializers.ListField(child=serializers.CharField())
     parents = serializers.ListField(child=serializers.CharField())

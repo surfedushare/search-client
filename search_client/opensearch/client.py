@@ -116,7 +116,7 @@ class SearchClient:
                 "parties": data.get("parties", []) or publishers,
                 "projects": data.get("projects", []),
                 "keywords": [{"label": keyword} for keyword in keywords],
-                "themes": [{"label": theme} for theme in data.get("research_themes", [])],
+                "research_themes": [{"label": theme} for theme in data.get("research_themes", [])],
                 "parents": data.get("is_part_of", []),
                 "children": data.get("has_parts", [])
             }
