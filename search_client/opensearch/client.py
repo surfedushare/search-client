@@ -265,6 +265,9 @@ class SearchClient:
         return self.parse_search_result(result)
 
     def get_materials_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10, **kwargs) -> dict:
+        return self.get_documents_by_id(external_ids, page, page_size)
+
+    def get_documents_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10) -> dict:
         """
         Retrieve specific materials from search engine through their external id.
 
