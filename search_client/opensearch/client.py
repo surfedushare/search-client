@@ -10,7 +10,8 @@ from search_client.serializers import LearningMaterialResultSerializer, Research
 class SearchClient:
 
     def __init__(self, host: str, document_type: DocumentTypes, alias_prefix: str,
-                 verify_certs: bool = True, basic_auth: tuple[str, str] = None) -> None:
+                 verify_certs: bool = True, basic_auth: tuple[str, str] = None,
+                 search_results_key: str = "records") -> None:
         protocol_config = {}
         if host.startswith("https"):
             protocol_config = {
@@ -32,6 +33,7 @@ class SearchClient:
         self.index_nl = f"{alias_prefix}-nl"
         self.index_en = f"{alias_prefix}-en"
         self.index_unk = f"{alias_prefix}-unk"
+        self.search_results_key = search_results_key
         self.languages = {
             "nl": self.index_nl,
             "en": self.index_en
@@ -49,8 +51,7 @@ class SearchClient:
         """
         hits = search_result.pop("hits")
         aggregations = search_result.get("aggregations", {})
-        result = dict()
-        result['recordcount'] = hits['total']['value']
+        result = self.parse_results_total(hits['total'])
 
         # Transform aggregations into drilldowns
         drilldowns = {}
@@ -73,7 +74,7 @@ class SearchClient:
         result['did_you_mean'] = did_you_mean
 
         # Transform hits into records
-        result['records'] = [
+        result[self.search_results_key] = [
             self.parse_search_hit(hit)
             for hit in hits['hits']
         ]
@@ -174,7 +175,8 @@ class SearchClient:
         This allows calculation of 'item counts' (i.e. how many results there are in through a certain filter)
         """
         search_results = self.search(search_text=search_text, filters=filters, drilldown_names=drilldown_names)
-        search_results["records"] = []
+        search_results[self.search_results_key] = []
+        search_results.update(self.parse_results_total(0))
         return search_results
 
     def search(self, search_text: str, drilldown_names: list[str] = None, filters: list[dict] = None,
@@ -286,7 +288,7 @@ class SearchClient:
                 break
             corrected_external_ids.append(external_id)
 
-        result = self.client.search(
+        raw_result = self.client.search(
             index=[self.index_nl, self.index_en, self.index_unk],
             body={
                 "query": {
@@ -298,19 +300,19 @@ class SearchClient:
                 'size': page_size,
             },
         )
-        results = self.parse_search_result(result)
-        materials = {
-            material["external_id"]: material
-            for material in results["records"]
+        search_result = self.parse_search_result(raw_result)
+        documents = {
+            document["external_id"]: document
+            for document in search_result[self.search_results_key]
         }
-        records = []
+        results = []
         for external_id in corrected_external_ids:
-            if external_id not in materials:
+            if external_id not in documents:
                 continue
-            records.append(materials[external_id])
-        results["recordcount"] = len(records)
-        results["records"] = records
-        return results
+            results.append(documents[external_id])
+        search_result.update(self.parse_results_total(len(results)))
+        search_result[self.search_results_key] = results
+        return search_result
 
     def stats(self) -> dict:
         stats = self.client.count(index=",".join([self.index_nl, self.index_en, self.index_unk]))
@@ -338,8 +340,7 @@ class SearchClient:
             body=body
         )
         hits = search_result.pop("hits")
-        result = dict()
-        result["records_total"] = result["results_total"] = hits["total"]["value"]
+        result = self.parse_results_total(hits["total"], is_search=False)
         result["results"] = [
             self.parse_search_hit(hit, transform=False)
             for hit in hits["hits"]
@@ -367,8 +368,7 @@ class SearchClient:
             body=body
         )
         hits = search_result.pop("hits")
-        result = dict()
-        result["records_total"] = result["results_total"] = hits["total"]["value"]
+        result = self.parse_results_total(hits["total"], is_search=False)
         result["results"] = [
             self.parse_search_hit(hit, transform=False)
             for hit in hits["hits"]
@@ -468,8 +468,20 @@ class SearchClient:
         if ordering.startswith("-"):
             order = "desc"
             ordering = ordering[1:]
-        search_type = ordering
-        return {search_type: {"order": order}}
+        return {ordering: {"order": order}}
+
+    def parse_results_total(self, total: dict | int, is_search: bool = True) -> dict:
+        if isinstance(total, int):  # the total did not come from OpenSearch directly, but was deferred somehow
+            total = {"value": total, "relation": "eq"}
+        total_key = f"{self.search_results_key}_total" if is_search else "results_total"
+        legacy_total_key = "recordcount" if is_search else "records_total"
+        return {
+            total_key: {
+                "value": total["value"],
+                "is_precise": total["relation"] != "gte"
+            },
+            legacy_total_key: total["value"]
+        }
 
     def parse_index_language(self, filters: list[dict]) -> list[str]:
         """
