@@ -463,7 +463,8 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
                 "description": "description",
                 "authors": authors,
                 "learning_material_disciplines_normalized": ["discipline"],
-                "research_themes": ["theme"]
+                "research_themes": ["theme"],
+                "study_vocabulary": ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"],
             }
         }
         result = self.instance.parse_search_hit(hit)
@@ -473,6 +474,10 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result["description"], "description")
         self.assertEqual(result["authors"], authors)
         self.assertEqual(result["disciplines"], ["discipline"])
-        self.assertNotIn("keywords", result, "Expected data not given in learning materials to not be included")
+        self.assertEqual(
+            result["study_vocabulary"],
+            ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"]
+        )
+        self.assertNotIn("research_themes", result, "Expected data not given in learning materials to not be included")
         self.assertNotIn("is_part_of", result, "Expected data not given in learning materials to not be included")
         self.assertNotIn("has_parts", result, "Expected data not given in learning materials to not be included")

@@ -46,6 +46,7 @@ class LearningMaterialResultSerializer(BaseSearchResultSerializer):
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
                                         source="learning_material_disciplines_normalized")
     ideas = serializers.ListField(child=serializers.CharField())
+    study_vocabulary = serializers.ListField(child=serializers.CharField(), default=[])
     technical_type = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     keywords = serializers.ListField(child=serializers.CharField())
     publishers = serializers.ListField(child=serializers.CharField())

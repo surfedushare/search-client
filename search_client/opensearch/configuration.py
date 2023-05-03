@@ -317,6 +317,9 @@ def get_learning_material_search_mapping_properties():
         'disciplines': {
             'type': 'keyword'
         },
+        'study_vocabulary': {
+            'type': 'keyword'
+        },
         'ideas': {
             'type': 'text',
             'fields': {
