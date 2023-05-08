@@ -7,7 +7,7 @@ djangorestframework==3.11.2
 pytz==2022.7.1
 
 # AWS
-requests-aws4auth==1.0
+requests-aws4auth==1.2.3
 
 # Tools
 tox==3.24.5
