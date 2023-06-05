@@ -108,19 +108,6 @@ class SearchClient:
             field_mapping[field]: value
             for field, value in data.items() if field in field_mapping
         }
-        # Reformatting some fields if a relations field is desired
-        if "relations" in field_mapping:
-            publishers = [{"name": publisher} for publisher in data.get("publishers", [])]
-            keywords = data.get("keywords", []) or []
-            record["relations"] = {
-                "authors": data.get("authors", []),
-                "parties": data.get("parties", []) or publishers,
-                "projects": data.get("projects", []),
-                "keywords": [{"label": keyword} for keyword in keywords],
-                "research_themes": [{"label": theme} for theme in data.get("research_themes", [])],
-                "parents": data.get("is_part_of", []),
-                "children": data.get("has_parts", [])
-            }
         # Calling methods on serializers to set data for method fields
         for field_name, field in serializer.fields.items():
             if field.source != "*":

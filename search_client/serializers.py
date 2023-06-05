@@ -25,6 +25,7 @@ class LabelSerializer(serializers.Serializer):
 class BaseSearchResultSerializer(serializers.Serializer):
 
     external_id = serializers.CharField()
+    published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
     doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     url = serializers.URLField()
     title = serializers.CharField()
@@ -33,49 +34,56 @@ class BaseSearchResultSerializer(serializers.Serializer):
     copyright = serializers.CharField()
     video = serializers.DictField()
     harvest_source = serializers.CharField()
-    provider = serializers.DictField()
     previews = serializers.DictField(default=None)
-    files = serializers.ListField(child=serializers.CharField())
+    files = serializers.ListField(child=serializers.DictField())
+    authors = serializers.ListField(child=serializers.DictField())
+    has_parts = serializers.ListField(child=serializers.CharField())
+    is_part_of = serializers.ListField(child=serializers.CharField())
+    keywords = serializers.ListField(child=serializers.CharField())
 
 
-class LearningMaterialResultSerializer(BaseSearchResultSerializer):
+class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
-    lom_educational_levels = serializers.ListField(child=serializers.DictField())
-    studies = serializers.ListField(child=serializers.DictField())
+    provider = serializers.DictField()
+    lom_educational_levels = serializers.ListField(child=serializers.CharField())
+    studies = serializers.ListField(child=serializers.CharField())
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
                                         source="learning_material_disciplines_normalized")
     ideas = serializers.ListField(child=serializers.CharField())
     study_vocabulary = serializers.ListField(child=serializers.CharField(), default=[])
     technical_type = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    keywords = serializers.ListField(child=serializers.CharField())
     publishers = serializers.ListField(child=serializers.CharField())
-    authors = serializers.ListField(child=serializers.CharField())
-    has_parts = serializers.ListField(child=serializers.CharField())
-    is_part_of = serializers.ListField(child=serializers.CharField())
     consortium = serializers.CharField(allow_blank=True, allow_null=True)
 
+
+class LearningMaterialResultSerializer(SimpleLearningMaterialResultSerializer):
+
+    authors = serializers.ListField(child=serializers.CharField())
+    lom_educational_levels = serializers.ListField(child=serializers.DictField())
+    studies = serializers.ListField(child=serializers.DictField())
     view_count = serializers.IntegerField()
     applaud_count = serializers.IntegerField()
     avg_star_rating = serializers.IntegerField()
     count_star_rating = serializers.IntegerField()
 
 
-class RelationSerializer(serializers.Serializer):
-
-    authors = PersonSerializer(many=True)
-    keywords = LabelSerializer(many=True)
-    parties = OrganisationSerializer(many=True)
-    research_themes = LabelSerializer(many=True)
-    projects = ProjectSerializer(many=True)
-    children = serializers.ListField(child=serializers.CharField())
-    parents = serializers.ListField(child=serializers.CharField())
-
-
 class ResearchProductResultSerializer(BaseSearchResultSerializer):
 
+    provider = serializers.SerializerMethodField()
     type = serializers.CharField(source="technical_type")
-    published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
     research_object_type = serializers.CharField()
     extension = serializers.DictField()
-    relations = RelationSerializer()
+    parties = serializers.ListField(child=serializers.CharField())
+    research_themes = serializers.ListField(child=serializers.CharField())
+    projects = serializers.ListField(child=serializers.CharField(), default=[])
+
+    def get_provider(self, obj):
+        provider = obj["provider"]
+        if provider["name"]:
+            return provider["name"]
+        elif provider["slug"]:
+            return provider["slug"]
+        elif provider["ror"]:
+            return provider["ror"]
+        elif provider["external_id"]:
+            return provider["external_id"]
