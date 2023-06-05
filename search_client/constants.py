@@ -32,5 +32,8 @@ LANGUAGES = ["nl", "en", "unk"]
 
 
 EDUREP_LEGACY_ID_PREFIXES = {
-    "edurep_delen:": "WikiwijsDelen:urn:uuid:"
+    "edurep_delen:": "WikiwijsDelen:urn:uuid:",
+    "edurep_delen:": "urn:uuid:",
+    "edurep_maken:": "jsonld-from-lom:wikiwijsmaken:",
+    "edurep_l4l": "jsonld-from-lom:l4l:"
 }
