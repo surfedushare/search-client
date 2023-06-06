@@ -44,7 +44,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
 
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    provider = serializers.DictField(default=None, allow_blank=True, allow_null=True)
+    provider = serializers.DictField(default=None, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
     studies = serializers.ListField(child=serializers.CharField())
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
