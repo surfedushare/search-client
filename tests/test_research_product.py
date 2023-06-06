@@ -41,33 +41,17 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         )
 
     def get_value_from_result(self, result, key):
-        if key == "authors":
-            value = result["relations"]["authors"]
-        elif key == "publishers":
-            value = result["relations"]["parties"]
-        elif key == "keywords":
-            value = result["relations"]["keywords"]
+        if key == "published_at":
+            value = parse(result[key], ignoretz=True)
         elif key == "technical_type":
             value = result["type"]
-        elif key == "published_at":
-            value = parse(result["published_at"], ignoretz=True)
         else:
-            raise ValueError(f"No translation for key '{key}'")
+            value = result[key]
         return value
 
     def assert_value_from_result(self, result, key, expectation, assertion=None, message=None):
         assertion = assertion or self.assertEqual
-        if key == "publishers":
-            expectation = [
-                {"name": name}
-                for name in expectation
-            ]
-        elif key == "keywords":
-            expectation = [
-                {"label": label}
-                for label in expectation
-            ]
-        elif key == "studies":
+        if key == "studies":
             return  # silently skipping this assertion, because NPPO doesn't support studies
         value = self.get_value_from_result(result, key)
         assertion(value, expectation, message)
@@ -319,7 +303,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
             "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT"
         )
         self.assertEqual(document['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
-        self.assert_value_from_result(document, 'publishers', ["Wikiwijs Maken"])
+        self.assert_value_from_result(document, 'parties', ["Wikiwijs Maken"])
         self.assert_value_from_result(
             document,
             'published_at',
@@ -402,35 +386,18 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
                 "description": "description",
                 "authors": authors,
                 "learning_material_disciplines_normalized": ["discipline"],
-                "research_themes": ["theme"]
+                "research_themes": ["theme"],
+                "provider": {
+                    "ror": None,
+                    "external_id": None,
+                    "name": "Test",
+                    "slug": None
+                },
             }
         }
         result = self.instance.parse_search_hit(hit)
-        self.assertIn("relations", result, "Expected research products result to have a relations key")
-        self.assertNotIn("authors", result, "Expected authors to be absent in main result for tr")
-        self.assertNotIn("themes", result, "Expected themes to be absent in main result for research products")
-        self.assertIn("authors", result["relations"], "Expected authors to be part of relations for research products")
-        self.assertIn(
-            "research_themes", result["relations"],
-            "Expected themes to be part of relations for research products"
-        )
+
         self.assertEqual(result["title"], "title")
         self.assertEqual(result["description"], "description")
-        self.assertEqual(result["relations"]["authors"], authors)
-        self.assertEqual(result["relations"]["research_themes"], [{"label": "theme"}])
-        self.assertEqual(
-            result["relations"]["keywords"], [],
-            "Expected data not given in research products to have a default"
-        )
-        self.assertEqual(
-            result["relations"]["parents"], [],
-            "Expected data not given in research products to have a default"
-        )
-        self.assertEqual(
-            result["relations"]["children"], [],
-            "Expected data not given in research products to have a default"
-        )
-        # Checking an edge case where keywords may be None
-        hit["_source"]["keywords"] = None
-        result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["relations"]["keywords"], [])
+        self.assertEqual(result["authors"], authors)
+        self.assertEqual(result["research_themes"], ["theme"])
