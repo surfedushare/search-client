@@ -44,7 +44,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
 
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    provider = serializers.DictField()
+    provider = serializers.DictField(default=None, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
     studies = serializers.ListField(child=serializers.CharField())
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
@@ -73,7 +73,7 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
     type = serializers.CharField(source="technical_type")
     research_object_type = serializers.CharField()
     extension = serializers.DictField()
-    parties = serializers.ListField(child=serializers.CharField())
+    parties = serializers.ListField(child=serializers.CharField(), source="publishers")
     research_themes = serializers.ListField(child=serializers.CharField())
     projects = serializers.ListField(child=serializers.CharField(), default=[])
 

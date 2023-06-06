@@ -4,7 +4,7 @@ from rest_framework.serializers import Serializer
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
 from search_client.constants import DocumentTypes, SEARCH_FIELDS, EDUREP_LEGACY_ID_PREFIXES
-from search_client.serializers import LearningMaterialResultSerializer, ResearchProductResultSerializer
+from search_client.serializers import SimpleLearningMaterialResultSerializer, ResearchProductResultSerializer
 
 
 class SearchClient:
@@ -83,7 +83,7 @@ class SearchClient:
     def get_result_serializer(self) -> Serializer | None:
         match self.document_type:
             case DocumentTypes.LEARNING_MATERIAL:
-                return LearningMaterialResultSerializer()
+                return SimpleLearningMaterialResultSerializer()
             case DocumentTypes.RESEARCH_PRODUCT:
                 return ResearchProductResultSerializer()
             case _:

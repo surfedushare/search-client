@@ -30,6 +30,12 @@ NL_MATERIAL = {
         "doi": None,
         "technical_type": "document",
         "research_themes": ["exact_informatica"],
+        "provider": {
+            "ror": None,
+            "external_id": None,
+            "name": "Wikiwijs Maken",
+            "slug": None
+        }
     },
     "biology": {
         "title": "Onderzoek over biologisch denken",
@@ -61,7 +67,13 @@ NL_MATERIAL = {
         "ideas": [],
         "doi": None,
         "technical_type": "document",
-        "research_themes": ["aarde_milieu"]
+        "research_themes": ["aarde_milieu"],
+        "provider": {
+            "ror": None,
+            "external_id": None,
+            "name": "Wikiwijs Maken",
+            "slug": None
+        }
     }
 }
 
