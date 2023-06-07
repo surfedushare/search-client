@@ -76,6 +76,8 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
     parties = serializers.ListField(child=serializers.CharField(), source="publishers")
     research_themes = serializers.ListField(child=serializers.CharField())
     projects = serializers.ListField(child=serializers.CharField(), default=[])
+    owners = serializers.SerializerMethodField(method_name="list_first_author")
+    contacts = serializers.SerializerMethodField(method_name="list_first_author")
 
     def get_provider(self, obj):
         provider = obj["provider"]
@@ -87,3 +89,9 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
             return provider["ror"]
         elif provider["external_id"]:
             return provider["external_id"]
+
+    def list_first_author(self, obj):
+        authors = obj["authors"]
+        if not authors:
+            return []
+        return [authors[0]]
