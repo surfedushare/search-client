@@ -345,7 +345,7 @@ class SearchClient:
                         },
                     },
                     "must_not": {
-                        "match": {"authors.name.folded": author_name}
+                        "match": {"authors.name.keyword": author_name}
                     }
                 }
             }

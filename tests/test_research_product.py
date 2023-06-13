@@ -370,8 +370,8 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(none_like_this["results"], [])
 
     def test_author_suggestions(self):
-        suggestions = self.instance.author_suggestions("Theo")
         author_expectation = "Theo van den Bogaart"
+        suggestions = self.instance.author_suggestions(author_expectation)
         self.assertEqual(suggestions["results_total"]["value"], 3)
         for result in suggestions["results"]:
             author_names = [author["name"] for author in self.get_value_from_result(result, "authors")]
