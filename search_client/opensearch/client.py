@@ -305,7 +305,7 @@ class SearchClient:
         stats = self.client.count(index=",".join([self.index_nl, self.index_en, self.index_unk]))
         return stats.get("count", 0)
 
-    def more_like_this(self, external_id: str, language: str) -> dict:
+    def more_like_this(self, external_id: str, language: str, transform_results: bool = False) -> dict:
         index = self.languages.get(language, self.index_unk)
         body = {
             "query": {
@@ -329,12 +329,12 @@ class SearchClient:
         hits = search_result.pop("hits")
         result = self.parse_results_total(hits["total"], is_search=False)
         result["results"] = [
-            self.parse_search_hit(hit, transform=False)
+            self.parse_search_hit(hit, transform=transform_results)
             for hit in hits["hits"]
         ]
         return result
 
-    def author_suggestions(self, author_name: str) -> dict:
+    def author_suggestions(self, author_name: str, transform_results: bool = False) -> dict:
         body = {
             "query": {
                 "bool": {
@@ -357,7 +357,7 @@ class SearchClient:
         hits = search_result.pop("hits")
         result = self.parse_results_total(hits["total"], is_search=False)
         result["results"] = [
-            self.parse_search_hit(hit, transform=False)
+            self.parse_search_hit(hit, transform=transform_results)
             for hit in hits["hits"]
         ]
         return result
