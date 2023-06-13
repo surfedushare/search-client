@@ -32,7 +32,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
     description = serializers.CharField()
     language = serializers.CharField()
     copyright = serializers.CharField()
-    video = serializers.DictField()
+    video = serializers.DictField(default=None)
     harvest_source = serializers.CharField()
     previews = serializers.DictField(default=None)
     files = serializers.ListField(child=serializers.DictField())
