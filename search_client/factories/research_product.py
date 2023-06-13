@@ -4,11 +4,11 @@ NL_MATERIAL = {
         "text": "Onderzoek over wiskunde en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT",
         "files": [
-            [{
+            {
                 "mime_type": "application/x-zip",
                 "url": "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT",
                 "title": "Wiskundedidactiek_en_ICT"
-            }]
+            }
         ],
         "description":
         "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op wiskundedidactiek en ICT "
@@ -42,11 +42,11 @@ NL_MATERIAL = {
         "text": "Onderzoek over biologie en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/91192/Biologiedidactiek_en_ICT",
         "files": [
-            [{
+            {
                 "mime_type": "application/x-zip",
                 "url": "https://maken.wikiwijs.nl/91192/Biologiedidactiek_en_ICT",
                 "title": "Biologiedidactiek_en_ICT"
-            }]
+            }
         ],
         "description":
             "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
