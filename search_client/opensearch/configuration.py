@@ -242,38 +242,28 @@ def get_research_product_search_mapping_properties():
             'type': 'keyword'
         },
         'parties': {
-            'type': 'object',
-            'properties': {
-                'name': {
+            'type': 'text',
+            'fields': {
+                'keyword': {
+                    'type': 'keyword',
+                    'ignore_above': 256
+                },
+                'folded': {
                     'type': 'text',
-                    'fields': {
-                        'keyword': {
-                            'type': 'keyword',
-                            'ignore_above': 256
-                        },
-                        'folded': {
-                            'type': 'text',
-                            'analyzer': 'folding'
-                        }
-                    }
+                    'analyzer': 'folding'
                 }
             }
         },
         'projects': {
-            'type': 'object',
-            'properties': {
-                'name': {
+            'type': 'text',
+            'fields': {
+                'keyword': {
+                    'type': 'keyword',
+                    'ignore_above': 256
+                },
+                'folded': {
                     'type': 'text',
-                    'fields': {
-                        'keyword': {
-                            'type': 'keyword',
-                            'ignore_above': 256
-                        },
-                        'folded': {
-                            'type': 'text',
-                            'analyzer': 'folding'
-                        }
-                    }
+                    'analyzer': 'folding'
                 }
             }
         },
