@@ -52,7 +52,7 @@ NL_MATERIAL = {
             "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
             "met Theo van den Bogaart",
         "language": "nl",
-        "external_id": "wikiwijs:123",
+        "external_id": "jsonld-from-lom:wikiwijsmaken:123",
         "copyright": "cc-by-30",
         "publisher_date": "2017-04-16T22:35:09+02:00",
         "keywords": [],
