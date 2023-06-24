@@ -91,7 +91,7 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
             return provider["external_id"]
 
     def list_first_author(self, obj):
-        authors = obj["authors"]
+        authors = obj.get("authors", None)
         if not authors:
             return []
         return [authors[0]]
