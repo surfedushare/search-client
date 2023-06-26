@@ -44,10 +44,10 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
                                       studies=biology_and_education_studies),
         )
         cls.search.index(
-            id="WikiwijsDelen:urn:uuid:abc",
+            id="urn:uuid:abc",
             index=cls.get_alias("nl"),
             body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit", topic="biology",
-                                      external_id="WikiwijsDelen:urn:uuid:abc",
+                                      external_id="urn:uuid:abc",
                                       publisher_date="2019-04-16T22:35:09+02:00",
                                       studies=biology_and_education_studies),
         )
@@ -392,20 +392,35 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(material['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
 
         # Edurep material
-        test_id = 'wikiwijs:123'
+        test_id = 'jsonld-from-lom:wikiwijsmaken:123'
         result = self.instance.get_materials_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         material = result['results'][0]
-        self.assertEqual(material['external_id'], "wikiwijs:123")
+        self.assertEqual(material['external_id'], "jsonld-from-lom:wikiwijsmaken:123")
 
-        # Edurep legacy format
+        # Edurep legacy formats
+        # edurep_delen prefix
         test_id = 'edurep_delen:abc'
         result = self.instance.get_materials_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         material = result['results'][0]
-        self.assertEqual(material['external_id'], "WikiwijsDelen:urn:uuid:abc")
+        self.assertEqual(material['external_id'], "urn:uuid:abc")
+        # WikiwijsDelen:urn:uuid prefix
+        test_id = 'WikiwijsDelen:urn:uuid:abc'
+        result = self.instance.get_materials_by_id(external_ids=[test_id])
+        self.assertIsNotNone(result)
+        self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
+        material = result['results'][0]
+        self.assertEqual(material['external_id'], "urn:uuid:abc")
+        # wikiwijsmaken prefix
+        test_id = 'wikiwijsmaken:123'
+        result = self.instance.get_materials_by_id(external_ids=[test_id])
+        self.assertIsNotNone(result)
+        self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
+        material = result['results'][0]
+        self.assertEqual(material['external_id'], "jsonld-from-lom:wikiwijsmaken:123")
 
     def test_search_by_author(self):
         author = "Michel van Ast"

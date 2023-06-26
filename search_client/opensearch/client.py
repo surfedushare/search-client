@@ -256,6 +256,13 @@ class SearchClient:
     def get_materials_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10, **kwargs) -> dict:
         return self.get_documents_by_id(external_ids, page, page_size)
 
+    def clean_external_id(self, external_id: str) -> str:
+        for legacy_prefix, prefix in EDUREP_LEGACY_ID_PREFIXES.items():
+            if external_id.startswith(legacy_prefix):
+                external_id = external_id.replace(legacy_prefix, prefix, 1)
+                break
+        return external_id
+
     def get_documents_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10) -> dict:
         """
         Retrieve specific materials from search engine through their external id.
@@ -269,11 +276,7 @@ class SearchClient:
 
         corrected_external_ids = []
         for external_id in external_ids:
-            for legacy_prefix, prefix in EDUREP_LEGACY_ID_PREFIXES.items():
-                if external_id.startswith(legacy_prefix):
-                    external_id = external_id.replace(legacy_prefix, prefix, 1)
-                break
-            corrected_external_ids.append(external_id)
+            corrected_external_ids.append(self.clean_external_id(external_id))
 
         raw_result = self.client.search(
             index=[self.index_nl, self.index_en, self.index_unk],
