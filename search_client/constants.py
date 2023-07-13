@@ -33,4 +33,7 @@ LANGUAGES = ["nl", "en", "unk"]
 
 EDUREP_LEGACY_ID_PREFIXES = {
     "edurep_delen:": "WikiwijsDelen:urn:uuid:",
+    "surf:oai:surfsharekit.nl:": "",
+    "surfsharekit:oai:surfsharekit.nl:": "",
+    "oer_han:oai:surfsharekit.nl:": "",
 }
