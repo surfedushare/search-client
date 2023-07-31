@@ -1,5 +1,5 @@
 # Dependencies
-opensearch-py==2.2.0
+opensearch-py==2.3.0
 python-dateutil==2.8.1
 
 # Legacy
