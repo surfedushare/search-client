@@ -393,6 +393,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
                     "name": "Test",
                     "slug": None
                 },
+                "doi": "10.12456/helloworld"
             }
         }
         result = self.instance.parse_search_hit(hit)
@@ -401,3 +402,4 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result["description"], "description")
         self.assertEqual(result["authors"], authors)
         self.assertEqual(result["research_themes"], ["theme"])
+        self.assertEqual(result["doi"], "https://doi.org/10.12456/helloworld")
