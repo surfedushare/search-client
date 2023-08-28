@@ -26,7 +26,6 @@ class BaseSearchResultSerializer(serializers.Serializer):
 
     external_id = serializers.CharField()
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
-    doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     url = serializers.URLField()
     title = serializers.CharField()
     description = serializers.CharField()
@@ -45,6 +44,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
     provider = serializers.DictField(default=None, allow_null=True)
+    doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
     studies = serializers.ListField(child=serializers.CharField())
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
@@ -70,6 +70,7 @@ class LearningMaterialResultSerializer(SimpleLearningMaterialResultSerializer):
 class ResearchProductResultSerializer(BaseSearchResultSerializer):
 
     provider = serializers.SerializerMethodField()
+    doi = serializers.SerializerMethodField()
     type = serializers.CharField(source="technical_type")
     research_object_type = serializers.CharField()
     extension = serializers.DictField()
@@ -89,6 +90,9 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
             return provider["ror"]
         elif provider["external_id"]:
             return provider["external_id"]
+
+    def get_doi(self, obj):
+        return "https://doi.org/" + obj["doi"]
 
     def list_first_author(self, obj):
         authors = obj.get("authors", None)
