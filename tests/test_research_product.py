@@ -403,3 +403,19 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result["authors"], authors)
         self.assertEqual(result["research_themes"], ["theme"])
         self.assertEqual(result["doi"], "https://doi.org/10.12456/helloworld")
+
+    def test_no_doi(self):
+        hit = {
+            "_source": {
+                "title": "title",
+                "provider": {
+                    "ror": None,
+                    "external_id": None,
+                    "name": "Test",
+                    "slug": None
+                },
+                "doi": None
+            }
+        }
+        result = self.instance.parse_search_hit(hit)
+        self.assertEqual(result["doi"], None)

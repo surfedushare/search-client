@@ -92,7 +92,10 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
             return provider["external_id"]
 
     def get_doi(self, obj):
-        return "https://doi.org/" + obj["doi"]
+        doi = obj.get("doi", None)
+        if not doi:
+            return
+        return "https://doi.org/" + doi
 
     def list_first_author(self, obj):
         authors = obj.get("authors", None)
