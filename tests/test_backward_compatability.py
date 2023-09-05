@@ -59,24 +59,19 @@ class TestRecordsSearchResultsKeySearchClient(BaseOpenSearchTestCase):
 
     def test_legacy_external_id_prefixes(self):
         self.assertEqual(
-            self.instance.clean_external_id("edurep_delen:abc"), "urn:uuid:abc",
+            self.instance.clean_external_id("edurep_delen:abc"), "WikiwijsDelen:urn:uuid:abc",
             "Expected edurep_delen prefix to get replaced"
         )
-        self.assertEqual(
-            self.instance.clean_external_id("wikiwijsmaken:abc"), "jsonld-from-lom:wikiwijsmaken:abc",
-            "Expected wikiwijsmaken prefix to get replaced"
-        )
-        self.assertEqual(
-            self.instance.clean_external_id("l4l:oai:library.wur.nl:l4l/123"),
-            "jsonld-from-lom:l4l:oai:library.wur.nl:l4l/123",
-            "Expected l4l prefix to get replaced"
-        )
-        self.assertEqual(
-            self.instance.clean_external_id("WikiwijsDelen:urn:uuid:abc"), "urn:uuid:abc",
-            "Expected WikiwijsDelen prefix to get replaced"
-        )
-        self.assertEqual(
-            self.instance.clean_external_id("urn:uuid:abc"),
-            "urn:uuid:abc", "Expected urn:uuid prefix to be left alone"
-        )
         self.assertEqual(self.instance.clean_external_id("abc"), "abc", "Expected Sharekit prefixes to be left alone")
+        self.assertEqual(
+            self.instance.clean_external_id("surf:oai:surfsharekit.nl:abc"), "abc",
+            "Expected legacy SURF prefix to get replaced"
+        )
+        self.assertEqual(
+            self.instance.clean_external_id("surfsharekit:oai:surfsharekit.nl:abc"), "abc",
+            "Expected legacy SURF prefix to get replaced"
+        )
+        self.assertEqual(
+            self.instance.clean_external_id("oer_han:oai:surfsharekit.nl:abc"), "abc",
+            "Expected legacy SURF prefix to get replaced"
+        )

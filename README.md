@@ -16,6 +16,16 @@ brew update && brew upgrade pyenv
 pyenv install 3.10.4
 ```
 
+#### M1 setup
+
+M1 chips run very slow when using pyenv. You can instead opt to use miniforge.
+```
+brew install miniforge
+conda env create -f environment.yml
+conda activate search-client
+```
+
+
 #### General setup
 
 To install the basic environment and tooling you'll need to first setup a local environment on a host machine with:
@@ -31,6 +41,7 @@ To finish the general setup you can run this command to build Open Search:
 ```bash
 docker-compose up --build
 ```
+
 
 ## Getting started
 
