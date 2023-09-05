@@ -52,7 +52,7 @@ NL_MATERIAL = {
         "language": "nl",
         "title_plain": "Biologie en Didactiek",
         "text_plain": "Leermateriaal over biologie en didactiek op de universiteit.",
-        "external_id": "jsonld-from-lom:wikiwijsmaken:123",
+        "external_id": "wikiwijsmaken:123",
         "copyright": "cc-by-30",
         "lom_educational_levels": ["HBO"],
         "publisher_date": "2017-04-16T22:35:09+02:00",
