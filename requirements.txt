@@ -15,4 +15,4 @@ invoke==1.7.3
 ipython==8.15.0
 ipdb==0.13.3
 flake8==4.0.1
-wheel==0.38.4
+wheel==0.41.2
