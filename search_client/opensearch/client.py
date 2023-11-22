@@ -205,7 +205,8 @@ class SearchClient:
                 "simple_query_string": {
                     "fields": SEARCH_FIELDS[self.document_type],
                     "query": search_text,
-                    "default_operator": "and"
+                    "default_operator": "and",
+                    "quote_field_suffix": ".plain",
                 }
             }
             body["query"]["bool"]["must"] += [query_string]

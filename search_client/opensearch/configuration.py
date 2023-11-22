@@ -74,6 +74,10 @@ def create_open_search_index_configuration(lang: str, document_type: DocumentTyp
                 'title': {
                     'type': 'text',
                     'fields': {
+                        'plain': {
+                            'type': 'text',
+                            'analyzer': language_analyzers.get(lang, "standard"),
+                        },
                         'analyzed': {
                             'type': 'text',
                             'analyzer': language_analyzers.get(lang, "standard"),
@@ -88,6 +92,10 @@ def create_open_search_index_configuration(lang: str, document_type: DocumentTyp
                 'text': {
                     'type': 'text',
                     'fields': {
+                        'plain': {
+                            'type': 'text',
+                            'analyzer': language_analyzers.get(lang, "standard"),
+                        },
                         'analyzed': {
                             'type': 'text',
                             'analyzer': language_analyzers.get(lang, "standard"),
@@ -102,6 +110,10 @@ def create_open_search_index_configuration(lang: str, document_type: DocumentTyp
                 'description': {
                     'type': 'text',
                     'fields': {
+                        'plain': {
+                            'type': 'text',
+                            'analyzer': language_analyzers.get(lang, "standard"),
+                        },
                         'analyzed': {
                             'type': 'text',
                             'analyzer': language_analyzers.get(lang, "standard"),
