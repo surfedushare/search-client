@@ -24,6 +24,8 @@ class LabelSerializer(serializers.Serializer):
 
 class BaseSearchResultSerializer(serializers.Serializer):
 
+    srn = serializers.CharField(default=None)
+    set = serializers.CharField(default=None)
     external_id = serializers.CharField()
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
     url = serializers.URLField()
