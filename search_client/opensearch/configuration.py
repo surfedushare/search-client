@@ -167,6 +167,9 @@ def create_open_search_index_configuration(lang: str, document_type: DocumentTyp
                 'publisher_year': {
                     'type': 'keyword'
                 },
+                'publisher_year_normalized': {
+                    'type': 'keyword'
+                },
                 'keywords': {
                     'type': 'text',
                     'fields': {
