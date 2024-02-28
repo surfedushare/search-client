@@ -75,7 +75,6 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
     doi = serializers.SerializerMethodField()
     type = serializers.CharField(source="technical_type")
     research_object_type = serializers.CharField()
-    extension = serializers.DictField()
     parties = serializers.ListField(child=serializers.CharField(), source="publishers")
     research_themes = serializers.ListField(child=serializers.CharField())
     projects = serializers.ListField(child=serializers.CharField(), default=[])
