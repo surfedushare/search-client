@@ -28,6 +28,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
     set = serializers.CharField(default=None)
     external_id = serializers.CharField()
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
+    modified_at = serializers.CharField(default=None)
     url = serializers.URLField()
     title = serializers.CharField()
     description = serializers.CharField()

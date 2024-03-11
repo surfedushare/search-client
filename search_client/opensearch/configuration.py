@@ -170,6 +170,10 @@ def create_open_search_index_configuration(lang: str, document_type: DocumentTyp
                 'publisher_year_normalized': {
                     'type': 'keyword'
                 },
+                'modified_at': {
+                    'type': 'date',
+                    'format': 'strict_date_optional_time||yyyy-MM||epoch_millis'
+                },
                 'keywords': {
                     'type': 'text',
                     'fields': {
