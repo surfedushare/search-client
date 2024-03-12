@@ -393,7 +393,8 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
                     "name": "Test",
                     "slug": None
                 },
-                "doi": "10.12456/helloworld"
+                "doi": "10.12456/helloworld",
+                "modified_at": "1970-01-01T01:01:01Z"
             }
         }
         result = self.instance.parse_search_hit(hit)
@@ -403,6 +404,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result["authors"], authors)
         self.assertEqual(result["research_themes"], ["theme"])
         self.assertEqual(result["doi"], "https://doi.org/10.12456/helloworld")
+        self.assertEqual(result["modified_at"], "1970-01-01")
 
     def test_no_doi(self):
         hit = {

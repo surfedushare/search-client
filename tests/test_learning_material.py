@@ -466,7 +466,8 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
                 "learning_material_disciplines_normalized": ["discipline"],
                 "research_themes": ["theme"],
                 "study_vocabulary": ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"],
-                "doi": "10.12456/helloworld"
+                "doi": "10.12456/helloworld",
+                "modified_at": "1970-01-01"
             }
         }
         result = self.instance.parse_search_hit(hit)
@@ -476,6 +477,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result["description"], "description")
         self.assertEqual(result["authors"], authors)
         self.assertEqual(result["disciplines"], ["discipline"])
+        self.assertEqual(result["modified_at"], "1970-01-01")
         self.assertEqual(
             result["study_vocabulary"],
             ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"]

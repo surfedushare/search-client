@@ -1,3 +1,5 @@
+from django.utils.dateparse import parse_datetime
+
 from rest_framework import serializers
 
 
@@ -28,7 +30,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
     set = serializers.CharField(default=None)
     external_id = serializers.CharField()
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
-    modified_at = serializers.CharField(default=None)
+    modified_at = serializers.SerializerMethodField()
     url = serializers.URLField()
     title = serializers.CharField()
     description = serializers.CharField()
@@ -42,6 +44,15 @@ class BaseSearchResultSerializer(serializers.Serializer):
     has_parts = serializers.ListField(child=serializers.CharField())
     is_part_of = serializers.ListField(child=serializers.CharField())
     keywords = serializers.ListField(child=serializers.CharField())
+
+    def get_modified_at(self, obj):
+        modified_at = obj.get("modified_at")
+        if not modified_at:
+            return
+        date = parse_datetime(modified_at)
+        if not date:
+            return
+        return date.strftime("%Y-%m-%d")
 
 
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
