@@ -4,21 +4,12 @@ A Python wrapper around Open Search to make searching easier
 
 ## Prerequisites
 
-This project uses `Python 3.10` and`docker-compose`.
+This project uses `Python 3.10` and`Docker Compose V2`.
 Make sure they are installed on your system before installing the project.
 
 #### Mac OS setup
 
-We recommend installing Python through pyenv:
-
-```
-brew update && brew upgrade pyenv
-pyenv install 3.10.4
-```
-
-#### M1 setup
-
-M1 chips run very slow when using pyenv. You can instead opt to use miniforge.
+We recommend installing Python through Conda for Mac. M1 chips run very slow when using pyenv.
 ```
 brew install miniforge
 conda env create -f environment.yml
@@ -39,7 +30,7 @@ pip install -r requirements.txt
 To finish the general setup you can run this command to build Open Search:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 
@@ -54,8 +45,8 @@ source venv/bin/activate
 Then you can start the Open Search service through Docker:
 
 ```bash
-docker-compose up
-docker-compose down
+docker compose up
+docker compose down
 ```
 
 ## Tests
