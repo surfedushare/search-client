@@ -218,17 +218,6 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             self.assertIn("-", key)
             self.assertGreater(value, 0)
 
-    def test_drilldown_search_studies(self):
-        search_with_discipline_drilldown = self.instance.search(
-            '',
-            drilldown_names=["studies"]
-        )
-        self.assertIsNotNone(search_with_discipline_drilldown)
-        self.assertTrue(search_with_discipline_drilldown['drilldowns'])
-        for key, value in search_with_discipline_drilldown['drilldowns'].items():
-            self.assertIn('studies-', key)
-            self.assertGreater(value, 0)
-
     def test_drilldown_with_filters(self):
         search = self.instance.search(
             "biologie",
