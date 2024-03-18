@@ -308,6 +308,9 @@ def get_learning_material_search_mapping_properties():
         'study_vocabulary': {
             'type': 'keyword'
         },
+        'study_vocabulary_terms': {
+            'type': 'keyword'
+        },
         'learning_material_disciplines': {
             'type': 'keyword'
         },
