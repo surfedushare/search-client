@@ -296,44 +296,16 @@ def get_learning_material_search_mapping_properties():
         'doi': {
             'type': 'keyword'
         },
-        'material_type': {
-            'type': 'keyword'
-        },
         'material_types': {
             'type': 'keyword'
         },
-        'educational_levels': {
-            'type': 'keyword'
-        },
         'lom_educational_levels': {
-            'type': 'keyword'
-        },
-        'studies': {
             'type': 'keyword'
         },
         'disciplines': {
             'type': 'keyword'
         },
         'study_vocabulary': {
-            'type': 'keyword'
-        },
-        'ideas': {
-            'type': 'text',
-            'fields': {
-                'keyword': {
-                    'type': 'keyword',
-                    'ignore_above': 256
-                },
-                'folded': {
-                    'type': 'text',
-                    'analyzer': 'folding'
-                }
-            }
-        },
-        'learning_material_themes': {
-            'type': 'keyword'
-        },
-        'learning_material_themes_normalized': {
             'type': 'keyword'
         },
         'learning_material_disciplines': {
