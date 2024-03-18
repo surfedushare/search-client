@@ -20,11 +20,10 @@ class SearchClient:
                 "use_ssl": True,
                 "verify_certs": verify_certs,
             }
-        http_auth = basic_auth or (None, None,)
 
         self.client = OpenSearch(
             [host],
-            http_auth=http_auth,
+            http_auth=basic_auth,
             connection_class=RequestsHttpConnection,
             **protocol_config
         )
