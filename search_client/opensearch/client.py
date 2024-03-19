@@ -308,7 +308,20 @@ class SearchClient:
         stats = self.client.count(index=",".join([self.index_nl, self.index_en, self.index_unk]))
         return stats.get("count", 0)
 
-    def more_like_this(self, external_id: str, language: str, transform_results: bool = False) -> dict:
+    def more_like_this(self, identifier: str, language: str, transform_results: bool = False,
+                       is_external_identifier: bool = True) -> dict:
+        # As long as frontends are not using SRN we need to allow comparisons on external_id
+        if is_external_identifier:
+            results = self.get_documents_by_id([identifier])
+            # If we can't find the referenced document we return no results
+            if not results[self.search_results_key]:
+                result = self.parse_results_total(0, is_search=False)
+                result["results"] = []
+                return result
+            doc = results[self.search_results_key][0]
+            identifier = doc["srn"]
+
+        # Now that we have a SRN value as identifier we can continue as normal
         index = self.languages.get(language, self.index_unk)
         body = {
             "query": {
@@ -317,7 +330,7 @@ class SearchClient:
                     "like": [
                         {
                             "_index": index,
-                            "_id": external_id
+                            "_id": identifier
                         }
                     ],
                     "min_term_freq": 1,

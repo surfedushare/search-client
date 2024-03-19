@@ -91,6 +91,8 @@ def generate_nl_product(title=None, description=None, technical_type=None, sourc
         copy["technical_type"] = technical_type
     if source:
         copy["harvest_source"] = source
+    if source and external_id:
+        copy["srn"] = f"{source}:{external_id}"
     if copyright:
         copy["copyright"] = copyright
     if publisher_date:

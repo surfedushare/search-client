@@ -1,5 +1,6 @@
 NL_MATERIAL = {
     "math": {
+        "srn": "wikiwijsmaken:3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "title": "Didactiek van wiskundig denken",
         "text": "Leermateriaal over wiskunde en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT",
@@ -36,6 +37,7 @@ NL_MATERIAL = {
         "learning_material_disciplines_normalized": ["exact_informatica"]
     },
     "biology": {
+        "srn": "wikiwijsmaken:wikiwijsmaken:123",
         "title": "Didactiek van biologisch denken",
         "text": "Leermateriaal over biologie en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/91192/Biologiedidactiek_en_ICT",
@@ -91,6 +93,8 @@ def generate_nl_material(educational_levels=None, title=None, description=None, 
         copy["technical_type"] = technical_type
     if source:
         copy["harvest_source"] = source
+    if source and external_id:
+        copy["srn"] = f"{source}:{external_id}"
     if copyright:
         copy["copyright"] = copyright
     if publisher_date:

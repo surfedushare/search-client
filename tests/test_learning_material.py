@@ -31,7 +31,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
                                       studies=math_and_education_studies),
         )
         cls.search.index(
-            id="abc",
+            id="surfsharekit:abc",
             index=cls.get_alias("nl"),
             body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
                                       studies=math_and_education_studies, external_id="abc",
@@ -440,12 +440,19 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(unknown_mistake["did_you_mean"], {})
 
     def test_more_like_this(self):
-        more_like_this = self.instance.more_like_this("abc", "nl")
+        more_like_this = self.instance.more_like_this("surfsharekit:abc", "nl", is_external_identifier=False)
         self.assertEqual(more_like_this["results_total"]["value"], 4)
         self.assertEqual(more_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
-        none_like_this = self.instance.more_like_this("does-not-exist", "nl")
+        none_like_this = self.instance.more_like_this("surfsharekit:does-not-exist", "nl", is_external_identifier=False)
         self.assertEqual(none_like_this["results_total"]["value"], 0)
         self.assertEqual(none_like_this["results"], [])
+        # Using external_id as input (legacy)
+        legacy_like_this = self.instance.more_like_this("abc", "nl")
+        self.assertEqual(legacy_like_this["results_total"]["value"], 4)
+        self.assertEqual(legacy_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
+        legacy_none_like_this = self.instance.more_like_this("does-not-exist", "nl")
+        self.assertEqual(legacy_none_like_this["results_total"]["value"], 0)
+        self.assertEqual(legacy_none_like_this["results"], [])
 
     def test_author_suggestions(self):
         author_expectation = "Theo van den Bogaart"
