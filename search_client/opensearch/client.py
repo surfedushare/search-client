@@ -319,7 +319,7 @@ class SearchClient:
                 result["results"] = []
                 return result
             doc = results[self.search_results_key][0]
-            identifier = doc["srn"]
+            identifier = doc.get("srn", identifier)
 
         # Now that we have a SRN value as identifier we can continue as normal
         index = self.languages.get(language, self.index_unk)
