@@ -1,5 +1,6 @@
 NL_MATERIAL = {
     "math": {
+        "srn": "wikiwijsmaken:3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "title": "Onderzoek over wiskundig denken",
         "text": "Onderzoek over wiskunde en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT",
@@ -38,6 +39,7 @@ NL_MATERIAL = {
         }
     },
     "biology": {
+        "srn": "wikiwijsmaken:wikiwijsmaken:123",
         "title": "Onderzoek over biologisch denken",
         "text": "Onderzoek over biologie en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/91192/Biologiedidactiek_en_ICT",
