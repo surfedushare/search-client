@@ -311,6 +311,19 @@ def get_learning_material_search_mapping_properties():
         'study_vocabulary_terms': {
             'type': 'keyword'
         },
+        'ideas': {  # deprecated, but still used by Edusources atm
+            'type': 'text',
+            'fields': {
+                'keyword': {
+                    'type': 'keyword',
+                    'ignore_above': 256
+                },
+                'folded': {
+                    'type': 'text',
+                    'analyzer': 'folding'
+                }
+            }
+        },
         'learning_material_disciplines': {
             'type': 'keyword'
         },
