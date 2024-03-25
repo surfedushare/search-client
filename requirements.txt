@@ -1,5 +1,5 @@
 # Dependencies
-opensearch-py==2.4.2
+opensearch-py==2.5.0
 python-dateutil==2.9.0.post0
 requests==2.31.0
 
