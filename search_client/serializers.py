@@ -1,4 +1,4 @@
-from django.utils.dateparse import parse_datetime
+from dateutil.parser import parse as parse_datetime
 
 from rest_framework import serializers
 

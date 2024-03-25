@@ -296,19 +296,10 @@ def get_learning_material_search_mapping_properties():
         'doi': {
             'type': 'keyword'
         },
-        'material_type': {
-            'type': 'keyword'
-        },
         'material_types': {
             'type': 'keyword'
         },
-        'educational_levels': {
-            'type': 'keyword'
-        },
         'lom_educational_levels': {
-            'type': 'keyword'
-        },
-        'studies': {
             'type': 'keyword'
         },
         'disciplines': {
@@ -317,7 +308,10 @@ def get_learning_material_search_mapping_properties():
         'study_vocabulary': {
             'type': 'keyword'
         },
-        'ideas': {
+        'study_vocabulary_terms': {
+            'type': 'keyword'
+        },
+        'ideas': {  # deprecated, but still used by Edusources atm
             'type': 'text',
             'fields': {
                 'keyword': {
@@ -329,12 +323,6 @@ def get_learning_material_search_mapping_properties():
                     'analyzer': 'folding'
                 }
             }
-        },
-        'learning_material_themes': {
-            'type': 'keyword'
-        },
-        'learning_material_themes_normalized': {
-            'type': 'keyword'
         },
         'learning_material_disciplines': {
             'type': 'keyword'

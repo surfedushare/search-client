@@ -210,59 +210,12 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         search_biologie = self.instance.search("biologie")
         self.assertEqual(search_biologie_none_date, search_biologie)
 
-    def test_search_studies(self):
-        search_result = self.instance.search('')
-        search_result_filter_1 = self.instance.search(
-            '',
-            filters=[{
-                "external_id": "studies",
-                "items": ['0861c43d-1874-4788-b522-df8be575677f']
-            }]
-        )
-        search_result_filter_2 = self.instance.search(
-            '',
-            filters=[{
-                "external_id": "studies",
-                "items": ['2b363227-8633-4652-ad57-c61f1efc02c8']
-            }]
-        )
-        search_result_filter_3 = self.instance.search(
-            '',
-            filters=[{
-                "external_id": "studies",
-                "items": ['0861c43d-1874-4788-b522-df8be575677f', '2b363227-8633-4652-ad57-c61f1efc02c8']
-            }]
-        )
-        self.assertNotEqual(search_result, search_result_filter_1)
-        self.assertNotEqual(search_result, search_result_filter_2)
-        self.assertNotEqual(search_result_filter_1, search_result_filter_2)
-        self.assertGreater(search_result['results_total']['value'], 0)
-        self.assertGreater(search_result_filter_1['results_total']['value'], 0)
-        self.assertGreater(search_result_filter_2['results_total']['value'], 0)
-        self.assertGreater(
-            search_result_filter_1['results_total']['value'] + search_result_filter_2['results_total']['value'],
-            search_result_filter_3['results_total']['value'],
-            "Expected at least 1 material to appear in both search_result_filter_1 and search_result_filter_2, "
-            "which would make the sum of those results larger than filtering on both studies together"
-        )
-
     def test_drilldown_search(self):
         search_biologie = self.instance.search("biologie", drilldown_names=["technical_type"])
         self.assertIsNotNone(search_biologie)
         self.assertEqual(len(search_biologie['drilldowns']), 2)
         for key, value in search_biologie['drilldowns'].items():
             self.assertIn("-", key)
-            self.assertGreater(value, 0)
-
-    def test_drilldown_search_studies(self):
-        search_with_discipline_drilldown = self.instance.search(
-            '',
-            drilldown_names=["studies"]
-        )
-        self.assertIsNotNone(search_with_discipline_drilldown)
-        self.assertTrue(search_with_discipline_drilldown['drilldowns'])
-        for key, value in search_with_discipline_drilldown['drilldowns'].items():
-            self.assertIn('studies-', key)
             self.assertGreater(value, 0)
 
     def test_drilldown_with_filters(self):

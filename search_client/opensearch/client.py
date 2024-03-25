@@ -11,7 +11,7 @@ class SearchClient:
 
     def __init__(self, host: str, document_type: DocumentTypes, alias_prefix: str,
                  verify_certs: bool = True, basic_auth: tuple[str, str] = None,
-                 search_results_key: str = "records") -> None:
+                 search_results_key: str = "results") -> None:
         protocol_config = {}
         if host.startswith("https"):
             protocol_config = {
@@ -20,11 +20,10 @@ class SearchClient:
                 "use_ssl": True,
                 "verify_certs": verify_certs,
             }
-        http_auth = basic_auth or (None, None,)
 
         self.client = OpenSearch(
             [host],
-            http_auth=http_auth,
+            http_auth=basic_auth,
             connection_class=RequestsHttpConnection,
             **protocol_config
         )
