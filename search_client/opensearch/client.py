@@ -97,6 +97,7 @@ class SearchClient:
         :return record: parsed record
         """
         data = hit["_source"]
+        data["score"] = hit.get("_score", 1.00)
         serializer = self.get_result_serializer()
         # Basic mapping between field and data (excluding any method fields with a source of "*")
         field_mapping = {
