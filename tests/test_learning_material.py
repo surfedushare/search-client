@@ -455,3 +455,22 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         }
         result = self.instance.parse_search_hit(hit)
         self.assertEqual(result["doi"], None)
+
+    def test_score(self):
+        hit = {
+            "_source": {
+                "not": "important"
+            },
+            "_score": 3.14
+        }
+        result = self.instance.parse_search_hit(hit)
+        self.assertEqual(result["score"], 3.14)
+
+    def test_no_score(self):
+        hit = {
+            "_source": {
+                "not": "important"
+            },
+        }
+        result = self.instance.parse_search_hit(hit)
+        self.assertEqual(result["score"], 1.00)
