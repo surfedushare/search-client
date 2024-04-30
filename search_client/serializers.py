@@ -57,7 +57,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
 
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    score = serializers.FloatField(required=True)
+    score = serializers.FloatField(default=1.0)
     provider = serializers.DictField(default=None, allow_null=True)
     doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
