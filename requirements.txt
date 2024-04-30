@@ -14,7 +14,7 @@ requests-aws4auth==1.2.3
 tox==4.14.2
 pytest==8.1.1
 invoke==2.2.0
-ipython==8.23.0
+ipython==8.24.0
 ipdb==0.13.13
 flake8==7.0.0
 wheel==0.43.0
