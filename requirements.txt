@@ -11,7 +11,7 @@ pytz==2022.7.1
 requests-aws4auth==1.2.3
 
 # Tools
-tox==4.14.2
+tox==4.15.0
 pytest==8.2.0
 invoke==2.2.0
 ipython==8.24.0
