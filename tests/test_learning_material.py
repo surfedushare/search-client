@@ -446,6 +446,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertNotIn("is_part_of", result, "Expected data not given in learning materials to not be included")
         self.assertNotIn("has_parts", result, "Expected data not given in learning materials to not be included")
         self.assertEqual(result["doi"], "10.12456/helloworld")
+        self.assertIsNone(result["subtitle"])
 
     def test_no_doi(self):
         hit = {

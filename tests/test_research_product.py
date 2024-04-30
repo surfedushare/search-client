@@ -412,6 +412,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(result["research_themes"], ["theme"])
         self.assertEqual(result["doi"], "https://doi.org/10.12456/helloworld")
         self.assertEqual(result["modified_at"], "1970-01-01")
+        self.assertIsNone(result["subtitle"])
 
     def test_no_doi(self):
         hit = {
