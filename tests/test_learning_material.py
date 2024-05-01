@@ -421,6 +421,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         hit = {
             "_source": {
                 "title": "title",
+                "subtitle": None,
                 "description": "description",
                 "authors": authors,
                 "learning_material_disciplines_normalized": ["discipline"],
