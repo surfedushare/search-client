@@ -9,6 +9,7 @@ class DocumentTypes(Enum):
 SEARCH_FIELDS = {
     DocumentTypes.LEARNING_MATERIAL: [
         "title^5", "title.analyzed", "title.folded^5",
+        "subtitle^5", "subtitle.analyzed", "subtitle.folded^5",
         "text^3", "text.analyzed", "text.folded^3",
         "description^3", "description.analyzed", "description.folded^3",
         "keywords^4", "keywords.folded^4",
@@ -19,6 +20,7 @@ SEARCH_FIELDS = {
     ],
     DocumentTypes.RESEARCH_PRODUCT: [
         "title^2", "title.analyzed^2", "title.folded^2",
+        "subtitle^2", "subtitle.analyzed^2", "subtitle.folded^2",
         "text", "text.analyzed", "text.folded",
         "description", "description.analyzed", "description.folded",
         "keywords", "keywords.folded",

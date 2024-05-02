@@ -57,7 +57,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
 
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    score = serializers.FloatField(required=True)
+    score = serializers.FloatField(default=1.0)
     provider = serializers.DictField(default=None, allow_null=True)
     doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
@@ -69,6 +69,7 @@ class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
     technical_type = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     publishers = serializers.ListField(child=serializers.CharField())
     consortium = serializers.CharField(allow_blank=True, allow_null=True)
+    subtitle = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class LearningMaterialResultSerializer(SimpleLearningMaterialResultSerializer):
@@ -93,6 +94,7 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
     projects = serializers.ListField(child=serializers.CharField(), default=[])
     owners = serializers.SerializerMethodField(method_name="list_first_author")
     contacts = serializers.SerializerMethodField(method_name="list_first_author")
+    subtitle = serializers.SerializerMethodField()
 
     def get_provider(self, obj):
         provider = obj["provider"]
@@ -116,3 +118,10 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
         if not authors:
             return []
         return [authors[0]]
+
+    def get_subtitle(self, obj):
+        subtitle = obj.get("subtitle")
+        if not subtitle:
+            return
+        title = obj.get("title", "")
+        return subtitle if subtitle not in title else None

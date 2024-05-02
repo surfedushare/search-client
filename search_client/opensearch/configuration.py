@@ -85,6 +85,20 @@ def create_open_search_index_configuration(lang: str, document_type: DocumentTyp
                         }
                     }
                 },
+                'subtitle': {
+                    'type': 'text',
+                    'fields': {
+                        'analyzed': {
+                            'type': 'text',
+                            'analyzer': language_analyzers.get(lang, "standard"),
+                            'search_analyzer': search_analyzer,
+                        },
+                        'folded': {
+                            'type': 'text',
+                            'analyzer': 'folding'
+                        }
+                    }
+                },
                 'text': {
                     'type': 'text',
                     'fields': {
