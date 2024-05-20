@@ -12,7 +12,7 @@ requests-aws4auth==1.2.3
 
 # Tools
 tox==4.15.0
-pytest==8.2.0
+pytest==8.2.1
 invoke==2.2.0
 ipython==8.24.0
 ipdb==0.13.13
