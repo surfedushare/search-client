@@ -351,6 +351,16 @@ def get_learning_material_search_mapping_properties():
             'type': 'keyword'
         },
         'consortium': {
-            'type': 'keyword'
+            'type': 'text',
+            'fields': {
+                'keyword': {
+                    'type': 'keyword',
+                    'ignore_above': 256
+                },
+                'folded': {
+                    'type': 'text',
+                    'analyzer': 'folding'
+                }
+            }
         },
     }
