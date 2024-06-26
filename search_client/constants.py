@@ -16,7 +16,7 @@ SEARCH_FIELDS = {
         "authors.name.folded^2",
         "publishers^2", "publishers.folded^2",
         "consortium^2", "consortium.folded^2",
-        "ideas", "ideas.folded"
+        "study_vocabulary_terms", "study_vocabulary_terms.folded"
     ],
     DocumentTypes.RESEARCH_PRODUCT: [
         "title^2", "title.analyzed^2", "title.folded^2",

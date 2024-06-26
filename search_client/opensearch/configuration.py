@@ -316,14 +316,17 @@ def get_learning_material_search_mapping_properties():
         'lom_educational_levels': {
             'type': 'keyword'
         },
-        'disciplines': {
-            'type': 'keyword'
-        },
         'study_vocabulary': {
             'type': 'keyword'
         },
         'study_vocabulary_terms': {
-            'type': 'keyword'
+            'type': 'text',
+            'fields': {
+                'folded': {
+                    'type': 'text',
+                    'analyzer': 'folding'
+                }
+            }
         },
         'ideas': {  # deprecated, but still used by Edusources atm
             'type': 'text',
@@ -338,13 +341,30 @@ def get_learning_material_search_mapping_properties():
                 }
             }
         },
+        # TODO: remove learning_material prefix from discipline (aka theme) fields after Edusources stops using them
         'learning_material_disciplines': {
             'type': 'keyword'
         },
         'learning_material_disciplines_normalized': {
             'type': 'keyword'
         },
-        'consortium': {
+        'disciplines': {
             'type': 'keyword'
+        },
+        'disciplines_normalized': {
+            'type': 'keyword'
+        },
+        'consortium': {
+            'type': 'text',
+            'fields': {
+                'keyword': {
+                    'type': 'keyword',
+                    'ignore_above': 256
+                },
+                'folded': {
+                    'type': 'text',
+                    'analyzer': 'folding'
+                }
+            }
         },
     }
