@@ -323,7 +323,13 @@ def get_learning_material_search_mapping_properties():
             'type': 'keyword'
         },
         'study_vocabulary_terms': {
-            'type': 'keyword'
+            'type': 'text',
+            'fields': {
+                'folded': {
+                    'type': 'text',
+                    'analyzer': 'folding'
+                }
+            }
         },
         'ideas': {  # deprecated, but still used by Edusources atm
             'type': 'text',
