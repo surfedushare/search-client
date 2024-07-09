@@ -67,6 +67,8 @@ class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
     ideas = serializers.ListField(child=serializers.CharField(), default=[])
     study_vocabulary = serializers.ListField(child=serializers.CharField(), default=[])
     technical_type = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    material_types = serializers.ListField(child=serializers.CharField(), default=[])
+    aggregation_level = serializers.CharField(allow_blank=True, allow_null=True)
     publishers = serializers.ListField(child=serializers.CharField())
     consortium = serializers.CharField(allow_blank=True, allow_null=True)
     subtitle = serializers.CharField(allow_blank=True, allow_null=True)
