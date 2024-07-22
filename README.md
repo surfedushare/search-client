@@ -4,7 +4,7 @@ A Python wrapper around Open Search to make searching easier
 
 ## Prerequisites
 
-This project uses `Python 3.10` and`Docker Compose V2`.
+This project uses `Python 3.10` and `Docker Compose V2`.
 Make sure they are installed on your system before installing the project.
 
 #### Mac OS setup
