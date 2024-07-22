@@ -42,7 +42,6 @@ class BaseOpenSearchTestCase(TestCase):
             cls.config.open_search.url,
             cls.document_type,
             cls.config.open_search.alias_prefix,
-            search_results_key="results"
         )
 
     @classmethod

@@ -10,8 +10,7 @@ from search_client.serializers import SimpleLearningMaterialResultSerializer, Re
 class SearchClient:
 
     def __init__(self, host: str, document_type: DocumentTypes, alias_prefix: str,
-                 verify_certs: bool = True, basic_auth: tuple[str, str] = None,
-                 search_results_key: str = "results") -> None:
+                 verify_certs: bool = True, basic_auth: tuple[str, str] = None) -> None:
         protocol_config = {}
         if host.startswith("https"):
             protocol_config = {
@@ -32,7 +31,6 @@ class SearchClient:
         self.index_nl = f"{alias_prefix}-nl"
         self.index_en = f"{alias_prefix}-en"
         self.index_unk = f"{alias_prefix}-unk"
-        self.search_results_key = search_results_key
         self.languages = {
             "nl": self.index_nl,
             "en": self.index_en
@@ -73,7 +71,7 @@ class SearchClient:
         result['did_you_mean'] = did_you_mean
 
         # Transform hits into records
-        result[self.search_results_key] = [
+        result["results"] = [
             self.parse_search_hit(hit)
             for hit in hits['hits']
         ]
@@ -162,7 +160,7 @@ class SearchClient:
         This allows calculation of 'item counts' (i.e. how many results there are in through a certain filter)
         """
         search_results = self.search(search_text=search_text, filters=filters, drilldown_names=drilldown_names)
-        search_results[self.search_results_key] = []
+        search_results["results"] = []
         search_results.update(self.parse_results_total(0))
         return search_results
 
@@ -295,7 +293,7 @@ class SearchClient:
         search_result = self.parse_search_result(raw_result)
         documents = {
             document["external_id"]: document
-            for document in search_result[self.search_results_key]
+            for document in search_result["results"]
         }
         results = []
         for external_id in corrected_external_ids:
@@ -303,7 +301,7 @@ class SearchClient:
                 continue
             results.append(documents[external_id])
         search_result.update(self.parse_results_total(len(results)))
-        search_result[self.search_results_key] = results
+        search_result["results"] = results
         return search_result
 
     def stats(self) -> dict:
@@ -316,11 +314,11 @@ class SearchClient:
         if is_external_identifier:
             results = self.get_documents_by_id([identifier])
             # If we can't find the referenced document we return no results
-            if not results[self.search_results_key]:
-                result = self.parse_results_total(0, is_search=False)
+            if not results["results"]:
+                result = self.parse_results_total(0)
                 result["results"] = []
                 return result
-            doc = results[self.search_results_key][0]
+            doc = results["results"][0]
             identifier = doc.get("srn", identifier)
 
         # Now that we have a SRN value as identifier we can continue as normal
@@ -345,7 +343,7 @@ class SearchClient:
             body=body
         )
         hits = search_result.pop("hits")
-        result = self.parse_results_total(hits["total"], is_search=False)
+        result = self.parse_results_total(hits["total"])
         result["results"] = [
             self.parse_search_hit(hit, transform=transform_results)
             for hit in hits["hits"]
@@ -373,7 +371,7 @@ class SearchClient:
             body=body
         )
         hits = search_result.pop("hits")
-        result = self.parse_results_total(hits["total"], is_search=False)
+        result = self.parse_results_total(hits["total"])
         result["results"] = [
             self.parse_search_hit(hit, transform=transform_results)
             for hit in hits["hits"]
@@ -475,17 +473,14 @@ class SearchClient:
             ordering = ordering[1:]
         return {ordering: {"order": order}}
 
-    def parse_results_total(self, total: dict | int, is_search: bool = True) -> dict:
+    def parse_results_total(self, total: dict | int) -> dict:
         if isinstance(total, int):  # the total did not come from OpenSearch directly, but was deferred somehow
             total = {"value": total, "relation": "eq"}
-        total_key = f"{self.search_results_key}_total" if is_search else "results_total"
-        legacy_total_key = "recordcount" if is_search else "records_total"
         return {
-            total_key: {
+            "results_total": {
                 "value": total["value"],
                 "is_precise": total["relation"] != "gte"
-            },
-            legacy_total_key: total["value"]
+            }
         }
 
     def parse_index_language(self, filters: list[dict]) -> list[str]:

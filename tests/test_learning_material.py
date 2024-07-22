@@ -88,7 +88,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertGreater(search_result['results_total']['value'], search_result_filter['results_total']['value'])
         self.assertEqual(
             set(search_result.keys()),
-            {"results_total", "recordcount", "results", "drilldowns", "did_you_mean"}
+            {"results_total", "results", "drilldowns", "did_you_mean"}
         )
         # does an empty search return a list?
         self.assertIsInstance(search_result['results'], list)
