@@ -6,7 +6,7 @@ from configuration import create_configuration
 
 from search_client import SearchClient
 from search_client.constants import DocumentTypes, LANGUAGES
-from search_client.opensearch.configuration import create_open_search_index_configuration
+from search_client.opensearch.indices.legacy import create_open_search_index_configuration
 
 
 class BaseOpenSearchTestCase(TestCase):
