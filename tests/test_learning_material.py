@@ -424,7 +424,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
                 "subtitle": None,
                 "description": "description",
                 "authors": authors,
-                "learning_material_disciplines_normalized": ["discipline"],
+                "disciplines_normalized": ["discipline"],
                 "research_themes": ["theme"],
                 "study_vocabulary": ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"],
                 "doi": "10.12456/helloworld",
