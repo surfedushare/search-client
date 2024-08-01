@@ -31,8 +31,8 @@ NL_MATERIAL = {
         "study_vocabulary": [],
         "doi": None,
         "technical_type": "document",
-        "learning_material_disciplines": ["exact_informatica"],
-        "learning_material_disciplines_normalized": ["exact_informatica"]
+        "disciplines": ["exact_informatica"],
+        "disciplines_normalized": ["exact_informatica"]
     },
     "biology": {
         "srn": "wikiwijsmaken:wikiwijsmaken:123",
@@ -66,8 +66,8 @@ NL_MATERIAL = {
         "study_vocabulary": [],
         "doi": None,
         "technical_type": "document",
-        "learning_material_disciplines": ["aarde_milieu"],
-        "learning_material_disciplines_normalized": ["aarde_milieu"]
+        "disciplines": ["aarde_milieu"],
+        "disciplines_normalized": ["aarde_milieu"]
     }
 }
 
