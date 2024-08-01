@@ -41,7 +41,7 @@ class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
     provider = serializers.DictField(default=None, allow_null=True)
     doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
-    studies = serializers.ListField(child=serializers.CharField())
+    studies = serializers.ListField(child=serializers.CharField(), default=[])
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
                                         source="learning_material_disciplines_normalized")
     ideas = serializers.ListField(child=serializers.CharField(), default=[])
@@ -58,7 +58,7 @@ class LearningMaterialResultSerializer(SimpleLearningMaterialResultSerializer):
 
     authors = serializers.ListField(child=serializers.CharField())
     lom_educational_levels = serializers.ListField(child=serializers.DictField())
-    studies = serializers.ListField(child=serializers.DictField())
+    studies = serializers.ListField(child=serializers.DictField(), default=[])
     view_count = serializers.IntegerField()
     applaud_count = serializers.IntegerField()
     avg_star_rating = serializers.IntegerField()
