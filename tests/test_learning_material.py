@@ -314,7 +314,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertEqual(document['title'], 'Didactiek van wiskundig denken')
         self.assertEqual(
             document['url'],
-            "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT"
+            "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e"
         )
         self.assertEqual(document['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
         self.assert_value_from_result(document, 'publishers', ["Wikiwijs Maken"])
