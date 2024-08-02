@@ -1,14 +1,29 @@
 NL_MATERIAL = {
     "math": {
-        "srn": "wikiwijsmaken:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+        "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+        "set": "sharekit:edusources",
         "title": "Onderzoek over wiskundig denken",
         "text": "Onderzoek over wiskunde en didactiek op de universiteit.",
-        "url": "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT",
+        "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
         "files": [
             {
-                "mime_type": "application/x-zip",
-                "url": "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT",
-                "title": "Wiskundedidactiek_en_ICT"
+                "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:"
+                       "bdd27d20f1182219c6c50714bd4e9d178af38ef6",
+                "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
+                "hash": "2ad5ffa1ee1b58c84c1adc9acbeff25c",
+                "type": "document",
+                "state": "active",
+                "title": "Didactiek van wiskundig denken.pdf",
+                "is_link": True,
+                "priority": 0,
+                "copyright": "cc-by-40",
+                "mime_type": "application/pdf",
+                "access_rights": "OpenAccess",
+                "previews": {
+                    "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
+                    "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
+                    "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
+                }
             }
         ],
         "description":
@@ -26,7 +41,7 @@ NL_MATERIAL = {
         "is_part_of": [],
         "suggest_phrase": "Onderzoek over wiskunde en didactiek op de universiteit.",
         "suggest_completion": ["Onderzoek", "over", "wiskunde", "en", "didactiek", "op", "de", "universiteit."],
-        "doi": None,
+        "doi": "10.12345",
         "technical_type": "document",
         "research_themes": ["exact_informatica"],
         "provider": {
@@ -34,18 +49,35 @@ NL_MATERIAL = {
             "external_id": None,
             "name": "Wikiwijs Maken",
             "slug": None
+        },
+        "highlight": {
+            "description": [
+                "<em>Materiaal</em> voor lerarenopleidingen"
+            ],
+            "text": [
+                "Leer<em>materiaal</em> over wiskunde"
+            ]
         }
     },
     "biology": {
-        "srn": "wikiwijsmaken:wikiwijsmaken:123",
+        "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
+        "set": "edurep:wikiwijsmaken",
         "title": "Onderzoek over biologisch denken",
         "text": "Onderzoek over biologie en didactiek op de universiteit.",
-        "url": "https://maken.wikiwijs.nl/91192/Biologiedidactiek_en_ICT",
+        "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
         "files": [
             {
-                "mime_type": "application/x-zip",
-                "url": "https://maken.wikiwijs.nl/91192/Biologiedidactiek_en_ICT",
-                "title": "Biologiedidactiek_en_ICT"
+                "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123:16bdc1e9a083ebe1878ec5b867bf850562feff35",
+                "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
+                "hash": "16bdc1e9a083ebe1878ec5b867bf850562feff35",
+                "type": "website",
+                "state": "active",
+                "title": "URL 1",
+                "is_link": True,
+                "priority": 0,
+                "copyright": "cc-by-40",
+                "mime_type": "text/html",
+                "access_rights": "OpenAccess"
             }
         ],
         "description":
@@ -72,6 +104,11 @@ NL_MATERIAL = {
             "name": "Wikiwijs Maken",
             "slug": None
         }
+    },
+    "highlight": {
+        "text": [
+            "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
+        ]
     }
 }
 
