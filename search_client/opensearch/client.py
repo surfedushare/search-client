@@ -167,7 +167,7 @@ class SearchClient:
         return search_results
 
     def search(self, search_text: str, drilldown_names: list[str] = None, filters: list[dict] = None,
-               ordering: str = None, page: int = 1, page_size: int = 5) -> dict:
+               ordering: str = None, page: int = 1, page_size: int = 5, min_score: float = 0.00) -> dict:
         """
         Build and send a query to search engine and parse it before returning.
 
@@ -185,6 +185,7 @@ class SearchClient:
             'query': {
                 "bool": defaultdict(list)
             },
+            'min_score': min_score,
             'from': start_record,
             'size': page_size,
             'post_filter': {
