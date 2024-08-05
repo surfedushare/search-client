@@ -47,7 +47,8 @@ class TestPydanticToDictConversion(TestCase):
             "modified_at": None,
             "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
             "title": "Didactiek van wiskundig denken",
-            "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op wiskundedidactiek en ICT met Theo van den Bogaart",
+            "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                           "wiskundedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
             "video": None,
@@ -59,7 +60,8 @@ class TestPydanticToDictConversion(TestCase):
             },
             "files": [
                 {
-                    "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:bdd27d20f1182219c6c50714bd4e9d178af38ef6",
+                    "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:"
+                           "bdd27d20f1182219c6c50714bd4e9d178af38ef6",
                     "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
                     "hash": "2ad5ffa1ee1b58c84c1adc9acbeff25c",
                     "type": "document",
@@ -73,7 +75,8 @@ class TestPydanticToDictConversion(TestCase):
                     "previews": {
                         "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
                         "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
-                        "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
+                        "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-"
+                                         "200x150.png"
                     }
                 }
             ],
@@ -150,7 +153,8 @@ class TestPydanticToDictConversion(TestCase):
             "modified_at": None,
             "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
             "title": "Onderzoek over wiskundig denken",
-            "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op wiskundedidactiek en ICT met Theo van den Bogaart",
+            "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                           "wiskundedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-30",
             "video": None,
@@ -158,7 +162,8 @@ class TestPydanticToDictConversion(TestCase):
             "previews": None,
             "files": [
                 {
-                    "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:bdd27d20f1182219c6c50714bd4e9d178af38ef6",
+                    "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:"
+                           "bdd27d20f1182219c6c50714bd4e9d178af38ef6",
                     "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
                     "hash": "2ad5ffa1ee1b58c84c1adc9acbeff25c",
                     "type": "document",
@@ -172,7 +177,8 @@ class TestPydanticToDictConversion(TestCase):
                     "previews": {
                         "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
                         "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
-                        "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
+                        "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-"
+                                         "200x150.png"
                     }
                 }
             ],
@@ -264,7 +270,8 @@ class TestPydanticToDictConversion(TestCase):
             "modified_at": None,
             "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
             "title": "Didactiek van biologisch denken",
-            "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT met Theo van den Bogaart",
+            "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                           "biologiedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
             "video": None,
@@ -339,7 +346,8 @@ class TestPydanticToDictConversion(TestCase):
             "modified_at": None,
             "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
             "title": "Onderzoek over biologisch denken",
-            "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT met Theo van den Bogaart",
+            "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                           "biologiedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-30",
             "video": None,
