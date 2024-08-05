@@ -48,6 +48,7 @@ NL_MATERIAL = {
         "technical_type": "document",
         "disciplines": ["exact_informatica"],
         "disciplines_normalized": ["exact_informatica"],
+        "learning_material_disciplines_normalized": ["exact_informatica"],
         "previews": {
             "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
             "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
@@ -111,6 +112,7 @@ NL_MATERIAL = {
         "technical_type": "document",
         "disciplines": ["aarde_milieu"],
         "disciplines_normalized": ["aarde_milieu"],
+        "learning_material_disciplines_normalized": ["exact_informatica"],
         "provider": {
             "name": "Wikiwijs Maken",
             "slug": None,
