@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
 from collections import defaultdict
 
 from rest_framework.serializers import Serializer
@@ -7,25 +10,46 @@ from search_client.constants import DocumentTypes, SEARCH_FIELDS, EDUREP_LEGACY_
 from search_client.serializers.legacy import SimpleLearningMaterialResultSerializer, ResearchProductResultSerializer
 
 
+@dataclass(frozen=True, slots=True)
+class OpenSearchClientBuilder:
+    hosts: list[str]
+    use_ssl: bool = False
+    http_auth: tuple[str, str] | None = None
+
+    # Some default values that are only relevant when using SSL
+    scheme: str = "https"
+    port: int = 443
+    verify_certs: bool = True
+
+    @classmethod
+    def from_host(cls, host: str, http_auth: tuple[str, str] | None = None) -> OpenSearchClientBuilder:
+        """
+        A convenience method to build a SearchClientBuilder from a single host string.
+        """
+        use_ssl = host.startswith("https")
+        return OpenSearchClientBuilder(hosts=[host], http_auth=http_auth, use_ssl=use_ssl)
+
+    def build(self) -> OpenSearch:
+        connection_configuration = {}
+        if self.use_ssl:
+            connection_configuration = {
+                "use_ssl": True,
+                "scheme": self.scheme,
+                "port": self.port,
+                "verify_certs": self.verify_certs,
+            }
+        return OpenSearch(
+            hosts=self.hosts,
+            http_auth=self.http_auth,
+            connection_class=RequestsHttpConnection,
+            **connection_configuration
+        )
+
+
 class SearchClient:
 
-    def __init__(self, host: str, document_type: DocumentTypes, alias_prefix: str,
-                 verify_certs: bool = True, basic_auth: tuple[str, str] = None) -> None:
-        protocol_config = {}
-        if host.startswith("https"):
-            protocol_config = {
-                "scheme": "https",
-                "port": 443,
-                "use_ssl": True,
-                "verify_certs": verify_certs,
-            }
-
-        self.client = OpenSearch(
-            [host],
-            http_auth=basic_auth,
-            connection_class=RequestsHttpConnection,
-            **protocol_config
-        )
+    def __init__(self, opensearch_client: OpenSearch, document_type: DocumentTypes, alias_prefix: str) -> None:
+        self.client = opensearch_client
         self.document_type = document_type
         self.alias_prefix = alias_prefix
         self.index_nl = f"{alias_prefix}-nl"

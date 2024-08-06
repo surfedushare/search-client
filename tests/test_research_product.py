@@ -2,7 +2,7 @@ from dateutil.parser import parse
 from datetime import datetime
 
 from tests.base import BaseOpenSearchTestCase
-from search_client import DocumentTypes
+from search_client.constants import DocumentTypes
 from search_client.factories import generate_nl_product
 
 
