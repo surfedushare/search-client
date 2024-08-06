@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from search_client import DocumentTypes
+from search_client.constants import DocumentTypes
 from search_client.opensearch.indices.legacy import create_open_search_index_configuration
 
 

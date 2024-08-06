@@ -4,7 +4,7 @@ from opensearchpy import OpenSearch
 
 from configuration import create_configuration
 
-from search_client import SearchClient
+from search_client.opensearch import SearchClient, OpenSearchClientBuilder
 from search_client.constants import DocumentTypes, LANGUAGES
 from search_client.opensearch.indices.legacy import create_open_search_index_configuration
 
@@ -38,8 +38,9 @@ class BaseOpenSearchTestCase(TestCase):
                 ignore=400,
                 body=cls.index_body('nl')
             )
+        opensearch_client = OpenSearchClientBuilder.from_host(cls.config.open_search.url).build()
         cls.instance = SearchClient(
-            cls.config.open_search.url,
+            opensearch_client,
             cls.document_type,
             cls.config.open_search.alias_prefix,
         )

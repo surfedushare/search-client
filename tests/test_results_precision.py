@@ -1,5 +1,6 @@
 from tests.base import BaseOpenSearchTestCase
-from search_client import SearchClient, DocumentTypes
+from search_client.constants import DocumentTypes
+from search_client.opensearch import SearchClient, OpenSearchClientBuilder
 
 
 class TestRecordsSearchResultsKeySearchClient(BaseOpenSearchTestCase):
@@ -9,8 +10,9 @@ class TestRecordsSearchResultsKeySearchClient(BaseOpenSearchTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        opensearch_client = OpenSearchClientBuilder.from_host(cls.config.open_search.url).build()
         cls.instance = SearchClient(
-            cls.config.open_search.url,
+            opensearch_client,
             cls.document_type,
             cls.config.open_search.alias_prefix,
         )
