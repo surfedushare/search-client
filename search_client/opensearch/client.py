@@ -3,11 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from collections import defaultdict
 
-from rest_framework.serializers import Serializer
+from pydantic import BaseModel
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
-from search_client.constants import DocumentTypes, SEARCH_FIELDS, EDUREP_LEGACY_ID_PREFIXES
-from search_client.serializers.legacy import SimpleLearningMaterialResultSerializer, ResearchProductResultSerializer
+from search_client.constants import Platforms, EDUREP_LEGACY_ID_PREFIXES
+from search_client.opensearch.configuration import (SearchConfiguration, build_presets_search_configuration,
+                                                    MultilingualIndicesSearchConfiguration)
 
 
 @dataclass(frozen=True, slots=True)
@@ -48,17 +49,15 @@ class OpenSearchClientBuilder:
 
 class SearchClient:
 
-    def __init__(self, opensearch_client: OpenSearch, document_type: DocumentTypes, alias_prefix: str) -> None:
+    client: OpenSearch
+    configuration: SearchConfiguration
+
+    def __init__(self, opensearch_client: OpenSearch, platform: Platforms,
+                 configuration: SearchConfiguration | None = None, presets: list[str] | None = None) -> None:
         self.client = opensearch_client
-        self.document_type = document_type
-        self.alias_prefix = alias_prefix
-        self.index_nl = f"{alias_prefix}-nl"
-        self.index_en = f"{alias_prefix}-en"
-        self.index_unk = f"{alias_prefix}-unk"
-        self.languages = {
-            "nl": self.index_nl,
-            "en": self.index_en
-        }
+        self.configuration = configuration or build_presets_search_configuration(
+            platform, presets, default="products:multilingual-indices"
+        )
 
     def __str__(self) -> str:
         return f"<SearchClient({self.client})>"
@@ -101,46 +100,20 @@ class SearchClient:
         ]
         return result
 
-    def get_result_serializer(self) -> Serializer | None:
-        match self.document_type:
-            case DocumentTypes.LEARNING_MATERIAL:
-                return SimpleLearningMaterialResultSerializer()
-            case DocumentTypes.RESEARCH_PRODUCT:
-                return ResearchProductResultSerializer()
-            case _:
-                raise TypeError(f"Unknown document type for result serialization: {self.document_type}")
-
-    def parse_search_hit(self, hit: dict, transform: bool = True) -> dict:
+    def parse_search_hit(self, hit: dict) -> BaseModel:
         """
         Parses the search hit into the format that is also used by the edurep endpoint.
         It's mostly just mapping the variables we need into the places that we expect them to be.
         :param hit: result from search
-        :param transform: will apply a transformation based on serializer fields when set to True
-        :return record: parsed record
+        :return BaseModel: parsed data through Pydantic
         """
+        if "_index" not in hit:
+            raise ValueError("Search hit did not specify an index.")
         data = hit["_source"]
         data["score"] = hit.get("_score", 1.00)
-        serializer = self.get_result_serializer()
-        # Basic mapping between field and data (excluding any method fields with a source of "*")
-        field_mapping = {
-            field.source: field_name if transform else field.source
-            for field_name, field in serializer.fields.items() if field.source != "*"
-        }
-        record = {
-            field_mapping[field]: value
-            for field, value in data.items() if field in field_mapping
-        }
-        # Calling methods on serializers to set data for method fields
-        for field_name, field in serializer.fields.items():
-            if field.source != "*":
-                continue
-            record[field_name] = getattr(serializer, field.method_name)(data)
-
-        # Add highlight to the record
-        if hit.get("highlight", 0):
-            record["highlight"] = hit["highlight"]
-
-        return record
+        data["highlight"] = hit.get("highlight")
+        serializer_model = self.configuration.get_serializer_from_index(hit["_index"])
+        return serializer_model(**data)
 
     def autocomplete(self, query: str) -> list[str]:
         """
@@ -163,7 +136,7 @@ class SearchClient:
         }
 
         result = self.client.search(
-            index=[self.index_nl, self.index_en, self.index_unk],
+            index=self.configuration.get_indices(),
             body=query_dictionary
         )
 
@@ -227,7 +200,7 @@ class SearchClient:
         if search_text:
             query_string = {
                 "simple_query_string": {
-                    "fields": SEARCH_FIELDS[self.document_type],
+                    "fields": self.configuration.search_fields,
                     "query": search_text,
                     "default_operator": "and"
                 }
@@ -277,10 +250,8 @@ class SearchClient:
         )
         return self.parse_search_result(result)
 
-    def get_materials_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10, **kwargs) -> dict:
-        return self.get_documents_by_id(external_ids, page, page_size)
-
-    def clean_external_id(self, external_id: str) -> str:
+    @staticmethod
+    def clean_external_id(external_id: str) -> str:
         for legacy_prefix, prefix in EDUREP_LEGACY_ID_PREFIXES.items():
             if external_id.startswith(legacy_prefix):
                 external_id = external_id.replace(legacy_prefix, prefix, 1)
@@ -303,7 +274,7 @@ class SearchClient:
             corrected_external_ids.append(self.clean_external_id(external_id))
 
         raw_result = self.client.search(
-            index=[self.index_nl, self.index_en, self.index_unk],
+            index=self.configuration.get_indices(),
             body={
                 "query": {
                     "bool": {
@@ -316,7 +287,7 @@ class SearchClient:
         )
         search_result = self.parse_search_result(raw_result)
         documents = {
-            document["external_id"]: document
+            document.external_id: document
             for document in search_result["results"]
         }
         results = []
@@ -329,7 +300,7 @@ class SearchClient:
         return search_result
 
     def stats(self) -> dict:
-        stats = self.client.count(index=",".join([self.index_nl, self.index_en, self.index_unk]))
+        stats = self.client.count(index=",".join(self.configuration.get_indices()))
         return stats.get("count", 0)
 
     def more_like_this(self, identifier: str, language: str, transform_results: bool = False,
@@ -343,10 +314,11 @@ class SearchClient:
                 result["results"] = []
                 return result
             doc = results["results"][0]
-            identifier = doc.get("srn", identifier)
+            identifier = doc.srn
 
         # Now that we have a SRN value as identifier we can continue as normal
-        index = self.languages.get(language, self.index_unk)
+        indices = self.configuration.get_indices_by_language()
+        index = indices.get(language, indices["unk"])
         body = {
             "query": {
                 "more_like_this": {
@@ -369,18 +341,18 @@ class SearchClient:
         hits = search_result.pop("hits")
         result = self.parse_results_total(hits["total"])
         result["results"] = [
-            self.parse_search_hit(hit, transform=transform_results)
+            self.parse_search_hit(hit)
             for hit in hits["hits"]
         ]
         return result
 
-    def author_suggestions(self, author_name: str, transform_results: bool = False) -> dict:
+    def author_suggestions(self, author_name: str) -> dict:
         body = {
             "query": {
                 "bool": {
                     "must": {
                         "multi_match": {
-                            "fields": [field for field in SEARCH_FIELDS[self.document_type] if "authors" not in field],
+                            "fields": [field for field in self.configuration.search_fields if "authors" not in field],
                             "query": author_name,
                         },
                     },
@@ -391,19 +363,18 @@ class SearchClient:
             }
         }
         search_result = self.client.search(
-            index=[self.index_nl, self.index_en, self.index_unk],
+            index=self.configuration.get_indices(),
             body=body
         )
         hits = search_result.pop("hits")
         result = self.parse_results_total(hits["total"])
         result["results"] = [
-            self.parse_search_hit(hit, transform=transform_results)
+            self.parse_search_hit(hit)
             for hit in hits["hits"]
         ]
         return result
 
-    @staticmethod
-    def parse_filters(filters: list[dict]) -> list[dict]:
+    def parse_filters(self, filters: list[dict]) -> list[dict]:
         """
         Parse filters from the frontend format into the search engine format.
         Not every filter is handled by search engine  in the same way so it's a lot of manual parsing.
@@ -416,8 +387,11 @@ class SearchClient:
         filter_items = []
         for filter_item in filters:
             # skip filter_items that are empty
-            # and the language filter item (it's handled by telling search engine in what index to search).
-            if not filter_item['items'] or 'language.keyword' in filter_item['external_id']:
+            if not filter_item['items']:
+                continue
+            # if documents are separated by language in indices, we can't use "language" as a traditional filter
+            support_multilingual_indices = isinstance(self.configuration, MultilingualIndicesSearchConfiguration)
+            if 'language' in filter_item['external_id'] and support_multilingual_indices:
                 continue
             search_type = filter_item['external_id']
             # date range query
@@ -497,7 +471,8 @@ class SearchClient:
             ordering = ordering[1:]
         return {ordering: {"order": order}}
 
-    def parse_results_total(self, total: dict | int) -> dict:
+    @staticmethod
+    def parse_results_total(total: dict | int) -> dict:
         if isinstance(total, int):  # the total did not come from OpenSearch directly, but was deferred somehow
             total = {"value": total, "relation": "eq"}
         return {
@@ -512,11 +487,11 @@ class SearchClient:
         Select the index to search on based on language.
         """
         # if no language is selected, search on both.
-        indices = [self.index_nl, self.index_en, self.index_unk]
-        if not filters:
+        indices = self.configuration.get_indices()
+        if not filters or not isinstance(self.configuration, MultilingualIndicesSearchConfiguration):
             return indices
         language_item = [filter_item for filter_item in filters if filter_item['external_id'] == 'language.keyword']
         if not language_item:
             return indices
-        language_indices = [f"{self.alias_prefix}-{language}" for language in language_item[0]['items']]
+        language_indices = [f"{self.configuration.platform.value}-{language}" for language in language_item[0]['items']]
         return language_indices if len(language_indices) else indices
