@@ -64,7 +64,7 @@ def build_products_index_configuration(product_type: DocumentTypes,
         },
         "mappings": {
             "properties": {
-                "url": {"type": "text"},
+                "url": {"type": "keyword"},
                 "authors": {
                     "type": "object",
                     "properties": {
@@ -111,10 +111,6 @@ def build_products_index_configuration(product_type: DocumentTypes,
                         }
                     }
                 },
-                "publisher_date": {
-                    "type": "date",
-                    "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
-                },
                 "publisher_year": {
                     "type": "keyword"
                 },
@@ -141,18 +137,8 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "technical_type": {
                     "type": "keyword"
                 },
-                "external_id": {
-                    "type": "keyword"
-                },
                 "harvest_source": {
                     "type": "keyword"
-                },
-                "suggest_completion": {
-                    "type": "completion"
-                },
-                "suggest_phrase": {
-                    "type": "text",
-                    "analyzer": "trigram"
                 },
                 "is_part_of": {
                     "type": "keyword"
@@ -162,6 +148,35 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 },
                 "doi": {
                     "type": "keyword"
+                },
+                ##########################################
+                # Required fields for search client
+                ##########################################
+                "srn": {  # more like this
+                    "type": "keyword"
+                },
+                "external_id": {  # get document by id
+                    "type": "keyword"
+                },
+                "title": {  # more like this
+                    "type": "text"
+                },
+                "subtitle": {  # expected output
+                    "type": "keyword",
+                },
+                "description": {  # more like this
+                    "type": "text"
+                },
+                "publisher_date": {  # distance feature and range filtering
+                    "type": "date",
+                    "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
+                },
+                "suggest_completion": {  # auto complete
+                    "type": "completion"
+                },
+                "suggest_phrase": {  # did you mean
+                    "type": "text",
+                    "analyzer": "trigram"
                 },
             }
         }
@@ -201,6 +216,7 @@ def build_products_index_configuration(product_type: DocumentTypes,
 def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | None = None):
     nl_search_analyzer = "dutch_dictionary_decompound" if nl_decompound_word_list else "custom_dutch"
     return {
+        "language": {"type": "keyword"},
         "texts": {
             "nl": {
                 "titles": {
