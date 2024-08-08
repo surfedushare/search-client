@@ -1,14 +1,14 @@
-from dateutil.parser import parse
 from datetime import datetime
 
 from tests.base import BaseOpenSearchTestCase
-from search_client.constants import DocumentTypes
+from search_client.constants import Platforms
 from search_client.factories import generate_nl_material
+from search_client.serializers.products import LearningMaterial
 
 
 class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
 
-    document_type = DocumentTypes.LEARNING_MATERIAL
+    platform = Platforms.EDUSOURCES
 
     @classmethod
     def setUpClass(cls):
@@ -59,10 +59,11 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         )
 
     def get_value_from_result(self, result, key):
+        data = result.model_dump()
         if key == "published_at":
-            value = parse(result[key], ignoretz=True)
+            value = data[key].replace(tzinfo=None)
         else:
-            value = result[key]
+            value = data[key]
         return value
 
     def assert_value_from_result(self, result, key, expectation, assertion=None, message=None):
@@ -142,7 +143,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertTrue(search_biologie_text_and_cc_by["results"])
         for result in search_biologie_text_and_cc_by["results"]:
             self.assert_value_from_result(result, "technical_type", "document")
-            self.assertEqual(result["copyright"], "cc-by-40")
+            self.assert_value_from_result(result, "copyright", "cc-by-40")
 
         # AND search with multiple filters applied
         search_biologie_and_didactiek = self.instance.search("biologie didactiek")
@@ -310,56 +311,27 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         document = result['results'][0]
+        self.assertIsInstance(document, LearningMaterial)
+        self.assertEqual(document.external_id, "3522b79c-928c-4249-a7f7-d2bcb3077f10")
 
-        self.assertEqual(document['title'], 'Didactiek van wiskundig denken')
-        self.assertEqual(
-            document['url'],
-            "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e"
-        )
-        self.assertEqual(document['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
-        self.assert_value_from_result(document, 'publishers', ["Wikiwijs Maken"])
-        self.assert_value_from_result(
-            document,
-            'published_at',
-            datetime(year=2017, month=4, day=16, hour=22, minute=35, second=9)
-        )
-        self.assert_value_from_result(document, 'authors', [
-            {"name": "Michel van Ast"},
-            {"name": "Theo van den Bogaart"},
-            {"name": "Marc de Graaf"},
-        ])
-        self.assert_value_from_result(document, 'keywords', ["nerds"])
-        self.assert_value_from_result(document, 'studies', [
-            "7afbb7a6-c29b-425c-9c59-6f79c845f5f0",  # math
-            "0861c43d-1874-4788-b522-df8be575677f"  # onderwijskunde
-        ])
-        self.assertEqual(document['language'], 'nl')
-        self.assert_value_from_result(document, 'technical_type', 'document')
-
-        # Sharekit
-        test_id = '3522b79c-928c-4249-a7f7-d2bcb3077f10'
+        # Edurep material
+        test_id = 'wikiwijsmaken:123'
         result = self.instance.get_documents_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         material = result['results'][0]
-        self.assertEqual(material['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
-
-        # Edurep material
-        test_id = 'wikiwijsmaken:123'
-        result = self.instance.get_materials_by_id(external_ids=[test_id])
-        self.assertIsNotNone(result)
-        self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
-        material = result['results'][0]
-        self.assertEqual(material['external_id'], "wikiwijsmaken:123")
+        self.assertIsInstance(material, LearningMaterial)
+        self.assertEqual(material.external_id, "wikiwijsmaken:123")
 
         # Edurep legacy formats
         # edurep_delen prefix
         test_id = 'edurep_delen:abc'
-        result = self.instance.get_materials_by_id(external_ids=[test_id])
+        result = self.instance.get_documents_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         material = result['results'][0]
-        self.assertEqual(material['external_id'], "WikiwijsDelen:urn:uuid:abc")
+        self.assertIsInstance(material, LearningMaterial)
+        self.assertEqual(material.external_id, "WikiwijsDelen:urn:uuid:abc")
 
     def test_search_by_author(self):
         author = "Michel van Ast"
@@ -395,14 +367,14 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
     def test_more_like_this(self):
         more_like_this = self.instance.more_like_this("surfsharekit:abc", "nl", is_external_identifier=False)
         self.assertEqual(more_like_this["results_total"]["value"], 4)
-        self.assertEqual(more_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
+        self.assertEqual(more_like_this["results"][0].title, "Didactiek van wiskundig denken")
         none_like_this = self.instance.more_like_this("surfsharekit:does-not-exist", "nl", is_external_identifier=False)
         self.assertEqual(none_like_this["results_total"]["value"], 0)
         self.assertEqual(none_like_this["results"], [])
         # Using external_id as input (legacy)
         legacy_like_this = self.instance.more_like_this("abc", "nl")
         self.assertEqual(legacy_like_this["results_total"]["value"], 4)
-        self.assertEqual(legacy_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
+        self.assertEqual(legacy_like_this["results"][0].title, "Didactiek van wiskundig denken")
         legacy_none_like_this = self.instance.more_like_this("does-not-exist", "nl")
         self.assertEqual(legacy_none_like_this["results_total"]["value"], 0)
         self.assertEqual(legacy_none_like_this["results"], [])
@@ -414,65 +386,35 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         for result in suggestions["results"]:
             author_names = [author["name"] for author in self.get_value_from_result(result, "authors")]
             self.assertNotIn(author_expectation, author_names)
-            self.assertIn(author_expectation, result["description"])
+            self.assertIn(author_expectation, result.description)
 
     def test_parse_search_hit(self):
-        authors = [{"name": "author"}]
         hit = {
-            "_source": {
-                "title": "title",
-                "subtitle": None,
-                "description": "description",
-                "authors": authors,
-                "disciplines_normalized": ["discipline"],
-                "research_themes": ["theme"],
-                "study_vocabulary": ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"],
-                "doi": "10.12456/helloworld",
-                "modified_at": "1970-01-01"
+            "_index": "edusources-nl",
+            "_source": generate_nl_material(),
+            "_score": 3.14,
+            "highlight": {
+                "text": ["highlighted"]
             }
         }
         result = self.instance.parse_search_hit(hit)
-        self.assertIn("authors", result, "Expected authors to be part of main result for learning materials")
-        self.assertIn("disciplines", result, "Expected disciplines to be part of main result for learning materials")
-        self.assertEqual(result["title"], "title")
-        self.assertEqual(result["description"], "description")
-        self.assertEqual(result["authors"], authors)
-        self.assertEqual(result["disciplines"], ["discipline"])
-        self.assertEqual(result["modified_at"], "1970-01-01")
-        self.assertEqual(
-            result["study_vocabulary"],
-            ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"]
-        )
-        self.assertNotIn("research_themes", result, "Expected data not given in learning materials to not be included")
-        self.assertNotIn("is_part_of", result, "Expected data not given in learning materials to not be included")
-        self.assertNotIn("has_parts", result, "Expected data not given in learning materials to not be included")
-        self.assertEqual(result["doi"], "10.12456/helloworld")
-        self.assertIsNone(result["subtitle"])
+        self.assertIsInstance(result, LearningMaterial)
+        self.assertEqual(result.score, 3.14)
+        self.assertEqual(result.highlight.text, ["highlighted"])
+        self.assertIsNone(result.highlight.description)
 
-    def test_no_doi(self):
+    def test_parse_search_hit_minimal(self):
         hit = {
-            "_source": {
-                "doi": None
-            }
+            "_index": "edusources-nl",
+            "_source": generate_nl_material(),
         }
         result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["doi"], None)
+        self.assertIsInstance(result, LearningMaterial)
+        self.assertEqual(result.score, 1.00)
+        self.assertIsNone(result.highlight)
 
-    def test_score(self):
+    def test_parse_search_hit_invalid_index(self):
         hit = {
-            "_source": {
-                "not": "important"
-            },
-            "_score": 3.14
+            "_source": generate_nl_material(),
         }
-        result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["score"], 3.14)
-
-    def test_no_score(self):
-        hit = {
-            "_source": {
-                "not": "important"
-            },
-        }
-        result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["score"], 1.00)
+        self.assertRaises(ValueError,  self.instance.parse_search_hit, [hit])

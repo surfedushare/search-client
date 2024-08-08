@@ -1,6 +1,15 @@
 from enum import Enum
 
 
+class Platforms(Enum):
+    EDUSOURCES = "edusources"
+    PUBLINOVA = "publinova"
+
+
+class Entities(Enum):
+    PRODUCTS = "products"
+
+
 class DocumentTypes(Enum):
     LEARNING_MATERIAL = "learning_material"
     RESEARCH_PRODUCT = "research_product"
