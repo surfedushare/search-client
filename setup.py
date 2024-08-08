@@ -19,7 +19,7 @@ setuptools.setup(
         exclude=["tests*"]
     ),
     install_requires=[
-        "Django>=3.2",
+        "Django>=4.2",
         "opensearch-py",
         "python-dateutil",
         "djangorestframework",
@@ -30,7 +30,9 @@ setuptools.setup(
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3.10",
-        "Framework :: Django :: 3.2",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Framework :: Django :: 4.2",
         "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
         "Operating System :: OS Independent",
     ],
