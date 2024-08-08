@@ -1,20 +1,19 @@
 import os
 from unittest import TestCase
-from opensearchpy import OpenSearch
 
 from configuration import create_configuration
 
 from search_client.opensearch import SearchClient, OpenSearchClientBuilder
-from search_client.constants import DocumentTypes, LANGUAGES
+from search_client.constants import DocumentTypes, LANGUAGES, Platforms
 from search_client.opensearch.indices.legacy import create_open_search_index_configuration
 
 
 class BaseOpenSearchTestCase(TestCase):
 
     instance = None
-    document_type = None
     search = None
     config = None
+    platform = Platforms.EDUSOURCES
 
     @classmethod
     def index_body(cls, language):
@@ -22,28 +21,21 @@ class BaseOpenSearchTestCase(TestCase):
 
     @classmethod
     def get_alias(cls, language):
-        return f"{cls.config.open_search.alias_prefix}-{language}"
+        return f"{cls.platform.value}-{language}"
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         project_location = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         cls.config = create_configuration(project_location=project_location)
-        cls.search = OpenSearch(
-            [cls.config.open_search.url]
-        )
+        cls.search = OpenSearchClientBuilder.from_host(cls.config.open_search.url).build()
         for language in LANGUAGES:
             cls.search.indices.create(
                 cls.get_alias(language),
                 ignore=400,
-                body=cls.index_body('nl')
+                body=cls.index_body(language)
             )
-        opensearch_client = OpenSearchClientBuilder.from_host(cls.config.open_search.url).build()
-        cls.instance = SearchClient(
-            opensearch_client,
-            cls.document_type,
-            cls.config.open_search.alias_prefix,
-        )
+        cls.instance = SearchClient(cls.search, cls.platform)
 
     @classmethod
     def tearDownClass(cls):
