@@ -1,9 +1,11 @@
-from search_client.constants import Platforms
+from search_client.constants import Platforms, Entities
 from search_client.opensearch.configuration import (
     SearchConfiguration,
     build_multilingual_indices_search_configuration,
-    build_product_search_configuration
+    build_product_search_configuration,
+    ProjectSearchConfiguration,
 )
+from search_client.serializers import Project
 
 
 _EDUSOURCES_PRESETS = {
@@ -15,6 +17,14 @@ _EDUSOURCES_PRESETS = {
 _PUBLINOVA_PRESETS = {
     "products:multilingual-indices": build_multilingual_indices_search_configuration(Platforms.PUBLINOVA),
     "products:default": build_product_search_configuration(Platforms.PUBLINOVA),
+    "projects:default": ProjectSearchConfiguration(
+        platform=Platforms.PUBLINOVA,
+        entities={Entities.PROJECTS},
+        search_fields=["title", "description"],
+        serializers={
+            Entities.PROJECTS: Project
+        }
+    )
 }
 
 
