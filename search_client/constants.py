@@ -8,6 +8,7 @@ class Platforms(Enum):
 
 class Entities(Enum):
     PRODUCTS = "products"
+    PROJECTS = "projects"
 
 
 class DocumentTypes(Enum):
