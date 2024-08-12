@@ -9,6 +9,8 @@ from search_client.opensearch.configuration.core import SearchConfiguration
 
 class MultilingualIndicesSearchConfiguration(SearchConfiguration):
 
+    allow_multi_entity_results = False
+
     def get_indices(self) -> list[str]:
         return [f"{self.platform.value}-{language}" for language in LANGUAGES]
 
@@ -38,6 +40,5 @@ def build_multilingual_indices_search_configuration(platform: Platforms) -> Sear
         platform=platform,
         entities={Entities.PRODUCTS},
         search_fields=SEARCH_FIELDS[document_type],
-        serializers={Entities.PRODUCTS: serializer},
-        allow_multi_entity_results=False
+        serializers={Entities.PRODUCTS: serializer}
     )

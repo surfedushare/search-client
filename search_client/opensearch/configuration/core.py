@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Type
+from typing import Type, ClassVar
 from dataclasses import dataclass, field
 
 from pydantic import BaseModel
@@ -10,12 +10,14 @@ from search_client.constants import Platforms, Entities, LANGUAGES
 
 @dataclass(slots=True)
 class SearchConfiguration:
+
     platform: Platforms
     entities: set[Entities]
     search_fields: list[str]
     serializers: dict[Entities, Type[BaseModel]]
     filter_fields: set[str] = field(default_factory=set)
-    allow_multi_entity_results: bool = True
+
+    allow_multi_entity_results: ClassVar[bool] = True
 
     def get_indices(self) -> list[str]:
         return [f"{self.platform.value}-{entity.value}" for entity in self.entities]
