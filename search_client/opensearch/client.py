@@ -223,14 +223,15 @@ class SearchClient:
                 }
             }
             body["query"]["bool"]["must"] += [query_string]
-            body["query"]["bool"]["should"] = {
-                "distance_feature": {
-                    "field": "publisher_date",
-                    "pivot": "90d",
-                    "origin": "now",
-                    "boost": 1.15
+            if self.configuration.distance_feature_field:
+                body["query"]["bool"]["should"] = {
+                    "distance_feature": {
+                        "field": self.configuration.distance_feature_field,
+                        "pivot": "90d",
+                        "origin": "now",
+                        "boost": 1.15
+                    }
                 }
-            }
             body["suggest"] = {
                 'did-you-mean-suggestion': {
                     'text': search_text,

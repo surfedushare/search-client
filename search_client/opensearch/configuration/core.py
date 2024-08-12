@@ -16,6 +16,7 @@ class SearchConfiguration:
     search_fields: list[str]
     serializers: dict[Entities, Type[BaseModel]]
     filter_fields: set[str] = field(default_factory=set)
+    distance_feature_field: str | None = field(default="publisher_date")
 
     allow_multi_entity_results: ClassVar[bool] = True
     use_aggregations_over_drilldowns: ClassVar[bool] = True
@@ -53,3 +54,6 @@ class SearchConfiguration:
         self.search_fields += other.search_fields  # concatenation of lists
         self.serializers.update(other.serializers)  # dict update
         self.filter_fields &= other.filter_fields  # intersection
+        # If distance_feature_fields don't match we unset the variable, because we can't process that.
+        if self.distance_feature_field != other.distance_feature_field:
+            self.distance_feature_field = None
