@@ -415,3 +415,109 @@ class TestPydanticToDictConversion(TestCase):
                 }
             ]
         })
+
+    def test_learning_material_math_all_languages(self):
+        data = generate_nl_material(topic="math_all_languages")
+        learning_material = LearningMaterial(**data)
+        learning_material_json = learning_material.model_dump_json()
+        learning_material_dump = json.loads(learning_material_json)
+        self.assertEqual(learning_material_dump, {
+            "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+            "set": "sharekit:edusources",
+            "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
+            "state": "active",
+            "provider": "Wikiwijs Maken",
+            "score": 0.0,
+            "published_at": "2017-04-16T22:35:09+02:00",
+            "modified_at": None,
+            "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
+            "title": "Didactiek van wiskundig denken (root)",
+            "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                           "wiskundedidactiek en ICT met Theo van den Bogaart (root)",
+            "language": "nl",
+            "copyright": "cc-by-40",
+            "video": None,
+            "harvest_source": "wikiwijsmaken",
+            "previews": {
+                "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
+                "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
+                "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
+            },
+            "files": [
+                {
+                    "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:"
+                           "bdd27d20f1182219c6c50714bd4e9d178af38ef6",
+                    "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
+                    "hash": "2ad5ffa1ee1b58c84c1adc9acbeff25c",
+                    "type": "document",
+                    "state": "active",
+                    "title": "Didactiek van wiskundig denken.pdf",
+                    "is_link": True,
+                    "copyright": "cc-by-40",
+                    "mime_type": "application/pdf",
+                    "access_rights": "OpenAccess",
+                    "video": None,
+                    "previews": {
+                        "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
+                        "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
+                        "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-"
+                                         "200x150.png"
+                    }
+                }
+            ],
+            "authors": [
+                {
+                    "name": "Michel van Ast",
+                    "email": None,
+                    "dai": None,
+                    "isni": None,
+                    "orcid": None,
+                    "external_id": None
+                },
+                {
+                    "name": "Theo van den Bogaart",
+                    "email": None,
+                    "dai": None,
+                    "isni": None,
+                    "orcid": None,
+                    "external_id": None
+                },
+                {
+                    "name": "Marc de Graaf",
+                    "email": None,
+                    "dai": None,
+                    "isni": None,
+                    "orcid": None,
+                    "external_id": None
+                }
+            ],
+            "has_parts": [],
+            "is_part_of": [],
+            "keywords": [
+                "nerds"
+            ],
+            "doi": None,
+            "lom_educational_levels": [
+                "HBO"
+            ],
+            "disciplines": [
+                "exact_informatica"
+            ],
+            "study_vocabulary": ["http://purl.edustandaard.nl/concept/1ba23d31-f46e-4b40-8c53-fae23b333279"],
+            "technical_type": "document",
+            "material_types": [],
+            "aggregation_level": None,
+            "publishers": [
+                "Wikiwijs Maken"
+            ],
+            "consortium": "SURF",
+            "subtitle": None,
+            "highlight": {
+                "description": [
+                    "<em>Materiaal</em> voor lerarenopleidingen"
+                ],
+                "text": [
+                    "Leer<em>materiaal</em> over wiskunde"
+                ]
+            }
+        })

@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from pydantic import BaseModel, Field, field_serializer, computed_field
+from pydantic import BaseModel, Field, field_serializer, computed_field, field_validator, ValidationInfo
 from pydantic.networks import HttpUrl
 
 from search_client.serializers.core import EntityStates, Provider, Highlight
@@ -48,13 +48,22 @@ class Product(BaseModel):
 
 class LearningMaterial(Product):
     lom_educational_levels: list[str] = Field(default_factory=list)
-    disciplines: list[str] = Field(default_factory=list, validator_alias="disciplines_normalized")
+    disciplines: list[str] = Field(default_factory=list, validation_alias="disciplines_normalized")
     study_vocabulary: list[str] = Field(default_factory=list)
     technical_type: str | None = Field(default=None)
     material_types: list[str] = Field(default_factory=list)
     aggregation_level: str | None = Field(default=None)
     publishers: list[str] = Field(default_factory=list)
     consortium: str | None = Field(default=None)
+
+    @field_validator("disciplines", "study_vocabulary", "consortium", mode="before")
+    @classmethod
+    def validate_multilingual_terms_field(cls, value: dict | list, info: ValidationInfo):
+        if not isinstance(value, dict):
+            return value
+        elif "keyword" not in value:
+            raise ValueError(f"multilingual_terms_field '{info.field_name}' did not specify a keyword property")
+        return value["keyword"]
 
 
 class ResearchProduct(Product):
