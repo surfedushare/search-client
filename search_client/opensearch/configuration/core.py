@@ -18,6 +18,7 @@ class SearchConfiguration:
     filter_fields: set[str] = field(default_factory=set)
 
     allow_multi_entity_results: ClassVar[bool] = True
+    use_aggregations_over_drilldowns: ClassVar[bool] = True
 
     def get_indices(self) -> list[str]:
         return [f"{self.platform.value}-{entity.value}" for entity in self.entities]

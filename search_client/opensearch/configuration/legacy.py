@@ -10,6 +10,7 @@ from search_client.opensearch.configuration.core import SearchConfiguration
 class MultilingualIndicesSearchConfiguration(SearchConfiguration):
 
     allow_multi_entity_results = False
+    use_aggregations_over_drilldowns = False
 
     def get_indices(self) -> list[str]:
         return [f"{self.platform.value}-{language}" for language in LANGUAGES]
@@ -28,17 +29,27 @@ class MultilingualIndicesSearchConfiguration(SearchConfiguration):
 
 
 def build_multilingual_indices_search_configuration(platform: Platforms) -> SearchConfiguration:
+    filter_fields = {
+        "publisher_year_normalized", "authors.name.keyword", "language.keyword", "copyright.keyword",
+        "publishers.keyword", "technical_type", "publisher_year"
+    }
     if platform is Platforms.EDUSOURCES:
         document_type = DocumentTypes.LEARNING_MATERIAL
         serializer = LearningMaterial
+        filter_fields |= {
+            "study_vocabulary", "learning_material_disciplines_normalized",  # these are deprecated
+            "lom_educational_levels", "consortium.keyword", "material_types", "aggregation_level"
+        }
     elif platform is Platforms.PUBLINOVA:
         document_type = DocumentTypes.RESEARCH_PRODUCT
         serializer = ResearchProduct
+        filter_fields |= {"research_object_type", "research_themes"}
     else:
         raise ValueError(f"Can't build product search configuration for platform: {platform}")
     return MultilingualIndicesSearchConfiguration(
         platform=platform,
         entities={Entities.PRODUCTS},
         search_fields=SEARCH_FIELDS[document_type],
-        serializers={Entities.PRODUCTS: serializer}
+        serializers={Entities.PRODUCTS: serializer},
+        filter_fields=filter_fields,
     )

@@ -8,9 +8,17 @@ class ProductSearchConfiguration(SearchConfiguration):
 
 
 def build_product_search_configuration(platform: Platforms) -> SearchConfiguration:
+    filter_fields = {
+        "publisher_year_normalized", "authors.name.keyword", "language.keyword", "copyright.keyword",
+        "publishers.keyword", "technical_type", "publisher_year"
+    }
     if platform is Platforms.EDUSOURCES:
         document_type = DocumentTypes.LEARNING_MATERIAL
         serializer = LearningMaterial
+        filter_fields |= {
+            "study_vocabulary.keyword", "disciplines_normalized.keyword",
+            "lom_educational_levels", "consortium.keyword", "material_types", "aggregation_level"
+        }
     elif platform is Platforms.PUBLINOVA:
         document_type = DocumentTypes.RESEARCH_PRODUCT
         serializer = ResearchProduct
