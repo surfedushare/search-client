@@ -73,13 +73,14 @@ class SearchClient:
         aggregations = search_result.get("aggregations", {})
         result = self.parse_results_total(hits['total'])
 
-        # Transform aggregations into drilldowns
-        drilldowns = {}
+        # Transform aggregations
+        aggregations_transforms = {}
         for aggregation_name, aggregation in aggregations.items():
             buckets = aggregation["filtered"]["buckets"] if "filtered" in aggregation else aggregation["buckets"]
             for bucket in buckets:
-                drilldowns[f"{aggregation_name}-{bucket['key']}"] = bucket["doc_count"]
-        result['drilldowns'] = drilldowns
+                aggregations_transforms[f"{aggregation_name}-{bucket['key']}"] = bucket["doc_count"]
+        aggregation_key = "aggregations" if self.configuration.use_aggregations_over_drilldowns else "drilldowns"
+        result[aggregation_key] = aggregations_transforms
 
         # Parse spelling suggestions
         did_you_mean = {}
@@ -152,29 +153,45 @@ class SearchClient:
 
     def drilldowns(self, drilldown_names: list[str], search_text: str = None, filters: list[dict] = None) -> dict:
         """
-        This function is named drilldowns is because it's also named drilldowns in the original edurep search code.
-        It passes on information to search, and returns the search without the records.
-        This allows calculation of 'item counts' (i.e. how many results there are in through a certain filter)
+        This method is deprecated in favour of aggregations, which functions the same,
+        but takes "drilldown_names" from SearchConfiguration.filter_fields automatically.
         """
         search_results = self.search(search_text=search_text, filters=filters, drilldown_names=drilldown_names)
         search_results["results"] = []
         search_results.update(self.parse_results_total(0))
         return search_results
 
+    def aggregations(self, search_text: str = None, filters: list[dict] = None) -> dict:
+        """
+        This method executes a search with its parameters, but strips the results.
+        This leaves a response with only filter counts data.
+
+        :param search_text: A string to search for.
+        :param filters: The filters that are applied for this search.
+        :return:
+        """
+        search_results = self.search(search_text=search_text, filters=filters, aggregate_filter_counts=True)
+        search_results["results"] = []
+        search_results.update(self.parse_results_total(0))
+        return search_results
+
     def search(self, search_text: str, drilldown_names: list[str] = None, filters: list[dict] = None,
-               ordering: str = None, page: int = 1, page_size: int = 5, min_score: float = 0.00) -> dict:
+               ordering: str = None, page: int = 1, page_size: int = 5, min_score: float = 0.00,
+               aggregate_filter_counts: bool = False) -> dict:
         """
         Build and send a query to search engine and parse it before returning.
 
         :param search_text: A string to search for.
-        :param drilldown_names: A list of the 'drilldowns' (filters) that are to be counted by engine.
+        :param drilldown_names: A list of the 'drilldowns' (filters) that are to be counted by engine (deprecated)
         :param filters: The filters that are applied for this search.
         :param ordering: Sort the results by this ordering (or use default search ordering otherwise)
         :param page: The page index of the results
         :param page_size: How many items are loaded per page.
         :param min_score: The minimal score for a result to be included in the response
+        :param aggregate_filter_counts: Indicates whether counts for filters should be calculated
         :return:
         """
+        aggregate_filter_counts = aggregate_filter_counts or bool(drilldown_names)
 
         start_record = page_size * (page - 1)
         body = {
@@ -231,7 +248,7 @@ class SearchClient:
 
         indices = self.parse_index_language(filters)
 
-        if drilldown_names:
+        if aggregate_filter_counts:
             body["aggs"] = self.parse_aggregations(drilldown_names, filters)
 
         filters = self.parse_filters(filters)
@@ -423,7 +440,7 @@ class SearchClient:
         :param filters: the filters for the query
         :return:
         """
-
+        aggregation_names = aggregation_names or list(self.configuration.filter_fields)
         aggregation_items = {}
         for aggregation_name in aggregation_names:
             other_filters = []
