@@ -69,6 +69,123 @@ NL_MATERIAL = {
             ]
         }
     },
+    "math_all_languages": {
+        "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+        "set": "sharekit:edusources",
+        "title": "Didactiek van wiskundig denken (root)",
+        "text": "Leermateriaal over wiskunde en didactiek op de universiteit. (root)",
+        "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
+        "files": [
+            {
+                "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:"
+                       "bdd27d20f1182219c6c50714bd4e9d178af38ef6",
+                "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
+                "hash": "2ad5ffa1ee1b58c84c1adc9acbeff25c",
+                "type": "document",
+                "state": "active",
+                "title": "Didactiek van wiskundig denken.pdf",
+                "is_link": True,
+                "priority": 0,
+                "copyright": "cc-by-40",
+                "mime_type": "application/pdf",
+                "access_rights": "OpenAccess",
+                "previews": {
+                    "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
+                    "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
+                    "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
+                }
+            }
+        ],
+        "description":
+            "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op wiskundedidactiek en ICT "
+            "met Theo van den Bogaart (root)",
+        "language": "nl",
+        "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
+        "copyright": "cc-by-40",
+        "lom_educational_levels": ["HBO"],
+        "publisher_date": "2017-04-16T22:35:09+02:00",
+        "keywords": ["nerds"],
+        "authors": [{"name": "Michel van Ast"}, {"name": "Theo van den Bogaart"}, {"name": "Marc de Graaf"}],
+        "publishers": ["Wikiwijs Maken"],
+        "studies": ["7afbb7a6-c29b-425c-9c59-6f79c845f5f0"],
+        "harvest_source": "wikiwijsmaken",
+        "has_parts": [],
+        "is_part_of": [],
+        "suggest_phrase": "Leermateriaal over wiskunde en didactiek op de universiteit.",
+        "suggest_completion": ["Leermateriaal", "over", "wiskunde", "en", "didactiek", "op", "de", "universiteit."],
+        "study_vocabulary": {
+            "keyword": ["http://purl.edustandaard.nl/concept/1ba23d31-f46e-4b40-8c53-fae23b333279"],
+            "nl": ["Robuste statistiek"],
+            "en": ["Robust statistics"]
+        },
+        "doi": None,
+        "technical_type": "document",
+        "disciplines": ["exact_informatica"],
+        "disciplines_normalized": {
+            "keyword": ["exact_informatica"],
+            "nl": ["Exact en Informatica"],
+            "en": ["Exact sciences and Informatics"]
+        },
+        "learning_material_disciplines_normalized": ["exact_informatica"],
+        "consortium": {
+            "keyword": "SURF",
+            "nl": "Stichting Universitaire Reken Faciliteiten",
+            "en": "Foundation University Computation Facilities"
+        },
+        "previews": {
+            "preview": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-400x300.png",
+            "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
+            "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
+        },
+        "provider": {
+            "name": "Wikiwijs Maken",
+            "slug": None,
+            "external_id": None,
+            "ror": None
+        },
+        "highlight": {
+            "description": [
+                "<em>Materiaal</em> voor lerarenopleidingen"
+            ],
+            "text": [
+                "Leer<em>materiaal</em> over wiskunde"
+            ]
+        },
+        "texts": {
+            "en": {},
+            "unk": {},
+            "nl": {
+                "titles": [
+                    {
+                        "text": "Didactiek van wiskundig denken",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
+                    }
+                ],
+                "subtitles": [],
+                "descriptions": [
+                    {
+                        "text": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                                "wiskundedidactiek en ICT met Theo van den Bogaart",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
+                    }
+                ],
+                "contents": [
+                    {
+                        "text": "Leermateriaal over wiskunde en didactiek op de universiteit.",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10:"
+                                    "bdd27d20f1182219c6c50714bd4e9d178af38ef6"
+                    }
+                ],
+                "transcriptions": []
+            }
+        }
+    },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
         "set": "edurep:wikiwijsmaken",
