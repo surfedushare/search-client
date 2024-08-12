@@ -177,6 +177,7 @@ class SearchClient:
         :param ordering: Sort the results by this ordering (or use default search ordering otherwise)
         :param page: The page index of the results
         :param page_size: How many items are loaded per page.
+        :param min_score: The minimal score for a result to be included in the response
         :return:
         """
 
