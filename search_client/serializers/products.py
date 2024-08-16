@@ -1,14 +1,19 @@
+from typing import Literal
 from datetime import datetime, date
 
 from pydantic import BaseModel, Field, field_serializer, computed_field, field_validator, ValidationInfo
 from pydantic.networks import HttpUrl
 
+from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider, Highlight
 from search_client.serializers.files import Video, Previews, File
 from search_client.serializers.persons import Author
 
 
 class Product(BaseModel):
+
+    entity: Literal[Entities.PRODUCTS] = Field(default=Entities.PRODUCTS, init=False)
+
     srn: str
     set: str
     external_id: str

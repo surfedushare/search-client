@@ -1,8 +1,10 @@
+from typing import Literal
 from datetime import datetime
 from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from search_client.constants import Entities
 from search_client.serializers.persons import Contact
 
 
@@ -12,6 +14,9 @@ class ProjectStatus(Enum):
 
 
 class Project(BaseModel):
+
+    entity: Literal[Entities.PROJECTS] = Field(default=Entities.PRODUCTS, init=False)
+
     external_id: str | None = Field(default=None)
     title: str
     description: str

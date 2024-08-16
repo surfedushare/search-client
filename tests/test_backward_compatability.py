@@ -37,6 +37,7 @@ class TestPydanticToDictConversion(TestCase):
         learning_material_json = learning_material.model_dump_json()
         learning_material_dump = json.loads(learning_material_json)
         self.assertEqual(learning_material_dump, {
+            "entity": "products",
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "set": "sharekit:edusources",
             "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
@@ -144,6 +145,7 @@ class TestPydanticToDictConversion(TestCase):
         research_product_json = research_product.model_dump_json()
         research_product_dump = json.loads(research_product_json)
         self.assertEqual(research_product_dump, {
+            "entity": "products",
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "set": "sharekit:edusources",
             "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
@@ -262,6 +264,7 @@ class TestPydanticToDictConversion(TestCase):
         learning_material_json = learning_material.model_dump_json()
         learning_material_dump = json.loads(learning_material_json)
         self.assertEqual(learning_material_dump, {
+            "entity": "products",
             "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
             "set": "edurep:wikiwijsmaken",
             "external_id": "wikiwijsmaken:123",
@@ -339,6 +342,7 @@ class TestPydanticToDictConversion(TestCase):
         research_product_json = research_product.model_dump_json()
         research_product_dump = json.loads(research_product_json)
         self.assertEqual(research_product_dump, {
+            "entity": "products",
             "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
             "set": "edurep:wikiwijsmaken",
             "external_id": "wikiwijsmaken:123",
@@ -426,6 +430,7 @@ class TestPydanticToDictConversion(TestCase):
         learning_material_json = learning_material.model_dump_json()
         learning_material_dump = json.loads(learning_material_json)
         self.assertEqual(learning_material_dump, {
+            "entity": "products",
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "set": "sharekit:edusources",
             "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
