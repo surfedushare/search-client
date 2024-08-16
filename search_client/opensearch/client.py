@@ -30,7 +30,7 @@ class OpenSearchClientBuilder:
         use_ssl = host.startswith("https")
         return OpenSearchClientBuilder(hosts=[host], http_auth=http_auth, use_ssl=use_ssl)
 
-    def build(self) -> OpenSearch:
+    def build(self, check_connection: bool = False) -> OpenSearch:
         connection_configuration = {}
         if self.use_ssl:
             connection_configuration = {
@@ -39,12 +39,15 @@ class OpenSearchClientBuilder:
                 "port": self.port,
                 "verify_certs": self.verify_certs,
             }
-        return OpenSearch(
+        client = OpenSearch(
             hosts=self.hosts,
             http_auth=self.http_auth,
             connection_class=RequestsHttpConnection,
             **connection_configuration
         )
+        if check_connection and not client.cat.health(request_timeout=30):
+            raise RuntimeError("Unable to connect to Open Search. Perhaps problems with credentials?")
+        return client
 
 
 class SearchClient:
