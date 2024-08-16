@@ -12,12 +12,14 @@ class MultilingualIndicesSearchConfiguration(SearchConfiguration):
     allow_multi_entity_results = False
     use_aggregations_over_drilldowns = False
 
-    def get_indices(self) -> list[str]:
-        return [f"{self.platform.value}-{language}" for language in LANGUAGES]
+    def get_aliases(self) -> list[str]:
+        alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
+        return [f"{alias_prefix}{self.platform.value}-{language}" for language in LANGUAGES]
 
-    def get_indices_by_language(self) -> dict[str, str]:
+    def get_aliases_by_language(self) -> dict[str, str]:
+        alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
         return {
-            language: f"{self.platform.value}-{language}"
+            language: f"{alias_prefix}{self.platform.value}-{language}"
             for language in LANGUAGES
         }
 

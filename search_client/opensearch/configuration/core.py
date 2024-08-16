@@ -18,18 +18,22 @@ class SearchConfiguration:
     filter_fields: set[str] = field(default_factory=set)
     distance_feature_field: str | None = field(default="publisher_date")
 
+    alias_prefix: str | None = field(default=None)
+
     allow_multi_entity_results: ClassVar[bool] = True
     use_aggregations_over_drilldowns: ClassVar[bool] = True
 
-    def get_indices(self) -> list[str]:
-        return [f"{self.platform.value}-{entity.value}" for entity in self.entities]
+    def get_aliases(self) -> list[str]:
+        alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
+        return [f"{alias_prefix}{self.platform.value}-{entity.value}" for entity in self.entities]
 
-    def get_indices_by_language(self) -> dict[str, str]:
+    def get_aliases_by_language(self) -> dict[str, str]:
         assert len(self.entities) == 1, \
             f"Expected exactly one entity to generate indices by language, but found: {self.entities}"
         entity = next(iter(self.entities))
+        alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
         return {
-            language: f"{self.platform.value}-{entity.value}"
+            language: f"{alias_prefix}{self.platform.value}-{entity.value}"
             for language in LANGUAGES
         }
 

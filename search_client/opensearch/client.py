@@ -139,7 +139,7 @@ class SearchClient:
         }
 
         result = self.client.search(
-            index=self.configuration.get_indices(),
+            index=self.configuration.get_aliases(),
             body=query_dictionary
         )
 
@@ -294,7 +294,7 @@ class SearchClient:
             corrected_external_ids.append(self.clean_external_id(external_id))
 
         raw_result = self.client.search(
-            index=self.configuration.get_indices(),
+            index=self.configuration.get_aliases(),
             body={
                 "query": {
                     "bool": {
@@ -320,7 +320,7 @@ class SearchClient:
         return search_result
 
     def stats(self) -> dict:
-        stats = self.client.count(index=",".join(self.configuration.get_indices()))
+        stats = self.client.count(index=",".join(self.configuration.get_aliases()))
         return stats.get("count", 0)
 
     def more_like_this(self, identifier: str, language: str, transform_results: bool = False,
@@ -337,7 +337,7 @@ class SearchClient:
             identifier = doc.srn
 
         # Now that we have a SRN value as identifier we can continue as normal
-        indices = self.configuration.get_indices_by_language()
+        indices = self.configuration.get_aliases_by_language()
         index = indices.get(language, indices["unk"])
         body = {
             "query": {
@@ -383,7 +383,7 @@ class SearchClient:
             }
         }
         search_result = self.client.search(
-            index=self.configuration.get_indices(),
+            index=self.configuration.get_aliases(),
             body=body
         )
         hits = search_result.pop("hits")
@@ -507,7 +507,7 @@ class SearchClient:
         Select the index to search on based on language.
         """
         # if no language is selected, search on both.
-        indices = self.configuration.get_indices()
+        indices = self.configuration.get_aliases()
         if not filters or not isinstance(self.configuration, MultilingualIndicesSearchConfiguration):
             return indices
         language_item = [filter_item for filter_item in filters if filter_item['external_id'] == 'language.keyword']
