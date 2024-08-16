@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from tests.base import BaseOpenSearchTestCase
 from search_client.constants import Platforms
@@ -42,9 +42,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
 
     def get_value_from_result(self, result, key):
         data = result.model_dump()
-        if key == "published_at":
-            value = data[key].replace(tzinfo=None)
-        elif key == "technical_type":
+        if key == "technical_type":
             value = data["type"]
         else:
             value = data[key]
@@ -158,7 +156,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime(year=2018, month=12, day=31),
+                date(year=2018, month=12, day=31),
                 self.assertLessEqual
             )
         search_biologie_lower_date = self.instance.search("biologie", filters=[
@@ -169,7 +167,7 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-01-01", "%Y-%m-%d"),
+                datetime.strptime("2018-01-01", "%Y-%m-%d").date(),
                 self.assertGreaterEqual
             )
         search_biologie_between_date = self.instance.search("biologie", filters=[
@@ -180,13 +178,13 @@ class TestResearchProductSearchClient(BaseOpenSearchTestCase):
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-12-31", "%Y-%m-%d"),
+                datetime.strptime("2018-12-31", "%Y-%m-%d").date(),
                 self.assertLessEqual
             )
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-01-01", "%Y-%m-%d"),
+                datetime.strptime("2018-01-01", "%Y-%m-%d").date(),
                 self.assertGreaterEqual
             )
 

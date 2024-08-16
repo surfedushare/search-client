@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from tests.base import BaseOpenSearchTestCase
 from search_client.constants import Platforms
@@ -60,11 +60,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
 
     def get_value_from_result(self, result, key):
         data = result.model_dump()
-        if key == "published_at":
-            value = data[key].replace(tzinfo=None)
-        else:
-            value = data[key]
-        return value
+        return data[key]
 
     def assert_value_from_result(self, result, key, expectation, assertion=None, message=None):
         assertion = assertion or self.assertEqual
@@ -172,7 +168,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime(year=2018, month=12, day=31),
+                date(year=2018, month=12, day=31),
                 self.assertLessEqual
             )
         search_biologie_lower_date = self.instance.search("biologie", filters=[
@@ -183,7 +179,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-01-01", "%Y-%m-%d"),
+                datetime.strptime("2018-01-01", "%Y-%m-%d").date(),
                 self.assertGreaterEqual
             )
         search_biologie_between_date = self.instance.search("biologie", filters=[
@@ -194,13 +190,13 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-12-31", "%Y-%m-%d"),
+                datetime.strptime("2018-12-31", "%Y-%m-%d").date(),
                 self.assertLessEqual
             )
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-01-01", "%Y-%m-%d"),
+                datetime.strptime("2018-01-01", "%Y-%m-%d").date(),
                 self.assertGreaterEqual
             )
 

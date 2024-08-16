@@ -16,7 +16,7 @@ class Product(BaseModel):
     provider: Provider | None = Field(default=None)
     score: float = Field(default=0)
     published_at: datetime | None = Field(default=None, validation_alias="publisher_date")
-    modified_at: date | None = Field(default=None)
+    modified_at: datetime | None = Field(default=None)
     url: HttpUrl
     title: str
     description: str
@@ -44,6 +44,12 @@ class Product(BaseModel):
             return provider.ror
         elif provider.external_id:
             return provider.external_id
+
+    @field_serializer("published_at", "modified_at")
+    def validate_date_field(self, value: datetime, _info) -> date:
+        if not value or type(value) is date:
+            return value
+        return value.date()
 
 
 class LearningMaterial(Product):
