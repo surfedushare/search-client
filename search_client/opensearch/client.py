@@ -52,11 +52,13 @@ class SearchClient:
     client: OpenSearch
     configuration: SearchConfiguration
 
+    preset_default: str = "products:multilingual-indices"
+
     def __init__(self, opensearch_client: OpenSearch, platform: Platforms,
                  configuration: SearchConfiguration | None = None, presets: list[str] | None = None) -> None:
         self.client = opensearch_client
         self.configuration = configuration or build_presets_search_configuration(
-            platform, presets, default="products:multilingual-indices"
+            platform, presets, default=self.preset_default
         )
 
     def __str__(self) -> str:
