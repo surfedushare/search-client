@@ -30,3 +30,4 @@ class File(BaseModel):
     access_rights: str
     video: Video | None = Field(default=None)
     previews: Previews | None = Field(default=None)
+    priority: int = Field(default=0)

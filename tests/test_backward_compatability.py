@@ -71,6 +71,7 @@ class TestPydanticToDictConversion(TestCase):
                     "copyright": "cc-by-40",
                     "mime_type": "application/pdf",
                     "access_rights": "OpenAccess",
+                    "priority": 0,
                     "video": None,
                     "previews": {
                         "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
@@ -173,6 +174,7 @@ class TestPydanticToDictConversion(TestCase):
                     "copyright": "cc-by-40",
                     "mime_type": "application/pdf",
                     "access_rights": "OpenAccess",
+                    "priority": 0,
                     "video": None,
                     "previews": {
                         "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
@@ -289,6 +291,7 @@ class TestPydanticToDictConversion(TestCase):
                     "copyright": "cc-by-40",
                     "mime_type": "text/html",
                     "access_rights": "OpenAccess",
+                    "priority": 0,
                     "video": None,
                     "previews": None
                 }
@@ -365,6 +368,7 @@ class TestPydanticToDictConversion(TestCase):
                     "copyright": "cc-by-40",
                     "mime_type": "text/html",
                     "access_rights": "OpenAccess",
+                    "priority": 0,
                     "video": None,
                     "previews": None
                 }
@@ -456,6 +460,7 @@ class TestPydanticToDictConversion(TestCase):
                     "copyright": "cc-by-40",
                     "mime_type": "application/pdf",
                     "access_rights": "OpenAccess",
+                    "priority": 0,
                     "video": None,
                     "previews": {
                         "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
