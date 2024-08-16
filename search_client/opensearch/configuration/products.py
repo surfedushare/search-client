@@ -30,5 +30,6 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
         search_fields=SEARCH_FIELDS[document_type],
         serializers={
             Entities.PRODUCTS: serializer
-        }
+        },
+        range_filter_fields={"published_at", "modified_at"},
     )

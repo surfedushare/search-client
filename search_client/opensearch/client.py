@@ -415,12 +415,12 @@ class SearchClient:
                 continue
             search_type = filter_item['external_id']
             # date range query
-            if search_type == "publisher_date":
+            if search_type in self.configuration.range_filter_fields:
                 lower_bound, upper_bound = filter_item["items"]
                 if lower_bound is not None or upper_bound is not None:
                     filter_items.append({
                         "range": {
-                            "publisher_date": {
+                            search_type: {
                                 "gte": lower_bound,
                                 "lte": upper_bound
                             }

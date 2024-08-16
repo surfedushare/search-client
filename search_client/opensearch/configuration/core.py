@@ -16,6 +16,7 @@ class SearchConfiguration:
     search_fields: list[str]
     serializers: dict[Entities, Type[BaseModel]]
     filter_fields: set[str] = field(default_factory=set)
+    range_filter_fields: set[str] = field(default_factory=set)
     distance_feature_field: str | None = field(default="publisher_date")
 
     alias_prefix: str | None = field(default=None)
@@ -42,6 +43,9 @@ class SearchConfiguration:
         entity = Entities(entity)
         return self.serializers[entity]
 
+    def get_valid_filter_fields(self) -> set[str]:
+        return self.filter_fields | self.range_filter_fields
+
     def merge(self, other: SearchConfiguration) -> None:
         # Some defensive type checking to prevent accidents
         assert isinstance(other, SearchConfiguration), f"Can't merge a SearchConfiguration with a {type(other)}"
@@ -58,6 +62,7 @@ class SearchConfiguration:
         self.search_fields += other.search_fields  # concatenation of lists
         self.serializers.update(other.serializers)  # dict update
         self.filter_fields &= other.filter_fields  # intersection
+        self.range_filter_fields &= other.range_filter_fields  # intersection
         # If distance_feature_fields don't match we unset the variable, because we can't process that.
         if self.distance_feature_field != other.distance_feature_field:
             self.distance_feature_field = None
