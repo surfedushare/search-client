@@ -54,5 +54,5 @@ def build_multilingual_indices_search_configuration(platform: Platforms) -> Sear
         search_fields=SEARCH_FIELDS[document_type],
         serializers={Entities.PRODUCTS: serializer},
         filter_fields=filter_fields,
-        range_filter_fields={"publisher_date"},
+        range_filter_fields={"publisher_date"},  # this is deprecated
     )
