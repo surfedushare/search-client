@@ -1,14 +1,15 @@
 from datetime import datetime, date
 
-from tests.base import BaseOpenSearchTestCase
-from search_client.constants import Platforms
+from tests.base import SearchClientIntegrationTestCase
+from search_client.constants import Platforms, Entities
 from search_client.factories import generate_nl_material
 from search_client.serializers.products import LearningMaterial
 
 
-class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
+class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
 
     platform = Platforms.EDUSOURCES
+    presets = ["products:multilingual-indices"]
 
     @classmethod
     def setUpClass(cls):
@@ -25,37 +26,30 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             "0861c43d-1874-4788-b522-df8be575677f"
         ]
 
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      studies=math_and_education_studies),
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="surfsharekit", studies=math_and_education_studies
         )
-        cls.search.index(
-            id="surfsharekit:abc",
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      studies=math_and_education_studies, external_id="abc",
-                                      title="De wiskunde van Pythagoras", description="Groots zijn zijn getallen")
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="surfsharekit", studies=math_and_education_studies, external_id="abc",
+            title="De wiskunde van Pythagoras", description="Groots zijn zijn getallen"
         )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      copyright="cc-by-40", topic="biology", publisher_date="2018-04-16T22:35:09+02:00",
-                                      studies=biology_and_education_studies),
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="surfsharekit", copyright="cc-by-40", topic="biology",
+            publisher_date="2018-04-16T22:35:09+02:00", studies=biology_and_education_studies
         )
-        cls.search.index(
-            id="WikiwijsDelen:urn:uuid:abc",
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit", topic="biology",
-                                      external_id="WikiwijsDelen:urn:uuid:abc",
-                                      publisher_date="2019-04-16T22:35:09+02:00",
-                                      studies=biology_and_education_studies),
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="edurep", topic="biology",
+            external_id="WikiwijsDelen:urn:uuid:abc", publisher_date="2019-04-16T22:35:09+02:00",
+            studies=biology_and_education_studies
         )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], technical_type="video", source="surfsharekit",
-                                      topic="biology", studies=biology_studies),
-            refresh=True  # always put refresh on the last material
+        cls.index_document(
+            Entities.PRODUCTS, is_last_entity_document=True,
+            educational_levels=["HBO"], technical_type="video", source="surfsharekit", topic="biology",
+            external_id="def", studies=biology_studies
         )
 
     def get_value_from_result(self, result, key):

@@ -9,6 +9,7 @@ PERSONS = {
 
 PROJECTS = {
     "math": {
+        "srn": "edurep:project:1",
         "external_id": "project:1",
         "title": "Een wiskundig project",
         "status": "finished",

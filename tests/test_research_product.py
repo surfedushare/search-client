@@ -1,43 +1,36 @@
 from datetime import datetime, date
 
-from tests.base import BaseOpenSearchTestCase
-from search_client.constants import Platforms
+from tests.base import SearchClientIntegrationTestCase
+from search_client.constants import Platforms, Entities
 from search_client.serializers.products import ResearchProduct
 from search_client.factories import generate_nl_product
 
 
-class TestResearchProductSearchClient(BaseOpenSearchTestCase):
+class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
     platform = Platforms.PUBLINOVA
+    presets = ["products:multilingual-indices"]
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_product(source="surfsharekit")
+        cls.index_document(Entities.PRODUCTS, source="surfsharekit")
+        cls.index_document(
+            Entities.PRODUCTS,
+            source="surfsharekit", external_id="abc", title="De wiskunde van Pythagoras",
+            description="Groots is zijn onderzoek"
         )
-        cls.search.index(
-            id="surfsharekit:abc",
-            index=cls.get_alias("nl"),
-            body=generate_nl_product(source="surfsharekit", external_id="abc",
-                                     title="De wiskunde van Pythagoras", description="Groots is zijn onderzoek")
+        cls.index_document(
+            Entities.PRODUCTS,
+            source="surfsharekit", copyright="cc-by-40", topic="biology", publisher_date="2018-04-16T22:35:09+02:00"
         )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_product(source="surfsharekit", copyright="cc-by-40", topic="biology",
-                                     publisher_date="2018-04-16T22:35:09+02:00"),
+        cls.index_document(
+            Entities.PRODUCTS,
+            source="surfsharekit", topic="biology", publisher_date="2019-04-16T22:35:09+02:00", external_id="def",
         )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_product(source="surfsharekit", topic="biology",
-                                     publisher_date="2019-04-16T22:35:09+02:00"),
-        )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_product(technical_type="video", source="surfsharekit", topic="biology"),
-            refresh=True  # always put refresh on the last material
+        cls.index_document(
+            Entities.PRODUCTS, is_last_entity_document=True,
+            technical_type="video", source="surfsharekit", topic="biology", external_id="123",
         )
 
     def get_value_from_result(self, result, key):

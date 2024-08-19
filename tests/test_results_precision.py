@@ -1,7 +1,7 @@
-from tests.base import BaseOpenSearchTestCase
+from tests.base import SearchClientTestCase
 
 
-class TestRecordsSearchResultsKeySearchClient(BaseOpenSearchTestCase):
+class TestRecordsSearchResultsKeySearchClient(SearchClientTestCase):
 
     def test_precise(self):
         totals = self.instance.parse_results_total({"value": 1, "relation": "eq"})

@@ -39,7 +39,10 @@ class SearchConfiguration:
         }
 
     def get_serializer_from_index(self, index: str) -> Type[BaseModel]:
-        platform, entity = index.split("-")
+        if not self.alias_prefix:
+            platform, entity = index.split("-")
+        else:
+            prefix, platform, entity = index.split("-")
         entity = Entities(entity)
         return self.serializers[entity]
 

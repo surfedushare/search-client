@@ -1,13 +1,13 @@
 from unittest import TestCase
 import json
 
-from tests.base import BaseOpenSearchTestCase
+from tests.base import SearchClientTestCase
 from search_client.factories.learning_material import generate_nl_material
 from search_client.factories.research_product import generate_nl_product
 from search_client.serializers.products import LearningMaterial, ResearchProduct
 
 
-class TestCleaningLegacyExternalIdPrefixes(BaseOpenSearchTestCase):
+class TestCleaningLegacyExternalIdPrefixes(SearchClientTestCase):
 
     def test_legacy_external_id_prefixes(self):
         self.assertEqual(
