@@ -133,6 +133,12 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "technical_type": {
                     "type": "keyword"
                 },
+                "technical_types": {
+                    "type": "keyword"
+                },
+                "licenses": {
+                    "type": "keyword"
+                },
                 "harvest_source": {
                     "type": "keyword"
                 },

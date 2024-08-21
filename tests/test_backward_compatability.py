@@ -51,6 +51,7 @@ class TestPydanticToDictConversion(TestCase):
                            "wiskundedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
+            "licenses": [],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": {
@@ -121,6 +122,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "study_vocabulary": [],
             "technical_type": "document",
+            "technical_types": [],
             "material_types": [],
             "aggregation_level": None,
             "publishers": [
@@ -158,7 +160,8 @@ class TestPydanticToDictConversion(TestCase):
             "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
                            "wiskundedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
-            "copyright": "cc-by-30",
+            "copyright": "cc-by-40",
+            "licenses": [],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": None,
@@ -219,6 +222,7 @@ class TestPydanticToDictConversion(TestCase):
             "doi": "https://doi.org/10.12345",
             "subtitle": None,
             "type": "document",
+            "types": [],
             "research_object_type": None,
             "parties": [
                 "Wikiwijs Maken"
@@ -278,6 +282,7 @@ class TestPydanticToDictConversion(TestCase):
                            "biologiedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
+            "licenses": [],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": None,
@@ -327,6 +332,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "study_vocabulary": [],
             "technical_type": "document",
+            "technical_types": [],
             "material_types": [],
             "aggregation_level": None,
             "publishers": [
@@ -355,7 +361,8 @@ class TestPydanticToDictConversion(TestCase):
             "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
                            "biologiedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
-            "copyright": "cc-by-30",
+            "copyright": "cc-by-40",
+            "licenses": [],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": None,
@@ -393,6 +400,7 @@ class TestPydanticToDictConversion(TestCase):
             "subtitle": None,
             "highlight": None,
             "type": "document",
+            "types": [],
             "research_object_type": None,
             "parties": [
                 "Wikiwijs Maken"
@@ -444,6 +452,7 @@ class TestPydanticToDictConversion(TestCase):
                            "wiskundedidactiek en ICT met Theo van den Bogaart (root)",
             "language": "nl",
             "copyright": "cc-by-40",
+            "licenses": ["cc-by-40"],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": {
@@ -514,6 +523,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "study_vocabulary": ["http://purl.edustandaard.nl/concept/1ba23d31-f46e-4b40-8c53-fae23b333279"],
             "technical_type": "document",
+            "technical_types": ["document"],
             "material_types": [],
             "aggregation_level": None,
             "publishers": [
@@ -552,6 +562,7 @@ class TestPydanticToDictConversion(TestCase):
                            "biologiedidactiek en ICT met Theo van den Bogaart (root)",
             "language": "nl",
             "copyright": "cc-by-40",
+            "licenses": ["cc-by-40"],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": None,
@@ -601,6 +612,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "study_vocabulary": [],
             "technical_type": "document",
+            "technical_types": ["document"],
             "material_types": [],
             "aggregation_level": None,
             "publishers": [
@@ -630,6 +642,7 @@ class TestPydanticToDictConversion(TestCase):
                            "wiskundedidactiek en ICT met Theo van den Bogaart (root)",
             "language": "nl",
             "copyright": "cc-by-40",
+            "licenses": ["cc-by-40"],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": None,
@@ -698,6 +711,7 @@ class TestPydanticToDictConversion(TestCase):
                 ]
             },
             "type": "document",
+            "types": ["document"],
             "research_object_type": None,
             "parties": [
                 "Wikiwijs Maken"
@@ -749,6 +763,7 @@ class TestPydanticToDictConversion(TestCase):
                            "biologiedidactiek en ICT met Theo van den Bogaart (root)",
             "language": "nl",
             "copyright": "cc-by-40",
+            "licenses": ["cc-by-40"],
             "video": None,
             "harvest_source": "wikiwijsmaken",
             "previews": None,
@@ -791,6 +806,7 @@ class TestPydanticToDictConversion(TestCase):
                 ]
             },
             "type": "document",
+            "types": ["document"],
             "research_object_type": None,
             "parties": [
                 "Wikiwijs Maken"

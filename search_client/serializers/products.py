@@ -26,7 +26,8 @@ class Product(BaseModel):
     title: str
     description: str
     language: str
-    copyright: str
+    copyright: str = Field(deprecated="copyright is deprecated in favor of licenses")
+    licenses: list[str] = Field(default_factory=list)
     video: Video | None = Field(default=None)
     harvest_source: str
     previews: Previews | None = Field(default=None)
@@ -61,7 +62,9 @@ class LearningMaterial(Product):
     lom_educational_levels: list[str] = Field(default_factory=list)
     disciplines: list[str] = Field(default_factory=list, validation_alias="disciplines_normalized")
     study_vocabulary: list[str] = Field(default_factory=list)
-    technical_type: str | None = Field(default=None)
+    technical_type: str | None = Field(default=None,
+                                       deprecated="technical_type is deprecated in favor or technical_types")
+    technical_types: list[str] = Field(default_factory=list)
     material_types: list[str] = Field(default_factory=list)
     aggregation_level: str | None = Field(default=None)
     publishers: list[str] = Field(default_factory=list)
@@ -79,7 +82,8 @@ class LearningMaterial(Product):
 
 class ResearchProduct(Product):
 
-    type: str = Field(validation_alias="technical_type")
+    type: str = Field(validation_alias="technical_type", deprecated="type is deprecated in favor or types")
+    types: list[str] = Field(default_factory=list, validation_alias="technical_types")
     research_object_type: str | None = Field(default=None)
     parties: list[str] = Field(default_factory=list, validation_alias="publishers")
     research_themes: list[str] = Field(default_factory=list)

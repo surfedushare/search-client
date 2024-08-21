@@ -183,6 +183,7 @@ MATERIALS = {
         "language": "nl",
         "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "copyright": "cc-by-40",
+        "licenses": ["cc-by-40"],
         "lom_educational_levels": ["HBO"],
         "publisher_date": "2017-04-16T22:35:09+02:00",
         "published_at": "2017-04-16T22:35:09+02:00",
@@ -201,6 +202,7 @@ MATERIALS = {
         },
         "doi": None,
         "technical_type": "document",
+        "technical_types": ["document"],
         "disciplines": ["exact_informatica"],
         "disciplines_normalized": {
             "keyword": ["exact_informatica"],
@@ -293,6 +295,7 @@ MATERIALS = {
         "language": "nl",
         "external_id": "wikiwijsmaken:123",
         "copyright": "cc-by-40",
+        "licenses": ["cc-by-40"],
         "lom_educational_levels": ["HBO"],
         "publisher_date": "2017-04-16T22:35:09+02:00",
         "published_at": "2017-04-16T22:35:09+02:00",
@@ -311,6 +314,7 @@ MATERIALS = {
         },
         "doi": None,
         "technical_type": "document",
+        "technical_types": ["document"],
         "disciplines": ["aarde_milieu"],
         "disciplines_normalized": {
             "keyword": ["aarde_milieu"],
