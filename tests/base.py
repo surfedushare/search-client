@@ -6,7 +6,8 @@ from opensearchpy import OpenSearch
 
 from configuration import create_configuration
 from search_client.constants import DocumentTypes, Platforms, Entities
-from search_client.factories import generate_nl_material, generate_nl_product, generate_project, generate_product
+from search_client.factories import (generate_nl_material, generate_nl_product, generate_project, generate_material,
+                                     generate_product)
 from search_client.opensearch import SearchClient, OpenSearchClientBuilder
 from search_client.opensearch.indices import build_products_index_configuration, build_projects_index_configuration
 from search_client.opensearch.indices.legacy import create_open_search_index_configuration
@@ -113,6 +114,8 @@ class BaseSearchClientIntegrationTestCase(TestCase):
                 factory = generate_nl_material
             case Platforms.PUBLINOVA, Entities.PRODUCTS, "multilingual-indices":
                 factory = generate_nl_product
+            case Platforms.EDUSOURCES, Entities.PRODUCTS, "default":
+                factory = generate_material
             case Platforms.PUBLINOVA, Entities.PRODUCTS, "default":
                 factory = generate_product
             case Platforms.PUBLINOVA, Entities.PROJECTS, "default":
