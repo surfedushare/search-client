@@ -1,4 +1,5 @@
 import os
+from typing import Callable
 from unittest import TestCase
 
 from opensearchpy import OpenSearch
@@ -74,7 +75,8 @@ class BaseSearchClientIntegrationTestCase(TestCase):
         for entity, alias in cls.aliases.items():
             if isinstance(entity, str):  # legacy indices that need creation, but remain empty
                 entity = Entities.PRODUCTS
-            cls.search.indices.create(alias, ignore=400, body=cls._get_index_configuration(entity))
+            cls.search.indices.delete(alias, ignore_unavailable=True)
+            cls.search.indices.create(alias, body=cls._get_index_configuration(entity))
 
     @classmethod
     def _setup_preset_subtypes(cls):
@@ -104,19 +106,24 @@ class BaseSearchClientIntegrationTestCase(TestCase):
         super().tearDownClass()
 
     @classmethod
-    def index_document(cls, entity: Entities, is_last_entity_document: bool = False, **kwargs):
+    def get_document_factory(cls, entity: Entities) -> Callable:
         subtype = cls.subtypes[entity]
         match cls.platform, entity, subtype:
             case Platforms.EDUSOURCES, Entities.PRODUCTS, "multilingual-indices":
-                generate_document = generate_nl_material
+                factory = generate_nl_material
             case Platforms.PUBLINOVA, Entities.PRODUCTS, "multilingual-indices":
-                generate_document = generate_nl_product
+                factory = generate_nl_product
             case Platforms.PUBLINOVA, Entities.PRODUCTS, "default":
-                generate_document = generate_product
+                factory = generate_product
             case Platforms.PUBLINOVA, Entities.PROJECTS, "default":
-                generate_document = generate_project
+                factory = generate_project
             case _:
                 raise ValueError(f"Invalid entity to index_document: {entity.value}")
+        return factory
+
+    @classmethod
+    def index_document(cls, entity: Entities, is_last_entity_document: bool = False, **kwargs):
+        generate_document = cls.get_document_factory(entity)
         body = generate_document(**kwargs)
         index_kwargs = {
             "id": body["srn"],

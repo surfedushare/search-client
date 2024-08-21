@@ -19,17 +19,42 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "study_vocabulary.keyword", "disciplines_normalized.keyword",
             "lom_educational_levels", "consortium.keyword", "material_types", "aggregation_level"
         }
+        search_fields = SEARCH_FIELDS[document_type]
     elif platform is Platforms.PUBLINOVA:
-        document_type = DocumentTypes.RESEARCH_PRODUCT
         serializer = ResearchProduct
+        search_fields = [
+            "texts.nl.titles.text^2", "texts.nl.titles.text.analyzed^2", "texts.nl.titles.text.folded^2",
+            "texts.nl.subtitles.text^2", "texts.nl.subtitles.text.analyzed^2", "texts.nl.subtitles.text.folded^2",
+            "texts.nl.contents.text", "texts.nl.contents.text.analyzed", "texts.nl.contents.text.folded",
+            "texts.nl.descriptions.text", "texts.nl.descriptions.text.analyzed", "texts.nl.descriptions.text.folded",
+
+            "texts.en.titles.text^2", "texts.en.titles.text.analyzed^2", "texts.en.titles.text.folded^2",
+            "texts.en.subtitles.text^2", "texts.en.subtitles.text.analyzed^2", "texts.en.subtitles.text.folded^2",
+            "texts.en.contents.text", "texts.en.contents.text.analyzed", "texts.en.contents.text.folded",
+            "texts.en.descriptions.text", "texts.en.descriptions.text.analyzed", "texts.en.descriptions.text.folded",
+
+            "texts.unk.titles.text^2", "texts.unk.titles.text.analyzed^2", "texts.unk.titles.text.folded^2",
+            "texts.unk.subtitles.text^2", "texts.unk.subtitles.text.analyzed^2", "texts.unk.subtitles.text.folded^2",
+            "texts.unk.contents.text", "texts.unk.contents.text.analyzed", "texts.unk.contents.text.folded",
+            "texts.unk.descriptions.text", "texts.unk.descriptions.text.analyzed", "texts.unk.descriptions.text.folded",
+
+            "keywords", "keywords.folded",
+            "authors.name.folded",
+            "parties.name.folded",
+            "projects.name.folded",
+        ]
     else:
         raise ValueError(f"Can't build product search configuration for platform: {platform}")
     return ProductSearchConfiguration(
         platform=platform,
         entities={Entities.PRODUCTS},
-        search_fields=SEARCH_FIELDS[document_type],
+        search_fields=search_fields,
         serializers={
             Entities.PRODUCTS: serializer
         },
-        range_filter_fields={"published_at", "modified_at"},
+        filter_fields=filter_fields,
+        range_filter_fields={
+            "published_at", "modified_at",
+            "publisher_date"  # deprecated, use published_at
+        },
     )

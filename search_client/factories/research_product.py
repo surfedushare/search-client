@@ -172,6 +172,7 @@ PRODUCT = {
         "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "copyright": "cc-by-30",
         "publisher_date": "2017-04-16T22:35:09+02:00",
+        "published_at": "2017-04-16T22:35:09+02:00",
         "keywords": ["nerds"],
         "authors": [{"name": "Michel van Ast"}, {"name": "Theo van den Bogaart"}, {"name": "Marc de Graaf"}],
         "publishers": ["Wikiwijs Maken"],
@@ -232,6 +233,90 @@ PRODUCT = {
             }
         }
     },
+    "biology": {
+        "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
+        "set": "edurep:wikiwijsmaken",
+        "title": "Onderzoek over biologisch denken",
+        "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
+        "files": [
+            {
+                "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123:16bdc1e9a083ebe1878ec5b867bf850562feff35",
+                "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
+                "hash": "16bdc1e9a083ebe1878ec5b867bf850562feff35",
+                "type": "website",
+                "state": "active",
+                "title": "URL 1",
+                "is_link": True,
+                "priority": 0,
+                "copyright": "cc-by-40",
+                "mime_type": "text/html",
+                "access_rights": "OpenAccess"
+            }
+        ],
+        "description":
+            "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
+            "met Theo van den Bogaart",
+        "language": "nl",
+        "external_id": "wikiwijsmaken:123",
+        "copyright": "cc-by-30",
+        "publisher_date": "2017-04-16T22:35:09+02:00",
+        "published_at": "2017-04-16T22:35:09+02:00",
+        "keywords": [],
+        "authors": [{"name": "Michel van Ast"}],
+        "publishers": ["Wikiwijs Maken"],
+        "harvest_source": "wikiwijsmaken",
+        "has_parts": [],
+        "is_part_of": [],
+        "suggest_phrase": "Onderzoek over biologie en didactiek op de universiteit.",
+        "suggest_completion": ["Onderzoek", "over", "biologie", "en", "didactiek", "op", "de", "universiteit."],
+        "doi": None,
+        "technical_type": "document",
+        "research_themes": ["aarde_milieu"],
+        "provider": {
+            "ror": None,
+            "external_id": None,
+            "name": "Wikiwijs Maken",
+            "slug": None
+        },
+        "highlight": {
+            "text": [
+                "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
+            ]
+        },
+        "texts": {
+            "en": {},
+            "unk": {},
+            "nl": {
+                "titles": [
+                    {
+                        "text": "Onderzoek over biologisch denken",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "edurep:wikiwijsmaken:wikiwijsmaken:123"
+                    }
+                ],
+                "subtitles": [],
+                "descriptions": [
+                    {
+                        "text": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                                "biologiedidactiek en ICT met Theo van den Bogaart",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "edurep:wikiwijsmaken:wikiwijsmaken:123"
+                    }
+                ],
+                "contents": [
+                    {
+                        "text": "Onderzoek over biologie en didactiek op de universiteit.",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "edurep:wikiwijsmaken:wikiwijsmaken:123:16bdc1e9a083ebe1878ec5b867bf850562feff35"
+                    }
+                ],
+                "transcriptions": []
+            }
+        },
+    }
 }
 
 
@@ -254,4 +339,5 @@ def generate_product(title=None, description=None, technical_type=None, source=N
         copy["copyright"] = copyright
     if publisher_date:
         copy["publisher_date"] = publisher_date
+        copy["published_at"] = publisher_date
     return copy

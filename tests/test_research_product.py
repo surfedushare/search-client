@@ -3,13 +3,17 @@ from datetime import datetime, date
 from tests.base import SearchClientIntegrationTestCase
 from search_client.constants import Platforms, Entities
 from search_client.serializers.products import ResearchProduct
-from search_client.factories import generate_nl_product
 
 
 class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
+    # Attributes used by SearchClientIntegrationTestCase
     platform = Platforms.PUBLINOVA
-    presets = ["products:multilingual-indices"]
+    presets = ["products:default"]
+
+    # Attributes for test cases in this file
+    aggregation_key = "aggregations"
+    datetime_field = "publisher_date"
 
     @classmethod
     def setUpClass(cls):
@@ -66,13 +70,13 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
         self.assertGreater(search_result['results_total']['value'], search_result_filter['results_total']['value'])
         self.assertEqual(
             set(search_result.keys()),
-            {"results_total", "results", "drilldowns", "did_you_mean"}
+            {"results_total", "results", self.aggregation_key, "did_you_mean"}
         )
         # does an empty search return a list?
         self.assertIsInstance(search_result['results'], list)
-        # are there no drilldowns for an empty search?
-        self.assertIsInstance(search_result['drilldowns'], dict)
-        self.assertEqual(len(search_result['drilldowns']), 0)
+        # are there no aggregations for an empty search?
+        self.assertIsInstance(search_result[self.aggregation_key], dict)
+        self.assertEqual(len(search_result[self.aggregation_key]), 0)
 
         # basic search
         search_biologie = self.instance.search("biologie")
@@ -142,7 +146,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
         # search with publish date filter applied
         search_biologie_upper_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": [None, "2018-12-31"]}
+            {"external_id": self.datetime_field, "items": [None, "2018-12-31"]}
         ])
         self.assertTrue(search_biologie_upper_date["results"])
         for result in search_biologie_upper_date["results"]:
@@ -153,7 +157,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
                 self.assertLessEqual
             )
         search_biologie_lower_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": ["2018-01-01", None]}
+            {"external_id": self.datetime_field, "items": ["2018-01-01", None]}
         ])
         self.assertTrue(search_biologie_lower_date["results"])
         for result in search_biologie_lower_date["results"]:
@@ -164,7 +168,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
                 self.assertGreaterEqual
             )
         search_biologie_between_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": ["2018-01-01", "2018-12-31"]}
+            {"external_id": self.datetime_field, "items": ["2018-01-01", "2018-12-31"]}
         ])
         self.assertTrue(search_biologie_between_date["results"])
         for result in search_biologie_between_date["results"]:
@@ -183,20 +187,20 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
         # search with None, None as date filter. This search should give the same result as not filtering at all.
         search_biologie_none_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": [None, None]}
+            {"external_id": self.datetime_field, "items": [None, None]}
         ])
         search_biologie = self.instance.search("biologie")
         self.assertEqual(search_biologie_none_date, search_biologie)
 
-    def test_drilldown_search(self):
+    def test_aggregation_search(self):
         search_biologie = self.instance.search("biologie", drilldown_names=["technical_type"])
         self.assertIsNotNone(search_biologie)
-        self.assertEqual(len(search_biologie['drilldowns']), 2)
-        for key, value in search_biologie['drilldowns'].items():
+        self.assertEqual(len(search_biologie[self.aggregation_key]), 2)
+        for key, value in search_biologie[self.aggregation_key].items():
             self.assertIn("-", key)
             self.assertGreater(value, 0)
 
-    def test_drilldown_with_filters(self):
+    def test_aggregation_with_filters(self):
         search = self.instance.search(
             "biologie",
             filters=[
@@ -205,13 +209,13 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
             drilldown_names=['harvest_source', 'technical_type']
         )
 
-        drilldowns = search['drilldowns']
+        aggregations = search[self.aggregation_key]
 
         total_for_technical_type = sum(
-            count for drilldown_name, count in drilldowns.items() if "technical_type" in drilldown_name
+            count for name, count in aggregations.items() if "technical_type" in name
         )
         total_for_repo = sum(
-            count for drilldown_name, count in drilldowns.items() if "harvest_source" in drilldown_name
+            count for name, count in aggregations.items() if "harvest_source" in name
         )
         # The counts for format do not include the filter (as it is applied to format)
         # The counts for repo DO include the format filter, so it returns less results
@@ -226,14 +230,14 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
             self.get_value_from_result(result, "published_at")
             for result in search_biologie["results"]
         ]
-        search_biologie_asc = self.instance.search("biologie", ordering="publisher_date")
+        search_biologie_asc = self.instance.search("biologie", ordering=self.datetime_field)
         self.assertIsNotNone(search_biologie_asc)
         self.assertTrue(search_biologie_asc["results"])
         search_biologie_asc_dates = [
             self.get_value_from_result(result, "published_at")
             for result in search_biologie_asc["results"]
         ]
-        search_biologie_desc = self.instance.search("biologie", ordering="publisher_date")
+        search_biologie_desc = self.instance.search("biologie", ordering=self.datetime_field)
         self.assertIsNotNone(search_biologie_desc)
         self.assertTrue(search_biologie_asc["results"])
         search_biologie_desc_dates = [
@@ -262,20 +266,20 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
         empty_drilldowns = self.instance.drilldowns(drilldown_names=[])
         self.assertEqual(empty_drilldowns['results_total']['value'], 0)
         self.assertEqual(empty_drilldowns['results'], [])
-        self.assertEqual(empty_drilldowns['drilldowns'], {})
+        self.assertEqual(empty_drilldowns[self.aggregation_key], {})
 
         biologie_drilldowns = self.instance.drilldowns([], search_text="biologie")
         self.assertEqual(biologie_drilldowns['results_total']['value'], 0)
         self.assertEqual(biologie_drilldowns['results'], [])
-        self.assertEqual(biologie_drilldowns['drilldowns'], {})
+        self.assertEqual(biologie_drilldowns[self.aggregation_key], {})
 
         repo_drilldowns = self.instance.drilldowns(['harvest_source'])
-        for drilldown_name, value in repo_drilldowns['drilldowns'].items():
+        for drilldown_name, value in repo_drilldowns[self.aggregation_key].items():
             self.assertIn("harvest_source", drilldown_name)
             self.assertGreater(value, 0)
 
         repo_and_format_drilldowns = self.instance.drilldowns(['harvest_source', 'technical_type'])
-        for drilldown_name, value in repo_and_format_drilldowns['drilldowns'].items():
+        for drilldown_name, value in repo_and_format_drilldowns[self.aggregation_key].items():
             field_id, external_id = drilldown_name.split("-")
             self.assertIn(field_id, ["harvest_source", "technical_type"])
             self.assertTrue(external_id)
@@ -348,8 +352,8 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
     def test_parse_search_hit(self):
         hit = {
-            "_index": "publinova-nl",
-            "_source": generate_nl_product(),
+            "_index": self.aliases[Entities.PRODUCTS],
+            "_source": self.get_document_factory(Entities.PRODUCTS)(),
             "_score": 3.14,
             "highlight": {
                 "text": ["highlighted"]
@@ -363,8 +367,8 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
     def test_parse_search_hit_minimal(self):
         hit = {
-            "_index": "publinova-nl",
-            "_source": generate_nl_product(),
+            "_index": self.aliases[Entities.PRODUCTS],
+            "_source": self.get_document_factory(Entities.PRODUCTS)(),
         }
         result = self.instance.parse_search_hit(hit)
         self.assertIsInstance(result, ResearchProduct)
@@ -373,6 +377,17 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
 
     def test_parse_search_hit_invalid_index(self):
         hit = {
-            "_source": generate_nl_product(),
+            "_source": self.get_document_factory(Entities.PRODUCTS)(),
         }
         self.assertRaises(ValueError,  self.instance.parse_search_hit, [hit])
+
+
+class TestResearchProductMultilingualIndicesSearchClient(TestResearchProductSearchClient):
+
+    # Attributes used by SearchClientIntegrationTestCase
+    platform = Platforms.PUBLINOVA
+    presets = ["products:multilingual-indices"]
+
+    # Attributes for test cases in this file
+    aggregation_key = "drilldowns"
+    datetime_field = "publisher_date"
