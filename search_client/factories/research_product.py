@@ -114,7 +114,7 @@ NL_PRODUCT = {
 
 
 def generate_nl_product(title=None, description=None, technical_type=None, source=None, copyright=None,
-                        publisher_date=None, studies=None, topic="math", external_id=None):
+                        publisher_date=None, topic="math", external_id=None):
     copy = NL_PRODUCT[topic].copy()
     if title:
         copy["title"] = title
@@ -132,8 +132,6 @@ def generate_nl_product(title=None, description=None, technical_type=None, sourc
         copy["copyright"] = copyright
     if publisher_date:
         copy["publisher_date"] = publisher_date
-    if studies:
-        copy["studies"] = studies
     return copy
 
 
