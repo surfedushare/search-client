@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from search_client.constants import Platforms, Entities
 from search_client.opensearch.configuration import (
     SearchConfiguration,
@@ -36,13 +38,9 @@ _PRESETS = {
 
 def build_presets_search_configuration(platform: Platforms, presets: list[str], default: str) -> SearchConfiguration:
     platform_presets = _PRESETS[platform]
-    presets = presets or [default]
-    configuration = SearchConfiguration(  # an empty configuration where presets get merged into
-        platform=platform,
-        entities=set(),
-        search_fields=[],
-        serializers={}
-    )
+    presets = iter(presets) if presets else iter([default])
+    main_preset_key = next(presets)
+    configuration = deepcopy(platform_presets[main_preset_key])
     for preset_key in presets:
         preset_configuration = platform_presets[preset_key]
         if not preset_configuration.allow_multi_entity_results:
