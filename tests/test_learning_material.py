@@ -15,41 +15,26 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
     def setUpClass(cls):
         super().setUpClass()
 
-        math_and_education_studies = [
-            "7afbb7a6-c29b-425c-9c59-6f79c845f5f0",  # math
-            "0861c43d-1874-4788-b522-df8be575677f"  # onderwijskunde
-        ]
-        biology_studies = [
-            "2b363227-8633-4652-ad57-c61f1efc02c8"
-        ]
-        biology_and_education_studies = biology_studies + [
-            "0861c43d-1874-4788-b522-df8be575677f"
-        ]
-
+        cls.index_document(Entities.PRODUCTS, educational_levels=["HBO"], source="surfsharekit")
         cls.index_document(
             Entities.PRODUCTS,
-            educational_levels=["HBO"], source="surfsharekit", studies=math_and_education_studies
-        )
-        cls.index_document(
-            Entities.PRODUCTS,
-            educational_levels=["HBO"], source="surfsharekit", studies=math_and_education_studies, external_id="abc",
+            educational_levels=["HBO"], source="surfsharekit", external_id="abc",
             title="De wiskunde van Pythagoras", description="Groots zijn zijn getallen"
         )
         cls.index_document(
             Entities.PRODUCTS,
             educational_levels=["HBO"], source="surfsharekit", copyright="cc-by-40", topic="biology",
-            publisher_date="2018-04-16T22:35:09+02:00", studies=biology_and_education_studies
+            publisher_date="2018-04-16T22:35:09+02:00"
         )
         cls.index_document(
             Entities.PRODUCTS,
             educational_levels=["HBO"], source="edurep", topic="biology",
-            external_id="WikiwijsDelen:urn:uuid:abc", publisher_date="2019-04-16T22:35:09+02:00",
-            studies=biology_and_education_studies
+            external_id="WikiwijsDelen:urn:uuid:abc", publisher_date="2019-04-16T22:35:09+02:00"
         )
         cls.index_document(
             Entities.PRODUCTS, is_last_entity_document=True,
             educational_levels=["HBO"], technical_type="video", source="surfsharekit", topic="biology",
-            external_id="def", studies=biology_studies
+            external_id="def"
         )
 
     def get_value_from_result(self, result, key):

@@ -37,7 +37,6 @@ NL_MATERIAL = {
         "keywords": ["nerds"],
         "authors": [{"name": "Michel van Ast"}, {"name": "Theo van den Bogaart"}, {"name": "Marc de Graaf"}],
         "publishers": ["Wikiwijs Maken"],
-        "studies": ["7afbb7a6-c29b-425c-9c59-6f79c845f5f0"],
         "harvest_source": "wikiwijsmaken",
         "has_parts": [],
         "is_part_of": [],
@@ -69,11 +68,93 @@ NL_MATERIAL = {
             ]
         }
     },
-    "math_all_languages": {
+    "biology": {
+        "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
+        "set": "edurep:wikiwijsmaken",
+        "title": "Didactiek van biologisch denken",
+        "text": "Leermateriaal over biologie en didactiek op de universiteit.",
+        "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
+        "files": [
+            {
+                "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123:16bdc1e9a083ebe1878ec5b867bf850562feff35",
+                "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
+                "hash": "16bdc1e9a083ebe1878ec5b867bf850562feff35",
+                "type": "website",
+                "state": "active",
+                "title": "URL 1",
+                "is_link": True,
+                "priority": 0,
+                "copyright": "cc-by-40",
+                "mime_type": "text/html",
+                "access_rights": "OpenAccess"
+            }
+        ],
+        "description":
+            "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
+            "met Theo van den Bogaart",
+        "language": "nl",
+        "external_id": "wikiwijsmaken:123",
+        "copyright": "cc-by-40",
+        "lom_educational_levels": ["HBO"],
+        "publisher_date": "2017-04-16T22:35:09+02:00",
+        "keywords": [],
+        "authors": [{"name": "Michel van Ast"}],
+        "publishers": ["Wikiwijs Maken"],
+        "harvest_source": "wikiwijsmaken",
+        "has_parts": [],
+        "is_part_of": [],
+        "suggest_phrase": "Leermateriaal over biologie en didactiek op de universiteit.",
+        "suggest_completion": ["Leermateriaal", "over", "biologie", "en", "didactiek", "op", "de", "universiteit."],
+        "study_vocabulary": [],
+        "doi": None,
+        "technical_type": "document",
+        "disciplines": ["aarde_milieu"],
+        "disciplines_normalized": ["aarde_milieu"],
+        "learning_material_disciplines_normalized": ["exact_informatica"],
+        "provider": {
+            "name": "Wikiwijs Maken",
+            "slug": None,
+            "external_id": None,
+            "ror": None
+        },
+        "highlight": {
+            "text": [
+                "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
+            ]
+        }
+    }
+}
+
+
+def generate_nl_material(educational_levels=None, title=None, description=None, technical_type=None, source=None,
+                         copyright=None, publisher_date=None, topic="math", external_id=None):
+    copy = NL_MATERIAL[topic].copy()
+    if title:
+        copy["title"] = title
+    if description:
+        copy["description"] = description
+    if external_id:
+        copy["external_id"] = external_id
+    if educational_levels:
+        copy["lom_educational_levels"] = educational_levels
+    if technical_type:
+        copy["technical_type"] = technical_type
+    if source:
+        copy["harvest_source"] = source
+    if source and external_id:
+        copy["srn"] = f"{source}:{external_id}"
+    if copyright:
+        copy["copyright"] = copyright
+    if publisher_date:
+        copy["publisher_date"] = publisher_date
+    return copy
+
+
+MATERIALS = {
+    "math": {
         "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "set": "sharekit:edusources",
-        "title": "Didactiek van wiskundig denken (root)",
-        "text": "Leermateriaal over wiskunde en didactiek op de universiteit. (root)",
+        "title": "Didactiek van wiskundig denken",
         "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
         "files": [
             {
@@ -104,10 +185,10 @@ NL_MATERIAL = {
         "copyright": "cc-by-40",
         "lom_educational_levels": ["HBO"],
         "publisher_date": "2017-04-16T22:35:09+02:00",
+        "published_at": "2017-04-16T22:35:09+02:00",
         "keywords": ["nerds"],
         "authors": [{"name": "Michel van Ast"}, {"name": "Theo van den Bogaart"}, {"name": "Marc de Graaf"}],
         "publishers": ["Wikiwijs Maken"],
-        "studies": ["7afbb7a6-c29b-425c-9c59-6f79c845f5f0"],
         "harvest_source": "wikiwijsmaken",
         "has_parts": [],
         "is_part_of": [],
@@ -190,7 +271,6 @@ NL_MATERIAL = {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
         "set": "edurep:wikiwijsmaken",
         "title": "Didactiek van biologisch denken",
-        "text": "Leermateriaal over biologie en didactiek op de universiteit.",
         "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
         "files": [
             {
@@ -209,27 +289,40 @@ NL_MATERIAL = {
         ],
         "description":
             "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
-            "met Theo van den Bogaart",
+            "met Theo van den Bogaart (root)",
         "language": "nl",
         "external_id": "wikiwijsmaken:123",
         "copyright": "cc-by-40",
         "lom_educational_levels": ["HBO"],
         "publisher_date": "2017-04-16T22:35:09+02:00",
+        "published_at": "2017-04-16T22:35:09+02:00",
         "keywords": [],
         "authors": [{"name": "Michel van Ast"}],
         "publishers": ["Wikiwijs Maken"],
-        "studies": [],
         "harvest_source": "wikiwijsmaken",
         "has_parts": [],
         "is_part_of": [],
         "suggest_phrase": "Leermateriaal over biologie en didactiek op de universiteit.",
         "suggest_completion": ["Leermateriaal", "over", "biologie", "en", "didactiek", "op", "de", "universiteit."],
-        "study_vocabulary": [],
+        "study_vocabulary": {
+            "keyword": [],
+            "en": [],
+            "nl": []
+        },
         "doi": None,
         "technical_type": "document",
         "disciplines": ["aarde_milieu"],
-        "disciplines_normalized": ["aarde_milieu"],
-        "learning_material_disciplines_normalized": ["exact_informatica"],
+        "disciplines_normalized": {
+            "keyword": ["aarde_milieu"],
+            "nl": ["Aarde en Milieu"],
+            "en": ["Earth and Environment"]
+        },
+        "learning_material_disciplines_normalized": ["aarde_milieu"],
+        "consortium": {
+            "keyword": None,
+            "nl": None,
+            "en": None
+        },
         "provider": {
             "name": "Wikiwijs Maken",
             "slug": None,
@@ -240,14 +333,47 @@ NL_MATERIAL = {
             "text": [
                 "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
             ]
+        },
+        "texts": {
+            "en": {},
+            "unk": {},
+            "nl": {
+                "titles": [
+                    {
+                        "text": "Didactiek van biologisch denken",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "edurep:wikiwijsmaken:wikiwijsmaken:123"
+                    }
+                ],
+                "subtitles": [],
+                "descriptions": [
+                    {
+                        "text": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
+                                "biologiedidactiek en ICT met Theo van den Bogaart",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "edurep:wikiwijsmaken:wikiwijsmaken:123"
+                    }
+                ],
+                "contents": [
+                    {
+                        "text": "Leermateriaal over biologie en didactiek op de universiteit.",
+                        "provider": "Wikiwijs Maken",
+                        "by_machine": False,
+                        "document": "edurep:wikiwijsmaken:wikiwijsmaken:123:16bdc1e9a083ebe1878ec5b867bf850562feff35"
+                    }
+                ],
+                "transcriptions": []
+            }
         }
     }
 }
 
 
-def generate_nl_material(educational_levels=None, title=None, description=None, technical_type=None, source=None,
-                         copyright=None, publisher_date=None, studies=None, topic="math", external_id=None):
-    copy = NL_MATERIAL[topic].copy()
+def generate_material(educational_levels=None, title=None, description=None, technical_type=None, source=None,
+                      copyright=None, publisher_date=None, topic="math", external_id=None):
+    copy = MATERIALS[topic].copy()
     if title:
         copy["title"] = title
     if description:
@@ -266,6 +392,5 @@ def generate_nl_material(educational_levels=None, title=None, description=None, 
         copy["copyright"] = copyright
     if publisher_date:
         copy["publisher_date"] = publisher_date
-    if studies:
-        copy["studies"] = studies
+        copy["publication_date"] = publisher_date
     return copy

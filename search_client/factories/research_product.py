@@ -137,7 +137,7 @@ def generate_nl_product(title=None, description=None, technical_type=None, sourc
     return copy
 
 
-PRODUCT = {
+PRODUCTS = {
     "math": {
         "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "set": "sharekit:edusources",
@@ -167,10 +167,10 @@ PRODUCT = {
         ],
         "description":
             "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op wiskundedidactiek en ICT "
-            "met Theo van den Bogaart",
+            "met Theo van den Bogaart (root)",
         "language": "nl",
         "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
-        "copyright": "cc-by-30",
+        "copyright": "cc-by-40",
         "publisher_date": "2017-04-16T22:35:09+02:00",
         "published_at": "2017-04-16T22:35:09+02:00",
         "keywords": ["nerds"],
@@ -255,10 +255,10 @@ PRODUCT = {
         ],
         "description":
             "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
-            "met Theo van den Bogaart",
+            "met Theo van den Bogaart (root)",
         "language": "nl",
         "external_id": "wikiwijsmaken:123",
-        "copyright": "cc-by-30",
+        "copyright": "cc-by-40",
         "publisher_date": "2017-04-16T22:35:09+02:00",
         "published_at": "2017-04-16T22:35:09+02:00",
         "keywords": [],
@@ -322,7 +322,7 @@ PRODUCT = {
 
 def generate_product(title=None, description=None, technical_type=None, source=None, copyright=None,
                      publisher_date=None, topic="math", external_id=None):
-    copy = PRODUCT[topic].copy()
+    copy = PRODUCTS[topic].copy()
     if title:
         copy["title"] = title
     if description:
