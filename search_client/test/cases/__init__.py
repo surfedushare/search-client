@@ -1,0 +1,1 @@
+from search_client.test.cases.integration import BaseSearchClientIntegrationTestCase

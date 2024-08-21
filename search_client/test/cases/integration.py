@@ -1,14 +1,12 @@
-import os
 from typing import Callable
 from unittest import TestCase
 
 from opensearchpy import OpenSearch
 
-from configuration import create_configuration
 from search_client.constants import DocumentTypes, Platforms, Entities
 from search_client.factories import (generate_nl_material, generate_nl_product, generate_project, generate_material,
                                      generate_product)
-from search_client.opensearch import SearchClient, OpenSearchClientBuilder
+from search_client.opensearch import SearchClient
 from search_client.opensearch.indices import build_products_index_configuration, build_projects_index_configuration
 from search_client.opensearch.indices.legacy import create_open_search_index_configuration
 
@@ -136,29 +134,3 @@ class BaseSearchClientIntegrationTestCase(TestCase):
         if is_last_entity_document:
             index_kwargs["refresh"] = True
         cls.search.index(**index_kwargs)
-
-
-class SearchClientIntegrationTestCase(BaseSearchClientIntegrationTestCase):
-
-    @classmethod
-    def setup_opensearch_client(cls) -> OpenSearch:
-        project_location = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        config = create_configuration(project_location=project_location)
-        return OpenSearchClientBuilder.from_host(config.open_search.url).build()
-
-
-class SearchClientTestCase(TestCase):
-    """
-    A base test case to unittest methods on the SearchClient that don't require functional indices.
-    """
-
-    instance = None
-    platform = Platforms.EDUSOURCES
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        project_location = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        config = create_configuration(project_location=project_location)
-        opensearch_client = OpenSearchClientBuilder.from_host(config.open_search.url).build()
-        cls.instance = SearchClient(opensearch_client, cls.platform)
