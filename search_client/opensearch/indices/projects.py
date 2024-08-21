@@ -5,6 +5,15 @@ def build_projects_index_configuration() -> dict:
                 "number_of_shards": 1,
                 "number_of_replicas": 0
             },
+            "analysis": {
+                "analyzer": {
+                    "trigram": {
+                        "type": "custom",
+                        "tokenizer": "standard",
+                        "filter": ["lowercase", "shingle"]
+                    },
+                }
+            }
         },
         "mappings": {
             "properties": {

@@ -117,10 +117,6 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "publisher_year_normalized": {
                     "type": "keyword"
                 },
-                "modified_at": {
-                    "type": "date",
-                    "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
-                },
                 "keywords": {
                     "type": "text",
                     "fields": {
@@ -167,7 +163,15 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "description": {  # more like this
                     "type": "text"
                 },
-                "publisher_date": {  # distance feature and range filtering
+                "publisher_date": {  # distance feature and range filtering, deprecated use published_at
+                    "type": "date",
+                    "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
+                },
+                "published_at": {  # distance feature and range filtering
+                    "type": "date",
+                    "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
+                },
+                "modified_at": {  # distance feature and range filtering
                     "type": "date",
                     "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
                 },
@@ -218,289 +222,327 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
     return {
         "language": {"type": "keyword"},
         "texts": {
-            "nl": {
-                "titles": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "custom_dutch",
-                                "search_analyzer": nl_search_analyzer
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+            "properties": {
+                "nl": {
+                    "properties": {
+                        "titles": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "custom_dutch",
+                                            "search_analyzer": nl_search_analyzer
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
                         },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
+                        "subtitles": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "custom_dutch",
+                                            "search_analyzer": nl_search_analyzer
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "descriptions": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "custom_dutch",
+                                            "search_analyzer": nl_search_analyzer
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "contents": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "custom_dutch",
+                                            "search_analyzer": nl_search_analyzer
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "transcriptions": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "custom_dutch",
+                                            "search_analyzer": nl_search_analyzer
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        }
+                    }
                 },
-                "subtitles": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "custom_dutch",
-                                "search_analyzer": nl_search_analyzer
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "descriptions": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "custom_dutch",
-                                "search_analyzer": nl_search_analyzer
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "contents": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "custom_dutch",
-                                "search_analyzer": nl_search_analyzer
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "transcriptions": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "custom_dutch",
-                                "search_analyzer": nl_search_analyzer
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                }
-            },
 
-            "en": {
-                "titles": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "english",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+                "en": {
+                    "properties": {
+                        "titles": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "english",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
                         },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "subtitles": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "english",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+                        "subtitles": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "english",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
                         },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "descriptions": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "english",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+                        "descriptions": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "english",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
                         },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "contents": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "english",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+                        "contents": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "english",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
                         },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "transcriptions": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "english",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+                        "transcriptions": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "english",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
+                        }
+                    }
                 },
-            },
 
-            "unk": {
-                "titles": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "standard",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
+                "unk": {
+                    "properties": {
+                        "titles": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "standard",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "subtitles": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "standard",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "descriptions": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "standard",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "contents": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "standard",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
+                            }
+                        },
+                        "transcriptions": {
+                            "properties": {
+                                "text": {
+                                    "type": "text",
+                                    "fields": {
+                                        "analyzed": {
+                                            "type": "text",
+                                            "analyzer": "standard",
+                                        },
+                                        "folded": {
+                                            "type": "text",
+                                            "analyzer": "folding"
+                                        }
+                                    },
+                                },
+                                "url": {"type": "keyword"},
+                                "provider": {"type": "keyword"},
+                                "by_machine": {"type": "boolean"},
                             }
                         },
                     },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
                 },
-                "subtitles": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "standard",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "descriptions": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "standard",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "contents": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "standard",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-                "transcriptions": {
-                    "text": {
-                        "type": "text",
-                        "fields": {
-                            "analyzed": {
-                                "type": "text",
-                                "analyzer": "standard",
-                            },
-                            "folded": {
-                                "type": "text",
-                                "analyzer": "folding"
-                            }
-                        },
-                    },
-                    "url": {"type": "keyword"},
-                    "provider": {"type": "keyword"},
-                    "by_machine": {"type": "bool"},
-                },
-            },
+            }
         }
     }
 

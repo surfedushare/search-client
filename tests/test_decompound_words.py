@@ -75,20 +75,20 @@ class BaseDecompoundWordsTestCase(TestCase):
             'word_list_path': 'dutch-decompound-words.txt',
             'updateable': True
         })
-        nl_texts = index["mappings"]["properties"]["texts"]["nl"]
-        en_texts = index["mappings"]["properties"]["texts"]["en"]
-        unk_texts = index["mappings"]["properties"]["texts"]["unk"]
+        nl_texts = index["mappings"]["properties"]["texts"]["properties"]["nl"]["properties"]
+        en_texts = index["mappings"]["properties"]["texts"]["properties"]["en"]["properties"]
+        unk_texts = index["mappings"]["properties"]["texts"]["properties"]["unk"]["properties"]
         for text_field in ["titles", "subtitles", "descriptions", "contents", "transcriptions"]:
-            self.assertEqual(nl_texts[text_field]["text"]['fields']['analyzed']["analyzer"],
+            self.assertEqual(nl_texts[text_field]["properties"]["text"]['fields']['analyzed']["analyzer"],
                              "custom_dutch")
-            self.assertEqual(nl_texts[text_field]["text"]['fields']['analyzed']["search_analyzer"],
+            self.assertEqual(nl_texts[text_field]["properties"]["text"]['fields']['analyzed']["search_analyzer"],
                              "dutch_dictionary_decompound")
             self.assertEqual(
-                en_texts[text_field]["text"]['fields']['analyzed']["analyzer"],
+                en_texts[text_field]["properties"]["text"]['fields']['analyzed']["analyzer"],
                 "english"
             )
             self.assertEqual(
-                unk_texts[text_field]["text"]['fields']['analyzed']["analyzer"],
+                unk_texts[text_field]["properties"]["text"]['fields']['analyzed']["analyzer"],
                 "standard"
             )
 
