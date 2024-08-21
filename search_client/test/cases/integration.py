@@ -4,8 +4,8 @@ from unittest import TestCase
 from opensearchpy import OpenSearch
 
 from search_client.constants import DocumentTypes, Platforms, Entities
-from search_client.factories import (generate_nl_material, generate_nl_product, generate_project, generate_material,
-                                     generate_product)
+from search_client.test.factories import (generate_nl_material, generate_nl_product, generate_project,
+                                          generate_material, generate_product)
 from search_client.opensearch import SearchClient
 from search_client.opensearch.indices import build_products_index_configuration, build_projects_index_configuration
 from search_client.opensearch.indices.legacy import create_open_search_index_configuration
