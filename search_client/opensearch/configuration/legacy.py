@@ -58,5 +58,6 @@ def build_multilingual_indices_search_configuration(platform: Platforms) -> Sear
         highlights={
             "description": {"description"},
             "text": {"text"}
-        }
+        },
+        more_like_this_field_references={"title", "description"},
     )

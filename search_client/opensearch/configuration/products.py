@@ -85,5 +85,6 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
         highlights={
             "description": {"texts:description"},
             "text": {"texts:contents"}
-        }
+        },
+        more_like_this_field_references={"texts:titles", "texts:descriptions"},
     )

@@ -353,10 +353,13 @@ class SearchClient:
         # Now that we have a SRN value as identifier we can continue as normal
         indices = self.configuration.get_aliases_by_language()
         index = indices.get(language, indices["unk"])
+        field_names = self.configuration.interpolate_field_languages(
+            *self.configuration.more_like_this_field_references
+        )
         body = {
             "query": {
                 "more_like_this": {
-                    "fields": ["title", "description"],
+                    "fields": field_names,
                     "like": [
                         {
                             "_index": index,
