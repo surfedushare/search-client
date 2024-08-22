@@ -82,4 +82,8 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "published_at", "modified_at",
             "publisher_date"  # deprecated, use published_at
         },
+        highlights={
+            "description": {"texts:description"},
+            "text": {"texts:contents"}
+        }
     )

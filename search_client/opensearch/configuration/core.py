@@ -93,6 +93,12 @@ class SearchConfiguration:
         references.sort()
         return references
 
+    def get_highlight_fields(self) -> list[str]:
+        fields = []
+        for field_references in self.highlights.values():
+            fields += self.interpolate_field_languages(*field_references)
+        return fields
+
     def merge(self, other: SearchConfiguration) -> None:
         # Some defensive type checking to prevent accidents
         assert isinstance(other, SearchConfiguration), f"Can't merge a SearchConfiguration with a {type(other)}"

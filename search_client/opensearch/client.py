@@ -117,9 +117,21 @@ class SearchClient:
             raise ValueError("Search hit did not specify an index.")
         data = hit["_source"]
         data["score"] = hit.get("_score", 1.00)
-        data["highlight"] = hit.get("highlight")
+        data["highlight"] = self.parse_hit_highlight(hit.get("highlight"))
         serializer_model = self.configuration.get_serializer_from_index(hit["_index"])
         return serializer_model(**data)
+
+    def parse_hit_highlight(self, highlight: dict) -> dict | None:
+        if not highlight:
+            return
+        result = defaultdict(list)
+        for field, snippets in highlight.items():
+            field_reference = self.configuration.extrapolate_field_references(field)[0]
+            highlight_key = next(
+                (key for key, references in self.configuration.highlights.items() if field_reference in references)
+            )
+            result[highlight_key] += snippets
+        return result
 
     def autocomplete(self, query: str) -> list[str]:
         """
@@ -213,8 +225,7 @@ class SearchClient:
                 'number_of_fragments': 1,
                 'fragment_size': 120,
                 'fields': {
-                    'description': {},
-                    'text': {}
+                   field: {} for field in self.configuration.get_highlight_fields()
                 }
             }
         }

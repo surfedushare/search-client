@@ -14,6 +14,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
     # Attributes for test cases in this file
     aggregation_key = "aggregations"
     datetime_field = "publisher_date"
+    highlight_key = "texts:contents"
 
     @classmethod
     def setUpClass(cls):
@@ -356,7 +357,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
             "_source": self.get_document_factory(Entities.PRODUCTS)(),
             "_score": 3.14,
             "highlight": {
-                "text": ["highlighted"]
+                self.highlight_key: ["highlighted"]
             }
         }
         result = self.instance.parse_search_hit(hit)
@@ -391,3 +392,4 @@ class TestResearchProductMultilingualIndicesSearchClient(TestResearchProductSear
     # Attributes for test cases in this file
     aggregation_key = "drilldowns"
     datetime_field = "publisher_date"
+    highlight_key = "text"

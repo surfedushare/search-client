@@ -49,14 +49,6 @@ NL_PRODUCT = {
             "external_id": None,
             "name": "Wikiwijs Maken",
             "slug": None
-        },
-        "highlight": {
-            "description": [
-                "<em>Materiaal</em> voor lerarenopleidingen"
-            ],
-            "text": [
-                "Leer<em>materiaal</em> over wiskunde"
-            ]
         }
     },
     "biology": {
@@ -104,11 +96,6 @@ NL_PRODUCT = {
             "name": "Wikiwijs Maken",
             "slug": None
         }
-    },
-    "highlight": {
-        "text": [
-            "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-        ]
     }
 }
 
@@ -189,14 +176,6 @@ PRODUCTS = {
             "external_id": None,
             "name": "Wikiwijs Maken",
             "slug": None
-        },
-        "highlight": {
-            "description": [
-                "<em>Materiaal</em> voor lerarenopleidingen"
-            ],
-            "text": [
-                "Leer<em>materiaal</em> over wiskunde"
-            ]
         },
         "texts": {
             "en": {},
@@ -279,11 +258,6 @@ PRODUCTS = {
             "external_id": None,
             "name": "Wikiwijs Maken",
             "slug": None
-        },
-        "highlight": {
-            "text": [
-                "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-            ]
         },
         "texts": {
             "en": {},

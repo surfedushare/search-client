@@ -59,14 +59,6 @@ NL_MATERIAL = {
             "external_id": None,
             "ror": None
         },
-        "highlight": {
-            "description": [
-                "<em>Materiaal</em> voor lerarenopleidingen"
-            ],
-            "text": [
-                "Leer<em>materiaal</em> over wiskunde"
-            ]
-        }
     },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
@@ -117,11 +109,6 @@ NL_MATERIAL = {
             "external_id": None,
             "ror": None
         },
-        "highlight": {
-            "text": [
-                "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-            ]
-        }
     }
 }
 
@@ -226,14 +213,6 @@ MATERIALS = {
             "external_id": None,
             "ror": None
         },
-        "highlight": {
-            "description": [
-                "<em>Materiaal</em> voor lerarenopleidingen"
-            ],
-            "text": [
-                "Leer<em>materiaal</em> over wiskunde"
-            ]
-        },
         "texts": {
             "en": {},
             "unk": {},
@@ -332,11 +311,6 @@ MATERIALS = {
             "slug": None,
             "external_id": None,
             "ror": None
-        },
-        "highlight": {
-            "text": [
-                "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-            ]
         },
         "texts": {
             "en": {},

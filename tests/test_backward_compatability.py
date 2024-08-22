@@ -130,14 +130,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "consortium": None,
             "subtitle": None,
-            "highlight": {
-                "description": [
-                    "<em>Materiaal</em> voor lerarenopleidingen"
-                ],
-                "text": [
-                    "Leer<em>materiaal</em> over wiskunde"
-                ]
-            }
+            "highlight": None,  # only gets added during actual search
         })
 
     def test_research_product_math(self):
@@ -251,14 +244,7 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None
                 }
             ],
-            "highlight": {
-                "description": [
-                    "<em>Materiaal</em> voor lerarenopleidingen"
-                ],
-                "text": [
-                    "Leer<em>materiaal</em> over wiskunde"
-                ]
-            }
+            "highlight": None,  # only gets added during actual search
         })
 
     def test_learning_material_biology(self):
@@ -318,12 +304,7 @@ class TestPydanticToDictConversion(TestCase):
             "keywords": [],
             "doi": None,
             "subtitle": None,
-            "highlight": {
-                "description": None,
-                "text": [
-                    "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-                ]
-            },
+            "highlight": None,  # only gets added during actual search
             "lom_educational_levels": [
                 "HBO"
             ],
@@ -398,7 +379,7 @@ class TestPydanticToDictConversion(TestCase):
             "keywords": [],
             "doi": None,
             "subtitle": None,
-            "highlight": None,
+            "highlight": None,  # only gets added during actual search
             "type": "document",
             "types": [],
             "research_object_type": None,
@@ -531,14 +512,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "consortium": "SURF",
             "subtitle": None,
-            "highlight": {
-                "description": [
-                    "<em>Materiaal</em> voor lerarenopleidingen"
-                ],
-                "text": [
-                    "Leer<em>materiaal</em> over wiskunde"
-                ]
-            }
+            "highlight": None,  # only gets added during actual search
         })
 
     def test_learning_material_biology_all_languages(self):
@@ -598,12 +572,7 @@ class TestPydanticToDictConversion(TestCase):
             "keywords": [],
             "doi": None,
             "subtitle": None,
-            "highlight": {
-                "description": None,
-                "text": [
-                    "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-                ]
-            },
+            "highlight": None,  # only gets added during actual search
             "lom_educational_levels": [
                 "HBO"
             ],
@@ -702,14 +671,7 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "doi": "https://doi.org/10.12345",
             "subtitle": None,
-            "highlight": {
-                "description": [
-                    "<em>Materiaal</em> voor lerarenopleidingen"
-                ],
-                "text": [
-                    "Leer<em>materiaal</em> over wiskunde"
-                ]
-            },
+            "highlight": None,  # only gets added during actual search
             "type": "document",
             "types": ["document"],
             "research_object_type": None,
@@ -799,12 +761,7 @@ class TestPydanticToDictConversion(TestCase):
             "keywords": [],
             "doi": None,
             "subtitle": None,
-            "highlight": {
-                "description": None,
-                "text": [
-                    "Leermateriaal over biologie en didactiek op de <em>universiteit</em>."
-                ]
-            },
+            "highlight": None,  # only gets added during actual search
             "type": "document",
             "types": ["document"],
             "research_object_type": None,
