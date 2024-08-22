@@ -9,6 +9,7 @@ class BaseSearchResultSerializer(serializers.Serializer):
     set = serializers.CharField(default=None)
     state = serializers.CharField(default="active")
     external_id = serializers.CharField()
+    score = serializers.FloatField(default=1.0)
     published_at = serializers.CharField(source="publisher_date", allow_blank=True, allow_null=True)
     modified_at = serializers.SerializerMethodField()
     url = serializers.URLField()
@@ -37,7 +38,6 @@ class BaseSearchResultSerializer(serializers.Serializer):
 
 class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
 
-    score = serializers.FloatField(default=1.0)
     provider = serializers.DictField(default=None, allow_null=True)
     doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
