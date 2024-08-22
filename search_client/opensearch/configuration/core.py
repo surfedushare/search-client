@@ -17,7 +17,9 @@ class SearchConfiguration:
     serializers: dict[Entities, Type[BaseModel]]
     filter_fields: set[str] = field(default_factory=set)
     range_filter_fields: set[str] = field(default_factory=set)
-    distance_feature_field: str | None = field(default="publisher_date")
+    distance_feature_field: str | None = field(default="published_at")
+    more_like_this_field_references: set[str] = field(default_factory=set)
+    highlights: dict[str, set[str]] | None = None  # values are field references
 
     alias_prefix: str | None = field(default=None)
 
@@ -48,6 +50,48 @@ class SearchConfiguration:
 
     def get_valid_filter_fields(self) -> set[str]:
         return self.filter_fields | self.range_filter_fields
+
+    @staticmethod
+    def interpolate_field_languages(*args: str) -> list[str]:
+        """
+        This method takes field references like "texts:titles" and returns valid fields for all languages.
+        In the example above that would be ["texts.nl.titles.text", "texts.en.titles.text", "texts.unk.titles.text"]
+
+        :param args: Field references.
+        :return: Valid fields for each reference in each language that the configuration/index supports.
+        """
+        field_names = []
+        for field_reference in args:
+            # If the reference doesn't start with the correct prefix, we assume it's already a valid field
+            if not field_reference.startswith("texts:"):
+                field_names.append(field_reference)
+                continue
+            _, subfield = field_reference.split(":")
+            for language in LANGUAGES:
+                field_names.append(f"texts.{language}.{subfield}.text")
+        return field_names
+
+    @staticmethod
+    def extrapolate_field_references(*args: str) -> list[str]:
+        """
+        This method takes field names and will extract the field reference(s) from them by stripping language specifics.
+        The reference for "texts.nl.titles.text", "texts.en.titles.text" and "texts.unk.titles.text" is "texts:titles".
+
+        :param args: Field names.
+        :return: References
+        """
+        references = set()
+        for field_name in args:
+            # If the field name doesn't start with the correct prefix, we assume it's a valid field.
+            # In this way field names may get mixed with references.
+            if not field_name.startswith("texts."):
+                references.add(field_name)
+                continue
+            _, _, subfield, _ = field_name.split(".")
+            references.add(f"texts:{subfield}")
+        references = list(references)
+        references.sort()
+        return references
 
     def merge(self, other: SearchConfiguration) -> None:
         # Some defensive type checking to prevent accidents
