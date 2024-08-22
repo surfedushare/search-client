@@ -141,7 +141,6 @@ MATERIALS = {
     "math": {
         "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "set": "sharekit:edusources",
-        "title": "Didactiek van wiskundig denken",
         "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
         "files": [
             {
@@ -164,9 +163,6 @@ MATERIALS = {
                 }
             }
         ],
-        "description":
-            "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op wiskundedidactiek en ICT "
-            "met Theo van den Bogaart (root)",
         "language": "nl",
         "external_id": "3522b79c-928c-4249-a7f7-d2bcb3077f10",
         "copyright": "cc-by-40",
@@ -251,7 +247,6 @@ MATERIALS = {
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
         "set": "edurep:wikiwijsmaken",
-        "title": "Didactiek van biologisch denken",
         "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
         "files": [
             {
@@ -268,9 +263,6 @@ MATERIALS = {
                 "access_rights": "OpenAccess"
             }
         ],
-        "description":
-            "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op biologiedidactiek en ICT "
-            "met Theo van den Bogaart (root)",
         "language": "nl",
         "external_id": "wikiwijsmaken:123",
         "copyright": "cc-by-40",

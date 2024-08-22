@@ -430,7 +430,7 @@ class TestPydanticToDictConversion(TestCase):
             "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
             "title": "Didactiek van wiskundig denken",
             "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
-                           "wiskundedidactiek en ICT met Theo van den Bogaart (root)",
+                           "wiskundedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
             "licenses": ["cc-by-40"],
@@ -533,7 +533,7 @@ class TestPydanticToDictConversion(TestCase):
             "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
             "title": "Didactiek van biologisch denken",
             "description": "Materiaal voor lerarenopleidingen en professionaliseringstrajecten gericht op "
-                           "biologiedidactiek en ICT met Theo van den Bogaart (root)",
+                           "biologiedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
             "licenses": ["cc-by-40"],
@@ -608,7 +608,7 @@ class TestPydanticToDictConversion(TestCase):
             "url": "https://surfsharekit.nl/objectstore/949e22f3-cd66-4be2-aefd-c714918fe90e",
             "title": "Onderzoek over wiskundig denken",
             "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
-                           "wiskundedidactiek en ICT met Theo van den Bogaart (root)",
+                           "wiskundedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
             "licenses": ["cc-by-40"],
@@ -722,7 +722,7 @@ class TestPydanticToDictConversion(TestCase):
             "url": "https://maken.wikiwijs.nl/85927/Biologische_denkactiviteiten#!page-2454065",
             "title": "Onderzoek over biologisch denken",
             "description": "Onderzoek voor lerarenopleidingen en professionaliseringstrajecten gericht op "
-                           "biologiedidactiek en ICT met Theo van den Bogaart (root)",
+                           "biologiedidactiek en ICT met Theo van den Bogaart",
             "language": "nl",
             "copyright": "cc-by-40",
             "licenses": ["cc-by-40"],

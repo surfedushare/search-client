@@ -1,7 +1,8 @@
 from typing import Literal
 from datetime import datetime, date
 
-from pydantic import BaseModel, Field, field_serializer, computed_field, field_validator, ValidationInfo
+from pydantic import (BaseModel, Field, field_serializer, computed_field, field_validator, ValidationInfo,
+                      model_validator)
 from pydantic.networks import HttpUrl
 
 from search_client.constants import Entities
@@ -52,10 +53,28 @@ class Product(BaseModel):
             return provider.external_id
 
     @field_serializer("published_at", "modified_at")
-    def validate_date_field(self, value: datetime, _info) -> date:
+    def serialize_date_field(self, value: datetime, _info) -> date:
         if not value or type(value) is date:
             return value
         return value.date()
+
+    @classmethod
+    def _validate_multilingual_text_field(cls, texts: dict, field_name: str) -> str | None:
+        values = texts.get(f"{field_name}s")
+        if not values:
+            return
+        return values[0]["text"]
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_multilingual_text_fields(cls, values: dict, _info):
+        texts = values.get("texts")
+        if not texts:
+            return values
+        language = values.get("language", "unk")
+        for field_name in ["title", "subtitle", "description"]:
+            values[field_name] = cls._validate_multilingual_text_field(texts[language], field_name)
+        return values
 
 
 class LearningMaterial(Product):

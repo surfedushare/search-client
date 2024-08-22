@@ -160,15 +160,6 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "external_id": {  # get document by id
                     "type": "keyword"
                 },
-                "title": {  # more like this
-                    "type": "text"
-                },
-                "subtitle": {  # expected output
-                    "type": "keyword",
-                },
-                "description": {  # more like this
-                    "type": "text"
-                },
                 "publisher_date": {  # distance feature and range filtering, deprecated use published_at
                     "type": "date",
                     "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
