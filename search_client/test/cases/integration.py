@@ -1,5 +1,4 @@
 from typing import Callable
-from unittest import TestCase
 
 from opensearchpy import OpenSearch
 
@@ -24,11 +23,11 @@ TEST_INDEX_CONFIGURATIONS = {
 }
 
 
-class BaseSearchClientIntegrationTestCase(TestCase):
+class SearchClientIntegrationTestCaseMixin:
     """
-    A base TestCase meant to do integration testing with the (SURF) SearchClient
+    A mixin for TestCase classes meant to do integration testing with the (SURF) SearchClient
 
-    This test case will, when given a platform, presets list and OpenSearch client:
+    This mixin will, when given a platform, presets list and OpenSearch client:
      * Create test indices with the correct schema.
      * Create a (SURF) SearchClient with the correct SearchConfiguration.
      * Provide an index_document method that allows you to add documents to the index, with custom data if needed.
@@ -37,10 +36,10 @@ class BaseSearchClientIntegrationTestCase(TestCase):
     # Attributes that should be set by inheriting classes
     platform: Platforms
     presets: list[str] = []
-    search: OpenSearch
     alias_prefix: str = "test"
 
     # Attributes that get set by setUpClass
+    search: OpenSearch
     instance: SearchClient = None
     aliases: dict[Entities | str, str] = None
     subtypes: dict[Entities, str] = None
@@ -80,7 +79,8 @@ class BaseSearchClientIntegrationTestCase(TestCase):
     @classmethod
     def _setup_preset_subtypes(cls):
         cls.subtypes = {}
-        for preset in cls.presets:
+        presets = cls.presets or [cls.instance.preset_default]
+        for preset in presets:
             entity, subtype = preset.split(":")
             entity = Entities(entity)
             if entity in cls.subtypes:
@@ -91,9 +91,9 @@ class BaseSearchClientIntegrationTestCase(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.search = cls.setup_opensearch_client()
-        cls._setup_preset_subtypes()
         cls.instance = SearchClient(cls.search, cls.platform, presets=cls.presets)
         cls.instance.configuration.alias_prefix = cls.alias_prefix
+        cls._setup_preset_subtypes()
         cls._setup_indices()
 
     @classmethod

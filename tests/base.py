@@ -6,10 +6,10 @@ from opensearchpy import OpenSearch
 from configuration import create_configuration
 from search_client.constants import Platforms
 from search_client.opensearch.client import SearchClient, OpenSearchClientBuilder
-from search_client.test.cases import BaseSearchClientIntegrationTestCase
+from search_client.test.cases import SearchClientIntegrationTestCaseMixin
 
 
-class SearchClientIntegrationTestCase(BaseSearchClientIntegrationTestCase):
+class SearchClientIntegrationTestCase(SearchClientIntegrationTestCaseMixin, TestCase):
 
     @classmethod
     def setup_opensearch_client(cls) -> OpenSearch:
