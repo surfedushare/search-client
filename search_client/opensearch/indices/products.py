@@ -154,7 +154,7 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 ##########################################
                 # Required fields for search client
                 ##########################################
-                "srn": {  # more like this
+                "srn": {  # more like this, get document by srn in the future
                     "type": "keyword"
                 },
                 "external_id": {  # get document by id

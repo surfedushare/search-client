@@ -6,7 +6,7 @@ from collections import defaultdict
 from pydantic import BaseModel
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
-from search_client.constants import Platforms, EDUREP_LEGACY_ID_PREFIXES
+from search_client.constants import Platforms, Entities, EDUREP_LEGACY_ID_PREFIXES
 from search_client.opensearch.configuration import (SearchConfiguration, build_presets_search_configuration,
                                                     MultilingualIndicesSearchConfiguration)
 
@@ -358,8 +358,12 @@ class SearchClient:
         stats["documents"] = total
         return stats
 
-    def more_like_this(self, identifier: str, language: str, transform_results: bool = False,
-                       is_external_identifier: bool = True) -> dict:
+    def more_like_this(self, identifier: str, language: str, is_external_identifier: bool = True) -> dict:
+        if self.configuration.more_like_this_field_references is None:
+            raise RuntimeError(
+                "more_like_this search is unavailable for given SearchConfiguration. "
+                "Did you create a multi-entity configuration?"
+            )
         # As long as frontends are not using SRN we need to allow comparisons on external_id
         if is_external_identifier:
             results = self.get_documents_by_id([identifier])
@@ -405,6 +409,8 @@ class SearchClient:
         return result
 
     def author_suggestions(self, author_name: str) -> dict:
+        if self.configuration.entities != {Entities.PRODUCTS}:
+            raise RuntimeError("Can't make author suggestions for entities other than products.")
         body = {
             "query": {
                 "bool": {

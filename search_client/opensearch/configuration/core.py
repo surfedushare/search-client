@@ -18,7 +18,7 @@ class SearchConfiguration:
     filter_fields: set[str] = field(default_factory=set)
     range_filter_fields: set[str] = field(default_factory=set)
     distance_feature_field: str | None = field(default="published_at")
-    more_like_this_field_references: set[str] = field(default_factory=set)
+    more_like_this_field_references: set[str] | None = None
     highlights: dict[str, set[str]] | None = None  # values are field references
 
     alias_prefix: str | None = field(default=None)
@@ -125,3 +125,5 @@ class SearchConfiguration:
         # If distance_feature_fields don't match we unset the variable, because we can't process that.
         if self.distance_feature_field != other.distance_feature_field:
             self.distance_feature_field = None
+        # More like this is impossible cross-index, so we unset that configuration.
+        self.more_like_this_field_references = None

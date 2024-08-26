@@ -39,3 +39,9 @@ class TestMultiEntitySearchClient(SearchClientIntegrationTestCase):
             "products": 1,
             "projects": 1
         })
+
+    def test_author_suggestions(self):
+        self.assertRaises(RuntimeError, self.instance.author_suggestions, "Test Auteur")
+
+    def test_more_like_this(self):
+        self.assertRaises(RuntimeError, self.instance.more_like_this, "abc123", "nl")
