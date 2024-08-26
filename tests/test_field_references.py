@@ -20,7 +20,7 @@ class TestFieldReferences(TestCase):
     def test_extrapolating_default_fields(self):
         configuration = get_preset_search_configuration(Platforms.EDUSOURCES, "products:default")
         references = configuration.extrapolate_field_references(
-            "texts.nl.titles.text", "texts.nl.contents.text","texts.en.descriptions.text", "texts.unk.contents.text",
+            "texts.nl.titles.text", "texts.nl.contents.text", "texts.en.descriptions.text", "texts.unk.contents.text",
             "texts.unk.descriptions.text", "publishers"
         )
         self.assertEqual(references, ["publishers", "texts:contents", "texts:descriptions", "texts:titles"])
