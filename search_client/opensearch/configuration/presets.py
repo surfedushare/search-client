@@ -49,8 +49,16 @@ def build_presets_search_configuration(platform: Platforms, presets: list[str], 
     return configuration
 
 
-def get_preset_search_configuration(platform: Platforms, preset: str):
+def is_valid_preset_search_configuration(platform: Platforms, preset: str) -> str:
+    if ":" not in preset:
+        preset += ":default"
     platform_presets = _PRESETS[platform]
     if preset not in platform_presets:
         raise ValueError(f"Preset {preset} is not available for {platform.value}.")
+    return preset
+
+
+def get_preset_search_configuration(platform: Platforms, preset: str):
+    platform_presets = _PRESETS[platform]
+    preset = is_valid_preset_search_configuration(platform, preset)
     return deepcopy(platform_presets[preset])
