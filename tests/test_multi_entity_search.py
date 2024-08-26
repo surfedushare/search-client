@@ -31,3 +31,11 @@ class TestMultiEntitySearchClient(SearchClientIntegrationTestCase):
             expected_types.discard(type(result))
             self.assertIsInstance(result, BaseModel)
         self.assertEqual(expected_types, set(), "Expected ResearchProduct and Project types inside search results.")
+
+    def test_stats(self):
+        stats = self.instance.stats()
+        self.assertEqual(stats, {
+            "documents": 2,
+            "products": 1,
+            "projects": 1
+        })

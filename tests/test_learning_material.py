@@ -15,6 +15,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
     aggregation_key = "aggregations"
     datetime_field = "publisher_date"
     highlight_key = "texts:contents"
+    has_integer_stats = False
 
     @classmethod
     def setUpClass(cls):
@@ -313,6 +314,21 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         self.assertIsInstance(material, LearningMaterial)
         self.assertEqual(material.external_id, "WikiwijsDelen:urn:uuid:abc")
 
+    def test_stats_integer(self):
+        if not self.has_integer_stats:
+            self.skipTest("TestCase isn't supporting integers as return type of stats.")
+        stats = self.instance.stats()
+        self.assertEqual(stats, 5)
+
+    def test_stats_dict(self):
+        if self.has_integer_stats:
+            self.skipTest("TestCase isn't supporting dict as return type of stats.")
+        stats = self.instance.stats()
+        self.assertEqual(stats, {
+            "documents": 5,
+            "products": 5
+        })
+
     def test_search_by_author(self):
         author = "Michel van Ast"
         expected_results_count = 5
@@ -410,3 +426,4 @@ class TestLearningMaterialMultilingualIndicesSearchClient(TestLearningMaterialSe
     aggregation_key = "drilldowns"
     datetime_field = "publisher_date"
     highlight_key = "text"
+    has_integer_stats = True

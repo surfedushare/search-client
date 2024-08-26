@@ -15,6 +15,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
     aggregation_key = "aggregations"
     datetime_field = "publisher_date"
     highlight_key = "texts:contents"
+    has_integer_stats = False
 
     @classmethod
     def setUpClass(cls):
@@ -296,6 +297,21 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
         self.assertIsInstance(document, ResearchProduct)
         self.assertEqual(document.external_id, "3522b79c-928c-4249-a7f7-d2bcb3077f10")
 
+    def test_stats_integer(self):
+        if not self.has_integer_stats:
+            self.skipTest("TestCase isn't supporting integers as return type of stats.")
+        stats = self.instance.stats()
+        self.assertEqual(stats, 5)
+
+    def test_stats_dict(self):
+        if self.has_integer_stats:
+            self.skipTest("TestCase isn't supporting dict as return type of stats.")
+        stats = self.instance.stats()
+        self.assertEqual(stats, {
+            "documents": 5,
+            "products": 5
+        })
+
     def test_search_by_author(self):
         author = "Michel van Ast"
         expected_results_count = 5
@@ -393,3 +409,4 @@ class TestResearchProductMultilingualIndicesSearchClient(TestResearchProductSear
     aggregation_key = "drilldowns"
     datetime_field = "publisher_date"
     highlight_key = "text"
+    has_integer_stats = True

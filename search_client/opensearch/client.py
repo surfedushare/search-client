@@ -333,9 +333,19 @@ class SearchClient:
         search_result["results"] = results
         return search_result
 
-    def stats(self) -> dict:
-        stats = self.client.count(index=",".join(self.configuration.get_aliases()))
-        return stats.get("count", 0)
+    def stats(self) -> dict | int:
+        if not self.configuration.allow_multi_entity_results:
+            stats = self.client.count(index=",".join(self.configuration.get_aliases()))
+            return stats.get("count", 0)
+        stats = {}
+        total = 0
+        for entity, alias in self.configuration.get_aliases_by_entity().items():
+            response = self.client.count(index=alias)
+            count = response.get("count", 0)
+            total += count
+            stats[entity.value] = count
+        stats["documents"] = total
+        return stats
 
     def more_like_this(self, identifier: str, language: str, transform_results: bool = False,
                        is_external_identifier: bool = True) -> dict:

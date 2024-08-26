@@ -16,6 +16,9 @@ class MultilingualIndicesSearchConfiguration(SearchConfiguration):
         alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
         return [f"{alias_prefix}{self.platform.value}-{language}" for language in LANGUAGES]
 
+    def get_aliases_by_entity(self) -> dict[Entities, str]:
+        raise NotImplementedError("Can't group language based aliases by an entity")
+
     def get_aliases_by_language(self) -> dict[str, str]:
         alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
         return {

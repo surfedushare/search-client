@@ -27,8 +27,14 @@ class SearchConfiguration:
     use_aggregations_over_drilldowns: ClassVar[bool] = True
 
     def get_aliases(self) -> list[str]:
+        return list(self.get_aliases_by_entity().values())
+
+    def get_aliases_by_entity(self) -> dict[Entities, str]:
         alias_prefix = "" if not self.alias_prefix else f"{self.alias_prefix}-"
-        return [f"{alias_prefix}{self.platform.value}-{entity.value}" for entity in self.entities]
+        return {
+            entity: f"{alias_prefix}{self.platform.value}-{entity.value}"
+            for entity in self.entities
+        }
 
     def get_aliases_by_language(self) -> dict[str, str]:
         assert len(self.entities) == 1, \
