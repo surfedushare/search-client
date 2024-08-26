@@ -314,6 +314,15 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         self.assertIsInstance(material, LearningMaterial)
         self.assertEqual(material.external_id, "WikiwijsDelen:urn:uuid:abc")
 
+    def test_get_documents_by_srn(self):
+        test_id = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"  # factories don't change the platform
+        result = self.instance.get_documents_by_srn([test_id])
+        self.assertIsNotNone(result)
+        self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
+        document = result['results'][0]
+        self.assertIsInstance(document, LearningMaterial)
+        self.assertEqual(document.srn, test_id)
+
     def test_stats_integer(self):
         if not self.has_integer_stats:
             self.skipTest("TestCase isn't supporting integers as return type of stats.")

@@ -292,27 +292,37 @@ class SearchClient:
                 break
         return external_id
 
-    def get_documents_by_id(self, external_ids: list[str], page: int = 1, page_size: int = 10) -> dict:
+    def get_documents_by_srn(self, document_ids: list[str], page: int = 1, page_size: int = 10) -> dict:
+        return self.get_documents_by_id(document_ids=document_ids, page=page, page_size=page_size, id_field="_id")
+
+    def get_documents_by_id(self, document_ids: list[str] = None, page: int = 1, page_size: int = 10,
+                            external_ids: list[str] = None, id_field: str = "external_id") -> dict:
         """
         Retrieve specific materials from search engine through their external id.
 
-        :param external_ids: the id's of the materials to retrieve
+        :param document_ids: the id's of the materials to retrieve
+        :param external_ids: same as document_ids, but deprecated use document_ids instead
         :param page: The page index of the results
         :param page_size: How many items are loaded per page.
+        :param id_field: Which field to use for the lookup of the documents by id (default: external_id)
         :return: a list of search results (like a regular search).
         """
+        document_ids = document_ids if document_ids else external_ids
         start_record = page_size * (page - 1)
 
-        corrected_external_ids = []
-        for external_id in external_ids:
-            corrected_external_ids.append(self.clean_external_id(external_id))
+        corrected_ids = []
+        if id_field == "external_id":
+            for external_id in document_ids:
+                corrected_ids.append(self.clean_external_id(external_id))
+        else:
+            corrected_ids = document_ids
 
         raw_result = self.client.search(
             index=self.configuration.get_aliases(),
             body={
                 "query": {
                     "bool": {
-                        "must": [{"terms": {"external_id": corrected_external_ids}}]
+                        "must": [{"terms": {id_field: corrected_ids}}]
                     }
                 },
                 'from': start_record,
@@ -320,15 +330,16 @@ class SearchClient:
             },
         )
         search_result = self.parse_search_result(raw_result)
+        id_attribute = id_field if id_field != "_id" else "srn"
         documents = {
-            document.external_id: document
+            getattr(document, id_attribute): document
             for document in search_result["results"]
         }
         results = []
-        for external_id in corrected_external_ids:
-            if external_id not in documents:
+        for document_id in corrected_ids:
+            if document_id not in documents:
                 continue
-            results.append(documents[external_id])
+            results.append(documents[document_id])
         search_result.update(self.parse_results_total(len(results)))
         search_result["results"] = results
         return search_result
