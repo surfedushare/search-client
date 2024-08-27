@@ -58,7 +58,7 @@ def is_valid_preset_search_configuration(platform: Platforms, preset: str) -> st
     return preset
 
 
-def get_preset_search_configuration(platform: Platforms, preset: str):
+def get_preset_search_configuration(platform: Platforms, preset: str) -> SearchConfiguration:
     platform_presets = _PRESETS[platform]
     preset = is_valid_preset_search_configuration(platform, preset)
     return deepcopy(platform_presets[preset])
