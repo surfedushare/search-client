@@ -23,11 +23,11 @@ class Product(BaseModel):
     score: float = Field(default=0)
     published_at: datetime | None = Field(default=None, validation_alias="publisher_date")
     modified_at: datetime | None = Field(default=None)
-    url: HttpUrl
+    url: HttpUrl | None = Field(default=None)
     title: str
-    description: str
+    description: str | None = Field(default=None)
     language: str
-    copyright: str = Field(deprecated="copyright is deprecated in favor of licenses")
+    copyright: str | None = Field(default=None, deprecated="copyright is deprecated in favor of licenses")
     licenses: list[str] = Field(default_factory=list)
     video: Video | None = Field(default=None)
     harvest_source: str
@@ -101,7 +101,8 @@ class LearningMaterial(Product):
 
 class ResearchProduct(Product):
 
-    type: str = Field(validation_alias="technical_type", deprecated="type is deprecated in favor or types")
+    type: str | None = Field(default=None, validation_alias="technical_type",
+                      deprecated="type is deprecated in favor or types")
     types: list[str] = Field(default_factory=list, validation_alias="technical_types")
     research_object_type: str | None = Field(default=None)
     parties: list[str] = Field(default_factory=list, validation_alias="publishers")
