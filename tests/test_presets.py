@@ -1,11 +1,19 @@
 from unittest import TestCase
 
 from search_client.constants import Platforms
-from search_client.opensearch.configuration import (SearchConfiguration, is_valid_preset_search_configuration,
+from search_client.opensearch.configuration import (SearchConfiguration, get_all_preset_keys,
+                                                    is_valid_preset_search_configuration,
                                                     get_preset_search_configuration)
 
 
 class TestIsValidPresetSearchConfiguration(TestCase):
+
+    def test_get_all_preset_keys(self):
+        presets = get_all_preset_keys()
+        self.assertEqual(presets, [
+            "products", "products:default", "products:multilingual-indices",
+            "projects", "projects:default",
+        ])
 
     def test_valid_preset(self):
         for platform in Platforms:

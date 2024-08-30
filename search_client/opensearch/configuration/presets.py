@@ -49,6 +49,19 @@ def build_presets_search_configuration(platform: Platforms, presets: list[str], 
     return configuration
 
 
+def get_all_preset_keys() -> list[str]:
+    entities = set()
+    presets = set()
+    for platform_presets in _PRESETS.values():
+        for preset in platform_presets:
+            entity, subtype = preset.split(":")
+            entities.add(entity)
+            presets.add(preset)
+    all_preset_keys = list(entities) + list(presets)
+    all_preset_keys.sort()
+    return all_preset_keys
+
+
 def is_valid_preset_search_configuration(platform: Platforms, preset: str) -> str:
     if ":" not in preset:
         preset += ":default"
