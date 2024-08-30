@@ -238,7 +238,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -259,7 +259,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -280,7 +280,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -301,7 +301,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -322,7 +322,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -347,7 +347,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -367,7 +367,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -387,7 +387,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -407,7 +407,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -427,7 +427,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -452,7 +452,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -472,7 +472,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -492,7 +492,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -512,7 +512,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
@@ -532,7 +532,7 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
                                         }
                                     },
                                 },
-                                "url": {"type": "keyword"},
+                                "document": {"type": "keyword"},
                                 "provider": {"type": "keyword"},
                                 "by_machine": {"type": "boolean"},
                             }
