@@ -24,9 +24,9 @@ class Product(BaseModel):
     published_at: datetime | None = Field(default=None, validation_alias="publisher_date")
     modified_at: datetime | None = Field(default=None)
     url: HttpUrl | None = Field(default=None)
-    title: str
+    title: str | None = Field(default=None)
     description: str | None = Field(default=None)
-    language: str
+    language: str | None = Field(default=None)
     copyright: str | None = Field(default=None, deprecated="copyright is deprecated in favor of licenses")
     licenses: list[str] = Field(default_factory=list)
     video: Video | None = Field(default=None)

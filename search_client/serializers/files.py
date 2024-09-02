@@ -19,15 +19,15 @@ class Previews(BaseModel):
 
 class File(BaseModel):
     srn: str
-    url: HttpUrl
     hash: str
-    type: str
-    state: EntityStates = Field(default=EntityStates.ACTIVE)
-    title: str
-    is_link: bool
-    copyright: str
-    mime_type: str
     access_rights: str
+    state: EntityStates = Field(default=EntityStates.ACTIVE)
+    is_link: bool = Field(default=False)
+    url: HttpUrl | None = Field(default=None)
+    type: str | None = Field(default=None)
+    title: str | None = Field(default=None)
+    copyright: str | None = Field(default=None)
+    mime_type: str | None = Field(default=None)
     video: Video | None = Field(default=None)
     previews: Previews | None = Field(default=None)
     priority: int = Field(default=0)
