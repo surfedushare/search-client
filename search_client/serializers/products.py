@@ -19,7 +19,7 @@ class Product(BaseModel):
     set: str
     external_id: str
     state: EntityStates = Field(default=EntityStates.ACTIVE)
-    provider: Provider | None = Field(default=None)
+    provider: Provider | str | None = Field(default=None)
     score: float = Field(default=0)
     published_at: datetime | None = Field(default=None, validation_alias="publisher_date")
     modified_at: datetime | None = Field(default=None)
@@ -43,7 +43,9 @@ class Product(BaseModel):
 
     @field_serializer("provider")
     def serialize_provider(self, provider: Provider, _info) -> str:
-        if provider.name:
+        if isinstance(provider, str):
+            return provider
+        elif provider.name:
             return provider.name
         elif provider.slug:
             return provider.slug
