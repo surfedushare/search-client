@@ -89,7 +89,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -97,7 +98,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 },
                 {
                     "name": "Marc de Graaf",
@@ -105,7 +107,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -188,7 +191,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -196,7 +200,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 },
                 {
                     "name": "Marc de Graaf",
@@ -204,7 +209,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -231,7 +237,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "contacts": [
@@ -241,7 +248,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "highlight": None,  # only gets added during actual search
@@ -296,7 +304,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -371,7 +380,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -397,7 +407,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "contacts": [
@@ -407,7 +418,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ]
         })
@@ -471,7 +483,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -479,7 +492,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 },
                 {
                     "name": "Marc de Graaf",
@@ -487,7 +501,8 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "external_id": None
+                    "external_id": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -564,7 +579,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -645,7 +661,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -653,7 +670,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 },
                 {
                     "name": "Marc de Graaf",
@@ -661,7 +679,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -689,7 +708,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ],
             "contacts": [
@@ -699,7 +719,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ]
         })
@@ -753,7 +774,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ],
             "has_parts": [],
@@ -779,7 +801,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ],
             "contacts": [
@@ -789,7 +812,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "dai": None,
                     "isni": None,
-                    "orcid": None
+                    "orcid": None,
+                    "is_external": False
                 }
             ]
         })
