@@ -47,6 +47,8 @@ class SearchConfiguration:
         }
 
     def get_serializer_from_index(self, index: str) -> Type[BaseModel]:
+        if "--" in index:
+            index, details = index.split("--")
         if not self.alias_prefix:
             platform, entity = index.split("-")
         else:

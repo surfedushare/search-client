@@ -25,6 +25,7 @@ class SearchClientTestCase(TestCase):
 
     instance = None
     platform = Platforms.EDUSOURCES
+    presets = []
 
     @classmethod
     def setUpClass(cls):
@@ -32,4 +33,4 @@ class SearchClientTestCase(TestCase):
         project_location = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         config = create_configuration(project_location=project_location)
         opensearch_client = OpenSearchClientBuilder.from_host(config.open_search.url).build()
-        cls.instance = SearchClient(opensearch_client, cls.platform)
+        cls.instance = SearchClient(opensearch_client, cls.platform, presets=cls.presets)
