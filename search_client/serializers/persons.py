@@ -14,4 +14,5 @@ class Author(BaseModel):
     dai: str | None = Field(default=None)
     isni: str | None = Field(default=None)
     orcid: str | None = Field(default=None)
-    is_external: bool = Field(default=False, description="This means external author for the Provider of a Product.")
+    is_external: bool | None = Field(default=None,
+                                     description="This means external author for the Provider of a Product.")

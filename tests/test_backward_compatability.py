@@ -90,7 +90,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -99,7 +99,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Marc de Graaf",
@@ -108,7 +108,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -192,7 +192,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -201,7 +201,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Marc de Graaf",
@@ -210,7 +210,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -238,7 +238,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "contacts": [
@@ -249,7 +249,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "highlight": None,  # only gets added during actual search
@@ -305,7 +305,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -330,6 +330,8 @@ class TestPydanticToDictConversion(TestCase):
             ],
             "consortium": None
         })
+
+    maxDiff = None
 
     def test_research_product_biology(self):
         data = generate_nl_product(topic="biology")
@@ -381,7 +383,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -408,7 +410,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "contacts": [
@@ -419,7 +421,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ]
         })
@@ -484,7 +486,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -493,7 +495,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Marc de Graaf",
@@ -502,7 +504,7 @@ class TestPydanticToDictConversion(TestCase):
                     "isni": None,
                     "orcid": None,
                     "external_id": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -580,7 +582,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -662,7 +664,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Theo van den Bogaart",
@@ -671,7 +673,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 },
                 {
                     "name": "Marc de Graaf",
@@ -680,7 +682,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -709,7 +711,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "contacts": [
@@ -720,7 +722,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ]
         })
@@ -775,7 +777,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "has_parts": [],
@@ -802,7 +804,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ],
             "contacts": [
@@ -813,7 +815,7 @@ class TestPydanticToDictConversion(TestCase):
                     "dai": None,
                     "isni": None,
                     "orcid": None,
-                    "is_external": False
+                    "is_external": None
                 }
             ]
         })
