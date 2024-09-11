@@ -96,6 +96,8 @@ class LearningMaterial(Product):
     def validate_multilingual_terms_field(cls, value: dict | list, info: ValidationInfo):
         if not isinstance(value, dict):
             return value
+        elif not value:
+            return [] if info.field_name != "consortium" else None
         elif "keyword" not in value:
             raise ValueError(f"multilingual_terms_field '{info.field_name}' did not specify a keyword property")
         return value["keyword"]
