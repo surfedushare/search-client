@@ -1,5 +1,5 @@
 # Dependencies
-opensearch-py==2.6.0
+opensearch-py==2.7.1
 python-dateutil==2.9.0.post0
 requests==2.32.3
 pydantic==2.8.2
