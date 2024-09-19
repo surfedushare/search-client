@@ -1,56 +1,36 @@
 import os
 from unittest import TestCase
+
 from opensearchpy import OpenSearch
 
 from configuration import create_configuration
+from search_client.constants import Platforms
+from search_client.opensearch.client import SearchClient, OpenSearchClientBuilder
+from search_client.test.cases import SearchClientIntegrationTestCaseMixin
 
-from search_client import SearchClient
-from search_client.constants import DocumentTypes, LANGUAGES
-from search_client.opensearch.configuration import create_open_search_index_configuration
+
+class SearchClientIntegrationTestCase(SearchClientIntegrationTestCaseMixin, TestCase):
+
+    @classmethod
+    def setup_opensearch_client(cls) -> OpenSearch:
+        project_location = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        config = create_configuration(project_location=project_location)
+        return OpenSearchClientBuilder.from_host(config.open_search.url).build()
 
 
-class BaseOpenSearchTestCase(TestCase):
+class SearchClientTestCase(TestCase):
+    """
+    A base test case to unittest methods on the SearchClient that don't require functional indices.
+    """
 
     instance = None
-    document_type = None
-    search = None
-    config = None
-
-    @classmethod
-    def index_body(cls, language):
-        return create_open_search_index_configuration(language, DocumentTypes.LEARNING_MATERIAL)
-
-    @classmethod
-    def get_alias(cls, language):
-        return f"{cls.config.open_search.alias_prefix}-{language}"
+    platform = Platforms.EDUSOURCES
+    presets = []
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         project_location = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        cls.config = create_configuration(project_location=project_location)
-        cls.search = OpenSearch(
-            [cls.config.open_search.url]
-        )
-        for language in LANGUAGES:
-            cls.search.indices.create(
-                cls.get_alias(language),
-                ignore=400,
-                body=cls.index_body('nl')
-            )
-        cls.instance = SearchClient(
-            cls.config.open_search.url,
-            cls.document_type,
-            cls.config.open_search.alias_prefix,
-            search_results_key="results"
-        )
-
-    @classmethod
-    def tearDownClass(cls):
-        for language in LANGUAGES:
-            cls.search.indices.delete(
-                cls.get_alias(language)
-            )
-        cls.search.close()
-        cls.instance.client.close()
-        super().tearDownClass()
+        config = create_configuration(project_location=project_location)
+        opensearch_client = OpenSearchClientBuilder.from_host(config.open_search.url).build()
+        cls.instance = SearchClient(opensearch_client, cls.platform, presets=cls.presets)

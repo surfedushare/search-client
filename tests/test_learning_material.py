@@ -1,69 +1,51 @@
-from dateutil.parser import parse
-from datetime import datetime
+from datetime import datetime, date
 
-from tests.base import BaseOpenSearchTestCase
-from search_client import DocumentTypes
-from search_client.factories import generate_nl_material
+from tests.base import SearchClientIntegrationTestCase
+from search_client.constants import Platforms, Entities
+from search_client.serializers.products import LearningMaterial
 
 
-class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
+class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
 
-    document_type = DocumentTypes.LEARNING_MATERIAL
+    # Attributes used by SearchClientIntegrationTestCase
+    platform = Platforms.EDUSOURCES
+    presets = ["products:default"]
+
+    # Attributes for test cases in this file
+    aggregation_key = "aggregations"
+    datetime_field = "publisher_date"
+    highlight_key = "texts:contents"
+    has_integer_stats = False
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
-        math_and_education_studies = [
-            "7afbb7a6-c29b-425c-9c59-6f79c845f5f0",  # math
-            "0861c43d-1874-4788-b522-df8be575677f"  # onderwijskunde
-        ]
-        biology_studies = [
-            "2b363227-8633-4652-ad57-c61f1efc02c8"
-        ]
-        biology_and_education_studies = biology_studies + [
-            "0861c43d-1874-4788-b522-df8be575677f"
-        ]
-
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      studies=math_and_education_studies),
+        cls.index_document(Entities.PRODUCTS, educational_levels=["HBO"], source="surfsharekit")
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="surfsharekit", external_id="abc",
+            title="De wiskunde van Pythagoras", description="Groots zijn zijn getallen"
         )
-        cls.search.index(
-            id="surfsharekit:abc",
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      studies=math_and_education_studies, external_id="abc",
-                                      title="De wiskunde van Pythagoras", description="Groots zijn zijn getallen")
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="surfsharekit", copyright="cc-by-40", topic="biology",
+            publisher_date="2018-04-16T22:35:09+02:00"
         )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit",
-                                      copyright="cc-by-40", topic="biology", publisher_date="2018-04-16T22:35:09+02:00",
-                                      studies=biology_and_education_studies),
+        cls.index_document(
+            Entities.PRODUCTS,
+            educational_levels=["HBO"], source="edurep", topic="biology",
+            external_id="WikiwijsDelen:urn:uuid:abc", publisher_date="2019-04-16T22:35:09+02:00"
         )
-        cls.search.index(
-            id="WikiwijsDelen:urn:uuid:abc",
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], source="surfsharekit", topic="biology",
-                                      external_id="WikiwijsDelen:urn:uuid:abc",
-                                      publisher_date="2019-04-16T22:35:09+02:00",
-                                      studies=biology_and_education_studies),
-        )
-        cls.search.index(
-            index=cls.get_alias("nl"),
-            body=generate_nl_material(educational_levels=["HBO"], technical_type="video", source="surfsharekit",
-                                      topic="biology", studies=biology_studies),
-            refresh=True  # always put refresh on the last material
+        cls.index_document(
+            Entities.PRODUCTS, is_last_entity_document=True,
+            educational_levels=["HBO"], technical_type="video", source="surfsharekit", topic="biology",
+            external_id="def"
         )
 
     def get_value_from_result(self, result, key):
-        if key == "published_at":
-            value = parse(result[key], ignoretz=True)
-        else:
-            value = result[key]
-        return value
+        data = result.model_dump()
+        return data[key]
 
     def assert_value_from_result(self, result, key, expectation, assertion=None, message=None):
         assertion = assertion or self.assertEqual
@@ -88,13 +70,13 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertGreater(search_result['results_total']['value'], search_result_filter['results_total']['value'])
         self.assertEqual(
             set(search_result.keys()),
-            {"results_total", "recordcount", "results", "drilldowns", "did_you_mean"}
+            {"results_total", "results", self.aggregation_key, "did_you_mean"}
         )
         # does an empty search return a list?
         self.assertIsInstance(search_result['results'], list)
         # are there no drilldowns for an empty search?
-        self.assertIsInstance(search_result['drilldowns'], dict)
-        self.assertEqual(len(search_result['drilldowns']), 0)
+        self.assertIsInstance(search_result[self.aggregation_key], dict)
+        self.assertEqual(len(search_result[self.aggregation_key]), 0)
 
         # basic search
         search_biologie = self.instance.search("biologie")
@@ -142,7 +124,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertTrue(search_biologie_text_and_cc_by["results"])
         for result in search_biologie_text_and_cc_by["results"]:
             self.assert_value_from_result(result, "technical_type", "document")
-            self.assertEqual(result["copyright"], "cc-by-40")
+            self.assert_value_from_result(result, "copyright", "cc-by-40")
 
         # AND search with multiple filters applied
         search_biologie_and_didactiek = self.instance.search("biologie didactiek")
@@ -164,48 +146,48 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
 
         # search with publish date filter applied
         search_biologie_upper_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": [None, "2018-12-31"]}
+            {"external_id": self.datetime_field, "items": [None, "2018-12-31"]}
         ])
         self.assertTrue(search_biologie_upper_date["results"])
         for result in search_biologie_upper_date["results"]:
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime(year=2018, month=12, day=31),
+                date(year=2018, month=12, day=31),
                 self.assertLessEqual
             )
         search_biologie_lower_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": ["2018-01-01", None]}
+            {"external_id": self.datetime_field, "items": ["2018-01-01", None]}
         ])
         self.assertTrue(search_biologie_lower_date["results"])
         for result in search_biologie_lower_date["results"]:
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-01-01", "%Y-%m-%d"),
+                datetime.strptime("2018-01-01", "%Y-%m-%d").date(),
                 self.assertGreaterEqual
             )
         search_biologie_between_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": ["2018-01-01", "2018-12-31"]}
+            {"external_id": self.datetime_field, "items": ["2018-01-01", "2018-12-31"]}
         ])
         self.assertTrue(search_biologie_between_date["results"])
         for result in search_biologie_between_date["results"]:
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-12-31", "%Y-%m-%d"),
+                datetime.strptime("2018-12-31", "%Y-%m-%d").date(),
                 self.assertLessEqual
             )
             self.assert_value_from_result(
                 result,
                 "published_at",
-                datetime.strptime("2018-01-01", "%Y-%m-%d"),
+                datetime.strptime("2018-01-01", "%Y-%m-%d").date(),
                 self.assertGreaterEqual
             )
 
         # search with None, None as date filter. This search should give the same result as not filtering at all.
         search_biologie_none_date = self.instance.search("biologie", filters=[
-            {"external_id": "publisher_date", "items": [None, None]}
+            {"external_id": self.datetime_field, "items": [None, None]}
         ])
         search_biologie = self.instance.search("biologie")
         self.assertEqual(search_biologie_none_date, search_biologie)
@@ -213,8 +195,8 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
     def test_drilldown_search(self):
         search_biologie = self.instance.search("biologie", drilldown_names=["technical_type"])
         self.assertIsNotNone(search_biologie)
-        self.assertEqual(len(search_biologie['drilldowns']), 2)
-        for key, value in search_biologie['drilldowns'].items():
+        self.assertEqual(len(search_biologie[self.aggregation_key]), 2)
+        for key, value in search_biologie[self.aggregation_key].items():
             self.assertIn("-", key)
             self.assertGreater(value, 0)
 
@@ -227,7 +209,7 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             drilldown_names=['harvest_source', 'technical_type']
         )
 
-        drilldowns = search['drilldowns']
+        drilldowns = search[self.aggregation_key]
 
         total_for_technical_type = sum(
             count for drilldown_name, count in drilldowns.items() if "technical_type" in drilldown_name
@@ -248,14 +230,14 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
             self.get_value_from_result(result, "published_at")
             for result in search_biologie["results"]
         ]
-        search_biologie_asc = self.instance.search("biologie", ordering="publisher_date")
+        search_biologie_asc = self.instance.search("biologie", ordering=self.datetime_field)
         self.assertIsNotNone(search_biologie_asc)
         self.assertTrue(search_biologie_asc["results"])
         search_biologie_asc_dates = [
             self.get_value_from_result(result, "published_at")
             for result in search_biologie_asc["results"]
         ]
-        search_biologie_desc = self.instance.search("biologie", ordering="publisher_date")
+        search_biologie_desc = self.instance.search("biologie", ordering=self.datetime_field)
         self.assertIsNotNone(search_biologie_desc)
         self.assertTrue(search_biologie_asc["results"])
         search_biologie_desc_dates = [
@@ -284,20 +266,20 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         empty_drilldowns = self.instance.drilldowns(drilldown_names=[])
         self.assertEqual(empty_drilldowns['results_total']['value'], 0)
         self.assertEqual(empty_drilldowns['results'], [])
-        self.assertEqual(empty_drilldowns['drilldowns'], {})
+        self.assertEqual(empty_drilldowns[self.aggregation_key], {})
 
         biologie_drilldowns = self.instance.drilldowns([], search_text="biologie")
         self.assertEqual(biologie_drilldowns['results_total']['value'], 0)
         self.assertEqual(biologie_drilldowns['results'], [])
-        self.assertEqual(biologie_drilldowns['drilldowns'], {})
+        self.assertEqual(biologie_drilldowns[self.aggregation_key], {})
 
         repo_drilldowns = self.instance.drilldowns(['harvest_source'])
-        for drilldown_name, value in repo_drilldowns['drilldowns'].items():
+        for drilldown_name, value in repo_drilldowns[self.aggregation_key].items():
             self.assertIn("harvest_source", drilldown_name)
             self.assertGreater(value, 0)
 
         repo_and_format_drilldowns = self.instance.drilldowns(['harvest_source', 'technical_type'])
-        for drilldown_name, value in repo_and_format_drilldowns['drilldowns'].items():
+        for drilldown_name, value in repo_and_format_drilldowns[self.aggregation_key].items():
             field_id, external_id = drilldown_name.split("-")
             self.assertIn(field_id, ["harvest_source", "technical_type"])
             self.assertTrue(external_id)
@@ -310,56 +292,51 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         document = result['results'][0]
+        self.assertIsInstance(document, LearningMaterial)
+        self.assertEqual(document.external_id, "3522b79c-928c-4249-a7f7-d2bcb3077f10")
 
-        self.assertEqual(document['title'], 'Didactiek van wiskundig denken')
-        self.assertEqual(
-            document['url'],
-            "https://maken.wikiwijs.nl/91192/Wiskundedidactiek_en_ICT"
-        )
-        self.assertEqual(document['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
-        self.assert_value_from_result(document, 'publishers', ["Wikiwijs Maken"])
-        self.assert_value_from_result(
-            document,
-            'published_at',
-            datetime(year=2017, month=4, day=16, hour=22, minute=35, second=9)
-        )
-        self.assert_value_from_result(document, 'authors', [
-            {"name": "Michel van Ast"},
-            {"name": "Theo van den Bogaart"},
-            {"name": "Marc de Graaf"},
-        ])
-        self.assert_value_from_result(document, 'keywords', ["nerds"])
-        self.assert_value_from_result(document, 'studies', [
-            "7afbb7a6-c29b-425c-9c59-6f79c845f5f0",  # math
-            "0861c43d-1874-4788-b522-df8be575677f"  # onderwijskunde
-        ])
-        self.assertEqual(document['language'], 'nl')
-        self.assert_value_from_result(document, 'technical_type', 'document')
-
-        # Sharekit
-        test_id = '3522b79c-928c-4249-a7f7-d2bcb3077f10'
+        # Edurep material
+        test_id = 'wikiwijsmaken:123'
         result = self.instance.get_documents_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         material = result['results'][0]
-        self.assertEqual(material['external_id'], "3522b79c-928c-4249-a7f7-d2bcb3077f10")
-
-        # Edurep material
-        test_id = 'wikiwijsmaken:123'
-        result = self.instance.get_materials_by_id(external_ids=[test_id])
-        self.assertIsNotNone(result)
-        self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
-        material = result['results'][0]
-        self.assertEqual(material['external_id'], "wikiwijsmaken:123")
+        self.assertIsInstance(material, LearningMaterial)
+        self.assertEqual(material.external_id, "wikiwijsmaken:123")
 
         # Edurep legacy formats
         # edurep_delen prefix
         test_id = 'edurep_delen:abc'
-        result = self.instance.get_materials_by_id(external_ids=[test_id])
+        result = self.instance.get_documents_by_id(external_ids=[test_id])
         self.assertIsNotNone(result)
         self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
         material = result['results'][0]
-        self.assertEqual(material['external_id'], "WikiwijsDelen:urn:uuid:abc")
+        self.assertIsInstance(material, LearningMaterial)
+        self.assertEqual(material.external_id, "WikiwijsDelen:urn:uuid:abc")
+
+    def test_get_documents_by_srn(self):
+        test_id = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"  # factories don't change the platform
+        result = self.instance.get_documents_by_srn([test_id])
+        self.assertIsNotNone(result)
+        self.assertEqual(result['results_total']['value'], 1, "Expected one result when searching for one id")
+        document = result['results'][0]
+        self.assertIsInstance(document, LearningMaterial)
+        self.assertEqual(document.srn, test_id)
+
+    def test_stats_integer(self):
+        if not self.has_integer_stats:
+            self.skipTest("TestCase isn't supporting integers as return type of stats.")
+        stats = self.instance.stats()
+        self.assertEqual(stats, 5)
+
+    def test_stats_dict(self):
+        if self.has_integer_stats:
+            self.skipTest("TestCase isn't supporting dict as return type of stats.")
+        stats = self.instance.stats()
+        self.assertEqual(stats, {
+            "documents": 5,
+            "products": 5
+        })
 
     def test_search_by_author(self):
         author = "Michel van Ast"
@@ -395,14 +372,14 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
     def test_more_like_this(self):
         more_like_this = self.instance.more_like_this("surfsharekit:abc", "nl", is_external_identifier=False)
         self.assertEqual(more_like_this["results_total"]["value"], 4)
-        self.assertEqual(more_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
+        self.assertEqual(more_like_this["results"][0].title, "Didactiek van wiskundig denken")
         none_like_this = self.instance.more_like_this("surfsharekit:does-not-exist", "nl", is_external_identifier=False)
         self.assertEqual(none_like_this["results_total"]["value"], 0)
         self.assertEqual(none_like_this["results"], [])
         # Using external_id as input (legacy)
         legacy_like_this = self.instance.more_like_this("abc", "nl")
         self.assertEqual(legacy_like_this["results_total"]["value"], 4)
-        self.assertEqual(legacy_like_this["results"][0]["title"], "Didactiek van wiskundig denken")
+        self.assertEqual(legacy_like_this["results"][0].title, "Didactiek van wiskundig denken")
         legacy_none_like_this = self.instance.more_like_this("does-not-exist", "nl")
         self.assertEqual(legacy_none_like_this["results_total"]["value"], 0)
         self.assertEqual(legacy_none_like_this["results"], [])
@@ -414,65 +391,48 @@ class TestLearningMaterialSearchClient(BaseOpenSearchTestCase):
         for result in suggestions["results"]:
             author_names = [author["name"] for author in self.get_value_from_result(result, "authors")]
             self.assertNotIn(author_expectation, author_names)
-            self.assertIn(author_expectation, result["description"])
+            self.assertIn(author_expectation, result.description)
 
     def test_parse_search_hit(self):
-        authors = [{"name": "author"}]
         hit = {
-            "_source": {
-                "title": "title",
-                "subtitle": None,
-                "description": "description",
-                "authors": authors,
-                "learning_material_disciplines_normalized": ["discipline"],
-                "research_themes": ["theme"],
-                "study_vocabulary": ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"],
-                "doi": "10.12456/helloworld",
-                "modified_at": "1970-01-01"
+            "_index": self.aliases[Entities.PRODUCTS],
+            "_source": self.get_document_factory(Entities.PRODUCTS)(),
+            "_score": 3.14,
+            "highlight": {
+                self.highlight_key: ["highlighted"]
             }
         }
         result = self.instance.parse_search_hit(hit)
-        self.assertIn("authors", result, "Expected authors to be part of main result for learning materials")
-        self.assertIn("disciplines", result, "Expected disciplines to be part of main result for learning materials")
-        self.assertEqual(result["title"], "title")
-        self.assertEqual(result["description"], "description")
-        self.assertEqual(result["authors"], authors)
-        self.assertEqual(result["disciplines"], ["discipline"])
-        self.assertEqual(result["modified_at"], "1970-01-01")
-        self.assertEqual(
-            result["study_vocabulary"],
-            ["http://purl.edustandaard.nl/concept/8f984395-e090-41be-96df-503f53ddaa09"]
-        )
-        self.assertNotIn("research_themes", result, "Expected data not given in learning materials to not be included")
-        self.assertNotIn("is_part_of", result, "Expected data not given in learning materials to not be included")
-        self.assertNotIn("has_parts", result, "Expected data not given in learning materials to not be included")
-        self.assertEqual(result["doi"], "10.12456/helloworld")
-        self.assertIsNone(result["subtitle"])
+        self.assertIsInstance(result, LearningMaterial)
+        self.assertEqual(result.score, 3.14)
+        self.assertEqual(result.highlight.text, ["highlighted"])
+        self.assertIsNone(result.highlight.description)
 
-    def test_no_doi(self):
+    def test_parse_search_hit_minimal(self):
         hit = {
-            "_source": {
-                "doi": None
-            }
+            "_index": self.aliases[Entities.PRODUCTS],
+            "_source": self.get_document_factory(Entities.PRODUCTS)(),
         }
         result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["doi"], None)
+        self.assertIsInstance(result, LearningMaterial)
+        self.assertEqual(result.score, 1.00)
+        self.assertIsNone(result.highlight)
 
-    def test_score(self):
+    def test_parse_search_hit_invalid_index(self):
         hit = {
-            "_source": {
-                "not": "important"
-            },
-            "_score": 3.14
+            "_source": self.get_document_factory(Entities.PRODUCTS)(),
         }
-        result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["score"], 3.14)
+        self.assertRaises(ValueError,  self.instance.parse_search_hit, [hit])
 
-    def test_no_score(self):
-        hit = {
-            "_source": {
-                "not": "important"
-            },
-        }
-        result = self.instance.parse_search_hit(hit)
-        self.assertEqual(result["score"], 1.00)
+
+class TestLearningMaterialMultilingualIndicesSearchClient(TestLearningMaterialSearchClient):
+
+    # Attributes used by SearchClientIntegrationTestCase
+    platform = Platforms.EDUSOURCES
+    presets = ["products:multilingual-indices"]
+
+    # Attributes for test cases in this file
+    aggregation_key = "drilldowns"
+    datetime_field = "publisher_date"
+    highlight_key = "text"
+    has_integer_stats = True

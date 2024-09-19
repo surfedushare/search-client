@@ -1,20 +1,7 @@
-from tests.base import BaseOpenSearchTestCase
-from search_client import SearchClient, DocumentTypes
+from tests.base import SearchClientTestCase
 
 
-class TestRecordsSearchResultsKeySearchClient(BaseOpenSearchTestCase):
-
-    document_type = DocumentTypes.LEARNING_MATERIAL
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.instance = SearchClient(
-            cls.config.open_search.url,
-            cls.document_type,
-            cls.config.open_search.alias_prefix,
-            search_results_key="results"
-        )
+class TestRecordsSearchResultsKeySearchClient(SearchClientTestCase):
 
     def test_precise(self):
         totals = self.instance.parse_results_total({"value": 1, "relation": "eq"})

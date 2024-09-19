@@ -3,27 +3,6 @@ from dateutil.parser import parse as parse_datetime
 from rest_framework import serializers
 
 
-class PersonSerializer(serializers.Serializer):
-
-    name = serializers.CharField()
-    email = serializers.CharField(required=False, allow_null=True)
-
-
-class OrganisationSerializer(serializers.Serializer):
-
-    name = serializers.CharField()
-
-
-class ProjectSerializer(serializers.Serializer):
-
-    name = serializers.CharField()
-
-
-class LabelSerializer(serializers.Serializer):
-
-    label = serializers.CharField()
-
-
 class BaseSearchResultSerializer(serializers.Serializer):
 
     srn = serializers.CharField(default=None)
@@ -62,9 +41,9 @@ class SimpleLearningMaterialResultSerializer(BaseSearchResultSerializer):
     provider = serializers.DictField(default=None, allow_null=True)
     doi = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     lom_educational_levels = serializers.ListField(child=serializers.CharField())
-    studies = serializers.ListField(child=serializers.CharField())
+    studies = serializers.ListField(child=serializers.CharField(), default=[])
     disciplines = serializers.ListField(child=serializers.CharField(), default=[],
-                                        source="learning_material_disciplines_normalized")
+                                        source="disciplines_normalized")
     ideas = serializers.ListField(child=serializers.CharField(), default=[])
     study_vocabulary = serializers.ListField(child=serializers.CharField(), default=[])
     technical_type = serializers.CharField(required=False, allow_blank=True, allow_null=True)
@@ -79,7 +58,7 @@ class LearningMaterialResultSerializer(SimpleLearningMaterialResultSerializer):
 
     authors = serializers.ListField(child=serializers.CharField())
     lom_educational_levels = serializers.ListField(child=serializers.DictField())
-    studies = serializers.ListField(child=serializers.DictField())
+    studies = serializers.ListField(child=serializers.DictField(), default=[])
     view_count = serializers.IntegerField()
     applaud_count = serializers.IntegerField()
     avg_star_rating = serializers.IntegerField()
@@ -92,8 +71,8 @@ class ResearchProductResultSerializer(BaseSearchResultSerializer):
     doi = serializers.SerializerMethodField()
     type = serializers.CharField(source="technical_type")
     research_object_type = serializers.CharField()
-    parties = serializers.ListField(child=serializers.CharField(), source="publishers")
-    research_themes = serializers.ListField(child=serializers.CharField())
+    parties = serializers.ListField(child=serializers.CharField(), source="publishers", default=[])
+    research_themes = serializers.ListField(child=serializers.CharField(), default=[])
     projects = serializers.ListField(child=serializers.CharField(), default=[])
     owners = serializers.SerializerMethodField(method_name="list_first_author")
     contacts = serializers.SerializerMethodField(method_name="list_first_author")

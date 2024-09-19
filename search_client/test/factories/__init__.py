@@ -1,0 +1,3 @@
+from search_client.test.factories.learning_material import generate_nl_material, generate_material
+from search_client.test.factories.research_product import generate_nl_product, generate_product
+from search_client.test.factories.projects import generate_project
