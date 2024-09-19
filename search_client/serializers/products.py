@@ -5,7 +5,7 @@ from pydantic import (BaseModel, Field, field_serializer, computed_field, field_
                       model_validator)
 from pydantic.networks import HttpUrl
 
-from search_client.constants import Entities
+from search_client.constants import LANGUAGES, Entities
 from search_client.serializers.core import EntityStates, Provider, Highlight
 from search_client.serializers.files import Video, Previews, File
 from search_client.serializers.persons import Author
@@ -74,6 +74,8 @@ class Product(BaseModel):
         if not texts:
             return values
         language = values.get("language", "unk")
+        if language not in LANGUAGES:
+            language = "unk"
         for field_name in ["title", "subtitle", "description"]:
             values[field_name] = cls._validate_multilingual_text_field(texts[language], field_name)
         return values
