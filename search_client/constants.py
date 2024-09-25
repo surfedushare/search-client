@@ -4,6 +4,7 @@ from enum import Enum
 class Platforms(Enum):
     EDUSOURCES = "edusources"
     PUBLINOVA = "publinova"
+    MBODATA = "mbodata"
 
 
 class Entities(Enum):
