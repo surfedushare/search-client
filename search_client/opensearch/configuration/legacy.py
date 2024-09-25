@@ -58,6 +58,7 @@ def build_multilingual_indices_search_configuration(platform: Platforms) -> Sear
         serializers={Entities.PRODUCTS: serializer},
         filter_fields=filter_fields,
         range_filter_fields={"publisher_date"},  # this is deprecated
+        distance_feature_field="publisher_date",  # this is deprecated
         highlights={
             "description": {"description"},
             "text": {"text"}
