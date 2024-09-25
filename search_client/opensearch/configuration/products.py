@@ -12,7 +12,7 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
         "publisher_year_normalized", "authors.name.keyword", "language.keyword", "copyright.keyword", "licenses",
         "publishers.keyword", "technical_type", "technical_types", "publisher_year"
     }
-    if platform is Platforms.EDUSOURCES:
+    if platform in [Platforms.EDUSOURCES, Platforms.MBODATA]:
         serializer = LearningMaterial
         filter_fields |= {
             "study_vocabulary.keyword", "disciplines_normalized.keyword",

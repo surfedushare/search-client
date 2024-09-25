@@ -32,9 +32,16 @@ _PUBLINOVA_PRESETS = {
 }
 
 
+_MBODATA_PRESETS = {
+    "products:multilingual-indices": build_product_search_configuration(Platforms.MBODATA),
+    "products:default": build_product_search_configuration(Platforms.MBODATA),
+}
+
+
 _PRESETS = {
     Platforms.EDUSOURCES: _EDUSOURCES_PRESETS,
-    Platforms.PUBLINOVA: _PUBLINOVA_PRESETS
+    Platforms.PUBLINOVA: _PUBLINOVA_PRESETS,
+    Platforms.MBODATA: _MBODATA_PRESETS
 }
 
 
