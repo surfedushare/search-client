@@ -12,7 +12,7 @@ PROJECTS = {
         "srn": "edurep:project:1",
         "external_id": "project:1",
         "title": "Een wiskundig project",
-        "status": "finished",
+        "project_status": "finished",
         "started_at": "1970-01-01",
         "ended_at": "2020-01-01",
         "coordinates": [],
@@ -26,7 +26,7 @@ PROJECTS = {
         "products": [
             "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         ],
-        "research_themes": [],
+        "themes": [],
         "suggest_phrase": "Een wiskundig project",
         "suggest_completion": ["Een", "wiskundig", "project"],
     }

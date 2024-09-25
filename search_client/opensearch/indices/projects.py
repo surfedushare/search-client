@@ -12,15 +12,16 @@ def build_projects_index_configuration() -> dict:
                         "tokenizer": "standard",
                         "filter": ["lowercase", "shingle"]
                     },
+                    "folding": {
+                        "tokenizer": "standard",
+                        "filter": ["lowercase", "asciifolding"]
+                    },
                 }
             }
         },
         "mappings": {
             "properties": {
-                "external_id": {
-                    "type": "keyword"
-                },
-                "status": {
+                "project_status": {
                     "type": "keyword"
                 },
                 "title": {
@@ -28,6 +29,40 @@ def build_projects_index_configuration() -> dict:
                 },
                 "description": {
                     "type": "text"
+                },
+                "goal": {
+                    "type": "text"
+                },
+                "keywords": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "folded": {
+                            "type": "text",
+                            "analyzer": "folding"
+                        }
+                    }
+                },
+                "parties": {
+                    "type": "keyword"
+                },
+                "products": {
+                    "type": "keyword"
+                },
+                "themes": {
+                    "type": "keyword"
+                },
+                ##########################################
+                # Required fields for search client
+                ##########################################
+                "srn": {  # get document by srn
+                    "type": "keyword"
+                },
+                "external_id": {  # get document by id
+                    "type": "keyword"
                 },
                 "suggest_completion": {  # auto complete
                     "type": "completion"

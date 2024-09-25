@@ -5,6 +5,7 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 from search_client.constants import Entities
+from search_client.serializers.files import Previews
 from search_client.serializers.persons import Contact
 
 
@@ -15,12 +16,12 @@ class ProjectStatus(Enum):
 
 class Project(BaseModel):
 
-    entity: Literal[Entities.PROJECTS] = Field(default=Entities.PRODUCTS, init=False)
+    entity: Literal[Entities.PROJECTS] = Field(default=Entities.PROJECTS, init=False)
 
     external_id: str | None = Field(default=None)
     title: str
     description: str
-    status: ProjectStatus
+    project_status: ProjectStatus
     started_at: datetime | None = Field(default=None)
     ended_at: datetime | None = Field(default=None)
     coordinates: list[float] = Field(default_factory=list)
@@ -31,4 +32,5 @@ class Project(BaseModel):
     keywords: list[str] = Field(default_factory=list)
     parties: list[str] = Field(default_factory=list)
     products: list[str] = Field(default_factory=list)
-    research_themes: list[str] = Field(default_factory=list)
+    themes: list[str] = Field(default_factory=list)
+    previews: Previews | None = Field(default=None)
