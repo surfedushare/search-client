@@ -160,11 +160,11 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "external_id": {  # get document by id
                     "type": "keyword"
                 },
-                "publisher_date": {  # distance feature and range filtering, deprecated use published_at
+                "publisher_date": {  # distance feature, default ordering and range filtering; depr. use published_at
                     "type": "date",
                     "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
                 },
-                "published_at": {  # distance feature and range filtering
+                "published_at": {  # distance feature, default ordering and range filtering
                     "type": "date",
                     "format": "strict_date_optional_time||yyyy-MM||epoch_millis"
                 },
