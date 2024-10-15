@@ -12,6 +12,7 @@ from search_client.serializers.persons import Contact
 class ProjectStatus(Enum):
     FINISHED = "finished"
     ONGOING = "ongoing"
+    UNKNOWN = "unknown"
 
 
 class Project(BaseModel):
