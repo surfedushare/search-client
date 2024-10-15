@@ -102,6 +102,8 @@ class SearchConfiguration:
         return references
 
     def get_highlight_fields(self) -> list[str]:
+        if self.highlights is None:
+            return []
         fields = []
         for field_references in self.highlights.values():
             fields += self.interpolate_field_languages(*field_references)

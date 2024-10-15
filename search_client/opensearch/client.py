@@ -220,15 +220,16 @@ class SearchClient:
             'size': page_size,
             'post_filter': {
                 "bool": defaultdict(list)
-            },
-            'highlight': {
+            }
+        }
+        if self.configuration.highlights is not None:
+            body['highlight'] = {
                 'number_of_fragments': 1,
                 'fragment_size': 120,
                 'fields': {
-                   field: {} for field in self.configuration.get_highlight_fields()
+                    field: {} for field in self.configuration.get_highlight_fields()
                 }
             }
-        }
 
         if search_text:
             query_string = {
