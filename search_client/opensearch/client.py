@@ -31,14 +31,16 @@ class OpenSearchClientBuilder:
         return OpenSearchClientBuilder(hosts=[host], http_auth=http_auth, use_ssl=use_ssl)
 
     def build(self, check_connection: bool = False) -> OpenSearch:
-        connection_configuration = {}
+        connection_configuration = {
+            "timeout": 20
+        }
         if self.use_ssl:
-            connection_configuration = {
+            connection_configuration.update({
                 "use_ssl": True,
                 "scheme": self.scheme,
                 "port": self.port,
                 "verify_certs": self.verify_certs,
-            }
+            })
         client = OpenSearch(
             hosts=self.hosts,
             http_auth=self.http_auth,
