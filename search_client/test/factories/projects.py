@@ -10,6 +10,8 @@ PERSONS = {
 PROJECTS = {
     "math": {
         "srn": "edurep:project:1",
+        "set": "edurep",
+        "provider": "Kennisnet",
         "external_id": "project:1",
         "title": "Een wiskundig project",
         "project_status": "finished",
@@ -33,7 +35,7 @@ PROJECTS = {
 }
 
 
-def generate_project(topic="math", title=None, description=None, external_id=None):
+def generate_project(topic="math", title=None, description=None, external_id=None, project_status=None):
     copy = PROJECTS[topic].copy()
     if title:
         copy["title"] = title
@@ -41,4 +43,7 @@ def generate_project(topic="math", title=None, description=None, external_id=Non
         copy["description"] = description
     if external_id:
         copy["external_id"] = external_id
+        copy["srn"] = f"{copy['set']}:{external_id}"
+    if project_status:
+        copy["project_status"] = project_status
     return copy
