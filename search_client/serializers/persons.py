@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 class Contact(BaseModel):
-    name: str
-    email: EmailStr | None = Field(default=None)
+    name: str | None = Field(default=None)
+    email: EmailStr
     external_id: str | None = Field(default=None)
 
 

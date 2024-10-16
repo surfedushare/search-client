@@ -27,8 +27,8 @@ class Project(BaseModel):
 
     external_id: str | None = Field(default=None)
     title: str
-    description: str
-    project_status: ProjectStatus
+    description: str | None = Field(default=None)
+    project_status: ProjectStatus = Field(default=ProjectStatus.UNKNOWN)
     started_at: datetime | None = Field(default=None)
     ended_at: datetime | None = Field(default=None)
     coordinates: list[float] = Field(default_factory=list)
