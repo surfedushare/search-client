@@ -30,7 +30,7 @@ class Product(BaseModel):
     copyright: str | None = Field(default=None, deprecated="copyright is deprecated in favor of licenses")
     licenses: list[str] = Field(default_factory=list)
     video: Video | None = Field(default=None)
-    harvest_source: str
+    harvest_source: str = Field(deprecated="harvest_source is deprecated in favor of set")
     previews: Previews | None = Field(default=None)
     files: list[File] = Field(default_factory=list)
     authors: list[Author] = Field(default_factory=list)
