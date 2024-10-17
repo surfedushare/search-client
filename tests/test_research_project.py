@@ -41,7 +41,10 @@ class TestResearchProjectSearchClient(SearchClientIntegrationTestCase):
 
     def test_basic_search(self):
         search_result = self.instance.search('')
-        search_result_filter = self.instance.search('', filters=[{"external_id": "project_status", "items": ["ongoing"]}])
+        search_result_filter = self.instance.search(
+            '',
+            filters=[{"external_id": "project_status", "items": ["ongoing"]}]
+        )
         # did we get _anything_ from search?
         self.assertIsNotNone(search_result)
         self.assertIsNotNone(search_result_filter)
