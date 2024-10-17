@@ -1,8 +1,8 @@
 from typing import Literal
-from datetime import datetime
+from datetime import date
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_serializer
 
 from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider
@@ -29,8 +29,8 @@ class Project(BaseModel):
     title: str
     description: str | None = Field(default=None)
     project_status: ProjectStatus = Field(default=ProjectStatus.UNKNOWN)
-    started_at: datetime | None = Field(default=None)
-    ended_at: datetime | None = Field(default=None)
+    started_at: date | None = Field(default=None)
+    ended_at: date | None = Field(default=None)
     coordinates: list[float] = Field(default_factory=list)
     goal: str | None = Field(default=None)
     contacts: list[Contact] = Field(default_factory=list)
@@ -41,3 +41,16 @@ class Project(BaseModel):
     products: list[str] = Field(default_factory=list)
     themes: list[str] = Field(default_factory=list)
     previews: Previews | None = Field(default=None)
+
+    @field_serializer("provider")
+    def serialize_provider(self, provider: Provider, _info) -> str:
+        if isinstance(provider, str):
+            return provider
+        elif provider.name:
+            return provider.name
+        elif provider.slug:
+            return provider.slug
+        elif provider.ror:
+            return provider.ror
+        elif provider.external_id:
+            return provider.external_id

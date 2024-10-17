@@ -22,8 +22,8 @@ _PUBLINOVA_PRESETS = {
     "projects:default": ProjectSearchConfiguration(
         platform=Platforms.PUBLINOVA,
         entities={Entities.PROJECTS},
-        filter_fields={"status"},
-        search_fields=["title", "description", "keywords", "keywords.folded"],
+        filter_fields={"project_status"},
+        search_fields=["title", "description", "keywords", "keywords.folded", "goal"],
         distance_feature_field=None,
         serializers={
             Entities.PROJECTS: Project
