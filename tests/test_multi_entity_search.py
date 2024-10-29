@@ -1,3 +1,5 @@
+import pytest
+
 from pydantic import BaseModel
 
 from tests.base import SearchClientIntegrationTestCase
@@ -25,12 +27,26 @@ class TestMultiEntitySearchClient(SearchClientIntegrationTestCase):
 
     def test_basic_search(self):
         search_result = self.instance.search("")
+        search_result_filter = self.instance.search(
+            "",
+            filters=[{"external_id": "provider.name", "items": ["Kennisnet"]}]
+        )
         self.assert_results_total(search_result["results_total"])
+        self.assert_results_total(search_result_filter["results_total"])
+        self.assertEqual(search_result["results_total"]["value"], 2)
+        self.assertEqual(search_result_filter["results_total"]["value"], 1)
+
         expected_types = {ResearchProduct, Project}
         for result in search_result["results"]:
             expected_types.discard(type(result))
             self.assertIsInstance(result, BaseModel)
         self.assertEqual(expected_types, set(), "Expected ResearchProduct and Project types inside search results.")
+        for result in search_result_filter["results"]:
+            self.assertIsInstance(result, Project, "Expected filter to only return the Project")
+
+    def test_filter_search_invalid(self):
+        with pytest.raises(RuntimeError):
+            self.instance.search("", filters=[{"external_id": "project_status", "items": ["finished"]}])
 
     def test_stats(self):
         stats = self.instance.stats()

@@ -179,6 +179,14 @@ def build_products_index_configuration(product_type: DocumentTypes,
                     "type": "text",
                     "analyzer": "trigram"
                 },
+                "provider": {  # a cross-entity filter field
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "keyword"
+                        }
+                    }
+                },
             }
         }
     }
