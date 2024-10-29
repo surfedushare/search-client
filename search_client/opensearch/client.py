@@ -213,7 +213,7 @@ class SearchClient:
         aggregate_filter_counts = aggregate_filter_counts or bool(drilldown_names)
 
         start_record = page_size * (page - 1)
-        body = {
+        body: dict = {
             'query': {
                 "bool": defaultdict(list)
             },
@@ -243,14 +243,14 @@ class SearchClient:
             }
             body["query"]["bool"]["must"] += [query_string]
             if self.configuration.distance_feature_field:
-                body["query"]["bool"]["should"] = {
+                body["query"]["bool"]["should"].append({
                     "distance_feature": {
                         "field": self.configuration.distance_feature_field,
                         "pivot": "90d",
                         "origin": "now",
                         "boost": 1.15
                     }
-                }
+                })
             body["suggest"] = {
                 'did-you-mean-suggestion': {
                     'text': search_text,
