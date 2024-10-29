@@ -687,4 +687,36 @@ def build_learning_material_search_mapping_properties(nl_decompound_word_list: s
                 }
             }
         },
+        "industries": {
+            "properties": {
+                "keyword": {"type": "keyword"},
+                "nl": {
+                    "type": "text",
+                    "fields": {
+                        "analyzed": {
+                            "type": "text",
+                            "analyzer": "custom_dutch",
+                            "search_analyzer": nl_search_analyzer
+                        },
+                        "folded": {
+                            "type": "text",
+                            "analyzer": "folding"
+                        }
+                    }
+                },
+                "en": {
+                    "type": "text",
+                    "fields": {
+                        "analyzed": {
+                            "type": "text",
+                            "analyzer": "english",
+                        },
+                        "folded": {
+                            "type": "text",
+                            "analyzer": "folding"
+                        }
+                    }
+                }
+            }
+        },
     }

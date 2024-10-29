@@ -44,6 +44,8 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "study_vocabulary.en^2", "study_vocabulary.en.analyzed^2", "study_vocabulary.en.folded^2",
             "disciplines_normalized.nl^2", "disciplines_normalized.nl.analyzed^2", "disciplines_normalized.nl.folded^2",
             "disciplines_normalized.en^2", "disciplines_normalized.en.analyzed^2", "disciplines_normalized.en.folded^2",
+            "industries.nl^2", "industries.nl.analyzed^2", "industries.nl.folded^2",
+            "industries.en^2", "industries.en.analyzed^2", "industries.en.folded^2",
         ]
     elif platform is Platforms.PUBLINOVA:
         serializer = ResearchProduct
