@@ -81,7 +81,7 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
         },
         filter_fields=filter_fields,
         range_filter_fields={
-            "published_at", "modified_at",
+            "published_at", "modified_at", "metrics.stars.average",
             "publisher_date"  # deprecated, use published_at
         },
         highlights={

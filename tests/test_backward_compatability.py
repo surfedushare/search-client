@@ -134,6 +134,17 @@ class TestPydanticToDictConversion(TestCase):
             "consortium": None,
             "subtitle": None,
             "highlight": None,  # only gets added during actual search
+            "metrics": {
+                "views": 1,
+                "stars": {
+                    "average": 5.0,
+                    "star_1": 0,
+                    "star_2": 0,
+                    "star_3": 0,
+                    "star_4": 0,
+                    "star_5": 1
+                }
+            },
         })
 
     def test_research_product_math(self):
@@ -253,6 +264,17 @@ class TestPydanticToDictConversion(TestCase):
                 }
             ],
             "highlight": None,  # only gets added during actual search
+            "metrics": {
+                "views": 1,
+                "stars": {
+                    "average": 5.0,
+                    "star_1": 0,
+                    "star_2": 0,
+                    "star_3": 0,
+                    "star_4": 0,
+                    "star_5": 1
+                }
+            },
         })
 
     def test_learning_material_biology(self):
@@ -328,7 +350,8 @@ class TestPydanticToDictConversion(TestCase):
             "publishers": [
                 "Wikiwijs Maken"
             ],
-            "consortium": None
+            "consortium": None,
+            "metrics": None
         })
 
     maxDiff = None
@@ -423,7 +446,8 @@ class TestPydanticToDictConversion(TestCase):
                     "external_id": None,
                     "is_external": None
                 }
-            ]
+            ],
+            "metrics": None
         })
 
     def test_learning_material_math_all_languages(self):
@@ -530,6 +554,17 @@ class TestPydanticToDictConversion(TestCase):
             "consortium": "SURF",
             "subtitle": None,
             "highlight": None,  # only gets added during actual search
+            "metrics": {
+                "views": 1,
+                "stars": {
+                    "average": 5.0,
+                    "star_1": 0,
+                    "star_2": 0,
+                    "star_3": 0,
+                    "star_4": 0,
+                    "star_5": 1
+                }
+            },
         })
 
     def test_learning_material_biology_all_languages(self):
@@ -605,7 +640,8 @@ class TestPydanticToDictConversion(TestCase):
             "publishers": [
                 "Wikiwijs Maken"
             ],
-            "consortium": None
+            "consortium": None,
+            "metrics": None
         })
 
     def test_research_product_math_all_languages(self):
@@ -724,7 +760,18 @@ class TestPydanticToDictConversion(TestCase):
                     "orcid": None,
                     "is_external": None
                 }
-            ]
+            ],
+            "metrics": {
+                "views": 1,
+                "stars": {
+                    "average": 5.0,
+                    "star_1": 0,
+                    "star_2": 0,
+                    "star_3": 0,
+                    "star_4": 0,
+                    "star_5": 1
+                }
+            },
         })
 
     def test_research_product_biology_all_languages(self):
@@ -817,5 +864,6 @@ class TestPydanticToDictConversion(TestCase):
                     "orcid": None,
                     "is_external": None
                 }
-            ]
+            ],
+            "metrics": None
         })
