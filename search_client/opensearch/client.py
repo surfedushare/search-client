@@ -451,6 +451,9 @@ class SearchClient:
         """
         if not filters:
             return []
+        elif not self.configuration.filter_fields:
+            raise RuntimeError("Can't parse_filters without a filter_fields configuration")
+
         filter_items = []
         for filter_item in filters:
             # skip filter_items that are empty
@@ -473,6 +476,12 @@ class SearchClient:
                             }
                         }
                     })
+            # we disallow any filter attempts on filter names that are not whitelisted
+            elif search_type not in self.configuration.filter_fields:
+                raise RuntimeError(
+                    f"{search_type} is not a valid filter field in current configuration, options: "
+                    f"{self.configuration.filter_fields}"
+                )
             # all other filter types are handled by just using terms with the 'translated' filter items
             else:
                 filter_items.append({
