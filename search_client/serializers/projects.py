@@ -13,6 +13,8 @@ from search_client.serializers.persons import Contact
 class ProjectStatus(Enum):
     FINISHED = "finished"
     ONGOING = "ongoing"
+    PREPARING = "preparing"
+    TO_BE_STARTED = "to be started"  # similar to "preparing", required by Publinova
     UNKNOWN = "unknown"
 
 
