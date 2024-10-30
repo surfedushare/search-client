@@ -29,7 +29,7 @@ class TestMultiEntitySearchClient(SearchClientIntegrationTestCase):
         search_result = self.instance.search("")
         search_result_filter = self.instance.search(
             "",
-            filters=[{"external_id": "provider.name", "items": ["Kennisnet"]}]
+            filters=[{"external_id": "provider", "items": ["Kennisnet"]}]
         )
         self.assert_results_total(search_result["results_total"])
         self.assert_results_total(search_result_filter["results_total"])

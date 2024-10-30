@@ -72,12 +72,7 @@ def build_projects_index_configuration() -> dict:
                     "analyzer": "trigram"
                 },
                 "provider": {  # a cross-entity filter field
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "keyword"
-                        }
-                    }
+                    "type": "keyword"
                 },
             }
         }

@@ -53,12 +53,7 @@ NL_MATERIAL = {
             "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
             "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
         },
-        "provider": {
-            "name": "Wikiwijs Maken",
-            "slug": None,
-            "external_id": None,
-            "ror": None
-        },
+        "provider": "Wikiwijs Maken"
     },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
@@ -103,12 +98,7 @@ NL_MATERIAL = {
         "disciplines": ["aarde_milieu"],
         "disciplines_normalized": ["aarde_milieu"],
         "learning_material_disciplines_normalized": ["exact_informatica"],
-        "provider": {
-            "name": "Wikiwijs Maken",
-            "slug": None,
-            "external_id": None,
-            "ror": None
-        },
+        "provider": "Wikiwijs Maken"
     }
 }
 
@@ -203,12 +193,7 @@ MATERIALS = {
             "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
             "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
         },
-        "provider": {
-            "name": "Wikiwijs Maken",
-            "slug": None,
-            "external_id": None,
-            "ror": None
-        },
+        "provider": "Wikiwijs Maken",
         "texts": {
             "en": {},
             "unk": {},
@@ -298,12 +283,7 @@ MATERIALS = {
             "nl": None,
             "en": None
         },
-        "provider": {
-            "name": "Wikiwijs Maken",
-            "slug": None,
-            "external_id": None,
-            "ror": None
-        },
+        "provider": "Wikiwijs Maken",
         "texts": {
             "en": {},
             "unk": {},

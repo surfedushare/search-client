@@ -11,12 +11,7 @@ PROJECTS = {
     "math": {
         "srn": "edurep:project:1",
         "set": "edurep",
-        "provider": {
-            "ror": None,
-            "external_id": None,
-            "name": "Kennisnet",
-            "slug": None
-        },
+        "provider": "Kennisnet",
         "external_id": "project:1",
         "title": "Een wiskundig project",
         "project_status": "finished",

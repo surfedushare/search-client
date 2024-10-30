@@ -23,7 +23,7 @@ class Project(BaseModel):
     entity: Literal[Entities.PROJECTS] = Field(default=Entities.PROJECTS, init=False)
     srn: str
     set: str
-    provider: Provider | None = Field(default=None)
+    provider: Provider | str | None = Field(default=None)
     state: EntityStates = Field(default=EntityStates.ACTIVE)
     score: float = Field(default=0)
 

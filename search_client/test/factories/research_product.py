@@ -44,12 +44,7 @@ NL_PRODUCT = {
         "doi": "10.12345",
         "technical_type": "document",
         "research_themes": ["exact_informatica"],
-        "provider": {
-            "ror": None,
-            "external_id": None,
-            "name": "Wikiwijs Maken",
-            "slug": None
-        }
+        "provider": "Wikiwijs Maken",
     },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
@@ -90,12 +85,7 @@ NL_PRODUCT = {
         "doi": None,
         "technical_type": "document",
         "research_themes": ["aarde_milieu"],
-        "provider": {
-            "ror": None,
-            "external_id": None,
-            "name": "Wikiwijs Maken",
-            "slug": None
-        }
+        "provider": "Wikiwijs Maken",
     }
 }
 
@@ -166,12 +156,7 @@ PRODUCTS = {
         "technical_type": "document",
         "technical_types": ["document"],
         "research_themes": ["exact_informatica"],
-        "provider": {
-            "ror": None,
-            "external_id": None,
-            "name": "Wikiwijs Maken",
-            "slug": None
-        },
+        "provider": "Wikiwijs Maken",
         "texts": {
             "en": {},
             "unk": {},
@@ -244,12 +229,7 @@ PRODUCTS = {
         "technical_type": "document",
         "technical_types": ["document"],
         "research_themes": ["aarde_milieu"],
-        "provider": {
-            "ror": None,
-            "external_id": None,
-            "name": "Wikiwijs Maken",
-            "slug": None
-        },
+        "provider": "Wikiwijs Maken",
         "texts": {
             "en": {},
             "unk": {},

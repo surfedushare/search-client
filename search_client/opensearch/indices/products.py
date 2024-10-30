@@ -180,12 +180,7 @@ def build_products_index_configuration(product_type: DocumentTypes,
                     "analyzer": "trigram"
                 },
                 "provider": {  # a cross-entity filter field
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "keyword"
-                        }
-                    }
+                    "type": "keyword"
                 },
             }
         }
