@@ -35,6 +35,7 @@ _PUBLINOVA_PRESETS = {
 _MBODATA_PRESETS = {
     "products:multilingual-indices": build_product_search_configuration(Platforms.MBODATA),
     "products:default": build_product_search_configuration(Platforms.MBODATA),
+    "products:phrase-search": build_product_search_configuration(Platforms.MBODATA, enable_decompounder=False),
 }
 
 

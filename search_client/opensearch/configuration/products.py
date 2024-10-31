@@ -7,69 +7,87 @@ class ProductSearchConfiguration(SearchConfiguration):
     pass
 
 
-def build_product_search_configuration(platform: Platforms) -> SearchConfiguration:
+def build_product_search_configuration(platform: Platforms, enable_decompounder: bool = True) -> SearchConfiguration:
     filter_fields = {
         "publisher_year_normalized", "authors.name.keyword", "language.keyword", "copyright.keyword", "licenses",
         "publishers.keyword", "technical_type", "technical_types", "publisher_year", "provider"
     }
+    text_search_fields = [
+        "texts.nl.titles.text.folded^2",
+        "texts.nl.subtitles.text.folded^2",
+        "texts.nl.contents.text.folded",
+        "texts.nl.descriptions.text.folded",
+
+        "texts.en.titles.text.folded^2",
+        "texts.en.subtitles.text.folded^2",
+        "texts.en.contents.text.folded",
+        "texts.en.descriptions.text.folded",
+
+        "texts.unk.titles.text.folded^2",
+        "texts.unk.subtitles.text.folded^2",
+        "texts.unk.contents.text.folded",
+        "texts.unk.descriptions.text.folded",
+    ]
+    decompounder_text_search_fields = [
+        "texts.nl.titles.text^2", "texts.nl.titles.text.analyzed^2",
+        "texts.nl.subtitles.text^2", "texts.nl.subtitles.text.analyzed^2",
+        "texts.nl.contents.text", "texts.nl.contents.text.analyzed",
+        "texts.nl.descriptions.text", "texts.nl.descriptions.text.analyzed",
+
+        "texts.en.titles.text^2", "texts.en.titles.text.analyzed^2",
+        "texts.en.subtitles.text^2", "texts.en.subtitles.text.analyzed^2",
+        "texts.en.contents.text", "texts.en.contents.text.analyzed",
+        "texts.en.descriptions.text", "texts.en.descriptions.text.analyzed",
+
+        "texts.unk.titles.text^2", "texts.unk.titles.text.analyzed^2",
+        "texts.unk.subtitles.text^2", "texts.unk.subtitles.text.analyzed^2",
+        "texts.unk.contents.text", "texts.unk.contents.text.analyzed",
+        "texts.unk.descriptions.text", "texts.unk.descriptions.text.analyzed",
+    ]
     if platform in [Platforms.EDUSOURCES, Platforms.MBODATA]:
         serializer = LearningMaterial
         filter_fields |= {
             "study_vocabulary.keyword", "disciplines_normalized.keyword",
             "lom_educational_levels", "consortium.keyword", "material_types", "aggregation_level"
         }
-        search_fields = [
-            "texts.nl.titles.text^2", "texts.nl.titles.text.analyzed^2", "texts.nl.titles.text.folded^2",
-            "texts.nl.subtitles.text^2", "texts.nl.subtitles.text.analyzed^2", "texts.nl.subtitles.text.folded^2",
-            "texts.nl.contents.text", "texts.nl.contents.text.analyzed", "texts.nl.contents.text.folded",
-            "texts.nl.descriptions.text", "texts.nl.descriptions.text.analyzed", "texts.nl.descriptions.text.folded",
-
-            "texts.en.titles.text^2", "texts.en.titles.text.analyzed^2", "texts.en.titles.text.folded^2",
-            "texts.en.subtitles.text^2", "texts.en.subtitles.text.analyzed^2", "texts.en.subtitles.text.folded^2",
-            "texts.en.contents.text", "texts.en.contents.text.analyzed", "texts.en.contents.text.folded",
-            "texts.en.descriptions.text", "texts.en.descriptions.text.analyzed", "texts.en.descriptions.text.folded",
-
-            "texts.unk.titles.text^2", "texts.unk.titles.text.analyzed^2", "texts.unk.titles.text.folded^2",
-            "texts.unk.subtitles.text^2", "texts.unk.subtitles.text.analyzed^2", "texts.unk.subtitles.text.folded^2",
-            "texts.unk.contents.text", "texts.unk.contents.text.analyzed", "texts.unk.contents.text.folded",
-            "texts.unk.descriptions.text", "texts.unk.descriptions.text.analyzed", "texts.unk.descriptions.text.folded",
-
+        term_search_fields = [
+            "consortium.nl.folded^2",
+            "consortium.en.folded^2",
+            "study_vocabulary.nl.folded^2",
+            "study_vocabulary.en.folded^2",
+            "disciplines_normalized.nl.folded^2",
+            "disciplines_normalized.en.folded^2",
+            "industries.nl.folded^2",
+            "industries.en.folded^2",
+        ]
+        decompounder_term_search_fields = [
+            "consortium.nl^2", "consortium.nl.analyzed^2",
+            "consortium.en^2", "consortium.en.analyzed^2",
+            "study_vocabulary.nl^2", "study_vocabulary.nl.analyzed^2",
+            "study_vocabulary.en^2", "study_vocabulary.en.analyzed^2",
+            "disciplines_normalized.nl^2", "disciplines_normalized.nl.analyzed^2",
+            "disciplines_normalized.en^2", "disciplines_normalized.en.analyzed^2",
+            "industries.nl^2", "industries.nl.analyzed^2",
+            "industries.en^2", "industries.en.analyzed^2",
+        ]
+        search_fields = text_search_fields + term_search_fields + [
             "keywords^4", "keywords.folded^4",
             "authors.name.folded^2",
             "publishers^2", "publishers.folded^2",
-
-            "consortium.nl^2", "consortium.nl.analyzed^2", "consortium.nl.folded^2",
-            "consortium.en^2", "consortium.en.analyzed^2", "consortium.en.folded^2",
-            "study_vocabulary.nl^2", "study_vocabulary.nl.analyzed^2", "study_vocabulary.nl.folded^2",
-            "study_vocabulary.en^2", "study_vocabulary.en.analyzed^2", "study_vocabulary.en.folded^2",
-            "disciplines_normalized.nl^2", "disciplines_normalized.nl.analyzed^2", "disciplines_normalized.nl.folded^2",
-            "disciplines_normalized.en^2", "disciplines_normalized.en.analyzed^2", "disciplines_normalized.en.folded^2",
-            "industries.nl^2", "industries.nl.analyzed^2", "industries.nl.folded^2",
-            "industries.en^2", "industries.en.analyzed^2", "industries.en.folded^2",
         ]
+        if enable_decompounder:
+            search_fields += decompounder_term_search_fields
+            search_fields += decompounder_text_search_fields
     elif platform is Platforms.PUBLINOVA:
         serializer = ResearchProduct
-        search_fields = [
-            "texts.nl.titles.text^2", "texts.nl.titles.text.analyzed^2", "texts.nl.titles.text.folded^2",
-            "texts.nl.subtitles.text^2", "texts.nl.subtitles.text.analyzed^2", "texts.nl.subtitles.text.folded^2",
-            "texts.nl.contents.text", "texts.nl.contents.text.analyzed", "texts.nl.contents.text.folded",
-            "texts.nl.descriptions.text", "texts.nl.descriptions.text.analyzed", "texts.nl.descriptions.text.folded",
-
-            "texts.en.titles.text^2", "texts.en.titles.text.analyzed^2", "texts.en.titles.text.folded^2",
-            "texts.en.subtitles.text^2", "texts.en.subtitles.text.analyzed^2", "texts.en.subtitles.text.folded^2",
-            "texts.en.contents.text", "texts.en.contents.text.analyzed", "texts.en.contents.text.folded",
-            "texts.en.descriptions.text", "texts.en.descriptions.text.analyzed", "texts.en.descriptions.text.folded",
-
-            "texts.unk.titles.text^2", "texts.unk.titles.text.analyzed^2", "texts.unk.titles.text.folded^2",
-            "texts.unk.subtitles.text^2", "texts.unk.subtitles.text.analyzed^2", "texts.unk.subtitles.text.folded^2",
-            "texts.unk.contents.text", "texts.unk.contents.text.analyzed", "texts.unk.contents.text.folded",
-            "texts.unk.descriptions.text", "texts.unk.descriptions.text.analyzed", "texts.unk.descriptions.text.folded",
-
+        search_fields = text_search_fields + [
             "keywords", "keywords.folded",
             "authors.name.folded",
             "parties.name.folded",
             "projects.name.folded",
         ]
+        if enable_decompounder:
+            search_fields += decompounder_text_search_fields
     else:
         raise ValueError(f"Can't build product search configuration for platform: {platform}")
     return ProductSearchConfiguration(
