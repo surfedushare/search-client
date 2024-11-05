@@ -53,7 +53,17 @@ NL_MATERIAL = {
             "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
             "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
         },
-        "provider": "Wikiwijs Maken"
+        "provider": "Wikiwijs Maken",
+        "metrics": {
+            "views": 1,
+            "stars": {
+                "average": 5.0,
+                "star_1": 0,
+                "star_2": 0,
+                "star_4": 0,
+                "star_5": 1
+            }
+        }
     },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
@@ -193,7 +203,18 @@ MATERIALS = {
             "full_size": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf.png",
             "preview_small": "https://surfpol-harvester-content-dev.s3.amazonaws.com/pdf-thumbnail-200x150.png"
         },
+
         "provider": "Wikiwijs Maken",
+        "metrics": {
+            "views": 1,
+            "stars": {
+                "average": 5.0,
+                "star_1": 0,
+                "star_2": 0,
+                "star_4": 0,
+                "star_5": 1
+            }
+        },
         "texts": {
             "en": {},
             "unk": {},

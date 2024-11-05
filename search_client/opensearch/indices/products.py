@@ -182,6 +182,22 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "provider": {  # a cross-entity filter field
                     "type": "keyword"
                 },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "views": {
+                            "type": "integer",
+                        },
+                        "stars": {
+                            "type": "object",
+                            "properties": {
+                                "average": {
+                                    "type": "float",
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ from pydantic import (BaseModel, Field, field_serializer, computed_field, field_
 from pydantic.networks import HttpUrl
 
 from search_client.constants import LANGUAGES, Entities
-from search_client.serializers.core import EntityStates, Provider, Highlight
+from search_client.serializers.core import EntityStates, Provider, Highlight, Metrics
 from search_client.serializers.files import Video, Previews, File
 from search_client.serializers.persons import Author
 
@@ -40,6 +40,7 @@ class Product(BaseModel):
     doi: str | None = Field(default=None)
     subtitle: str | None = Field(default=None)
     highlight: Highlight | None = Field(default=None)
+    metrics: Metrics | None = Field(default=None)
 
     @field_serializer("provider")
     def serialize_provider(self, provider: Provider, _info) -> str:

@@ -45,6 +45,16 @@ NL_PRODUCT = {
         "technical_type": "document",
         "research_themes": ["exact_informatica"],
         "provider": "Wikiwijs Maken",
+        "metrics": {
+            "views": 1,
+            "stars": {
+                "average": 5.0,
+                "star_1": 0,
+                "star_2": 0,
+                "star_4": 0,
+                "star_5": 1
+            }
+        },
     },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
@@ -190,7 +200,17 @@ PRODUCTS = {
                 ],
                 "transcriptions": []
             }
-        }
+        },
+        "metrics": {
+            "views": 1,
+            "stars": {
+                "average": 5.0,
+                "star_1": 0,
+                "star_2": 0,
+                "star_4": 0,
+                "star_5": 1
+            }
+        },
     },
     "biology": {
         "srn": "edurep:wikiwijsmaken:wikiwijsmaken:123",
