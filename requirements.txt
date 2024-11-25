@@ -20,5 +20,5 @@ invoke==2.2.0
 ipython==8.29.0
 ipdb==0.13.13
 flake8==7.1.1
-wheel==0.44.0
+wheel==0.45.1
 devtools==0.12.2
