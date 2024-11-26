@@ -31,9 +31,12 @@ class BaseDecompoundWordsTestCase(TestCase):
         self.assertIn("dictionary_decompound", dutch_index["settings"]["analysis"]["filter"])
         decompound_filter = dutch_index["settings"]["analysis"]["filter"]["dictionary_decompound"]
         self.assertEqual(decompound_filter, {
-            'type': 'dictionary_decompounder',
-            'word_list_path': 'dutch-decompound-words.txt',
-            'updateable': True
+            "type": "dictionary_decompounder",
+            "word_list_path": "dutch-decompound-words.txt",
+            "updateable": True,
+            "only_longest_match": True,
+            "min_word_size": 8,
+            "min_subword_size": 5
         })
         for text_field in ["title", "text", "description"]:
             self.assertEqual(dutch_index["mappings"]["properties"][text_field]['fields']['analyzed']["analyzer"],
@@ -55,7 +58,7 @@ class BaseDecompoundWordsTestCase(TestCase):
             )
 
     def _test_decompound_word(self):
-        index = build_products_index_configuration(DocumentTypes.LEARNING_MATERIAL, "dutch-decompound-words.txt")
+        index = build_products_index_configuration(self.document_type, "dutch-decompound-words.txt")
         self.assertIn("dutch_dictionary_decompound", index["settings"]["analysis"]["analyzer"])
         decompound_analyser = index["settings"]["analysis"]["analyzer"]["dutch_dictionary_decompound"]
         self.assertEqual(decompound_analyser, {
@@ -71,9 +74,13 @@ class BaseDecompoundWordsTestCase(TestCase):
         self.assertIn("dictionary_decompound", index["settings"]["analysis"]["filter"])
         decompound_filter = index["settings"]["analysis"]["filter"]["dictionary_decompound"]
         self.assertEqual(decompound_filter, {
-            'type': 'dictionary_decompounder',
-            'word_list_path': 'dutch-decompound-words.txt',
-            'updateable': True
+            "type": "dictionary_decompounder",
+            "word_list_path": "dutch-decompound-words.txt",
+            "updateable": True,
+            "only_longest_match": True,
+            "min_word_size": 8,
+            "min_subword_size": 5
+
         })
         nl_texts = index["mappings"]["properties"]["texts"]["properties"]["nl"]["properties"]
         en_texts = index["mappings"]["properties"]["texts"]["properties"]["en"]["properties"]

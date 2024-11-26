@@ -227,7 +227,10 @@ def build_products_index_configuration(product_type: DocumentTypes,
         configuration["settings"]["analysis"]["filter"]["dictionary_decompound"] = {
             "type": "dictionary_decompounder",
             "word_list_path": nl_decompound_word_list,
-            "updateable": True
+            "updateable": True,
+            "only_longest_match": True,
+            "min_word_size": 8,
+            "min_subword_size": 5,
         }
 
     return configuration
