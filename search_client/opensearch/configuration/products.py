@@ -9,7 +9,7 @@ class ProductSearchConfiguration(SearchConfiguration):
 
 def build_product_search_configuration(platform: Platforms) -> SearchConfiguration:
     filter_fields = {
-        "publisher_year_normalized", "authors.name.keyword", "language.keyword", "copyright.keyword", "licenses",
+        "publisher_year_normalized", "authors.name.keyword", "language.keyword", "language", "copyright.keyword", "licenses",
         "publishers.keyword", "technical_type", "technical_types", "publisher_year", "provider"
     }
     if platform in [Platforms.EDUSOURCES, Platforms.MBODATA]:
@@ -18,6 +18,8 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "study_vocabulary.keyword", "disciplines_normalized.keyword",
             "lom_educational_levels", "consortium.keyword", "material_types", "aggregation_level"
         }
+        if platform is Platforms.MBODATA:
+            filter_fields |= {"harvest_source", "industries.keyword", "sectors.keyword", "access_rights"}
         search_fields = [
             "texts.nl.titles.text^2", "texts.nl.titles.text.analyzed^2", "texts.nl.titles.text.folded^2",
             "texts.nl.subtitles.text^2", "texts.nl.subtitles.text.analyzed^2", "texts.nl.subtitles.text.folded^2",
