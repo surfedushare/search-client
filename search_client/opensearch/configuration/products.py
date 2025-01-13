@@ -9,8 +9,8 @@ class ProductSearchConfiguration(SearchConfiguration):
 
 def build_product_search_configuration(platform: Platforms) -> SearchConfiguration:
     filter_fields = {
-        "publisher_year_normalized", "authors.name.keyword", "language.keyword", "language", "copyright.keyword", "licenses",
-        "publishers.keyword", "technical_type", "technical_types", "publisher_year", "provider"
+        "publisher_year_normalized", "authors.name.keyword", "language.keyword", "language", "copyright.keyword",
+        "licenses", "publishers.keyword", "technical_type", "technical_types", "publisher_year", "provider"
     }
     if platform in [Platforms.EDUSOURCES, Platforms.MBODATA]:
         serializer = LearningMaterial
