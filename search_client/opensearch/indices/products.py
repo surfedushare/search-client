@@ -139,6 +139,9 @@ def build_products_index_configuration(product_type: DocumentTypes,
                 "licenses": {
                     "type": "keyword"
                 },
+                "access_rights": {
+                    "type": "keyword"
+                },
                 "harvest_source": {
                     "type": "keyword"
                 },
