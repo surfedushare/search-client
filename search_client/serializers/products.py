@@ -43,9 +43,11 @@ class Product(BaseModel):
     metrics: Metrics | None = Field(default=None)
 
     @field_serializer("provider")
-    def serialize_provider(self, provider: Provider, _info) -> str:
+    def serialize_provider(self, provider: Provider, _info) -> str | None:
         if isinstance(provider, str):
             return provider
+        elif not provider:
+            return None
         elif provider.name:
             return provider.name
         elif provider.slug:
