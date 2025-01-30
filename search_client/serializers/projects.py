@@ -1,8 +1,8 @@
-from typing import Literal
-from datetime import date
+from typing import Literal, Any
+from datetime import date, datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, field_serializer
+from pydantic import BaseModel, Field, field_serializer, field_validator
 
 from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider
@@ -56,3 +56,10 @@ class Project(BaseModel):
             return provider.ror
         elif provider.external_id:
             return provider.external_id
+
+    @field_validator("started_at", "ended_at", mode="before")
+    @classmethod
+    def convert_to_date(cls, value: Any) -> date:
+        if isinstance(value, datetime):
+            return value.date()
+        return value
