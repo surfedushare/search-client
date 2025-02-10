@@ -55,6 +55,9 @@ def build_projects_index_configuration() -> dict:
                 "themes": {
                     "type": "keyword"
                 },
+                "sia_project_reference": {
+                    "type": "keyword"
+                },
                 ##########################################
                 # Required fields for search client
                 ##########################################

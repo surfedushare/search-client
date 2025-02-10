@@ -43,6 +43,7 @@ class Project(BaseModel):
     products: list[str] = Field(default_factory=list)
     themes: list[str] = Field(default_factory=list)
     previews: Previews | None = Field(default=None)
+    sia_project_reference: str | None = Field(default=None)
 
     @field_serializer("provider")
     def serialize_provider(self, provider: Provider, _info) -> str:
