@@ -571,6 +571,9 @@ def build_multilingual_search_mapping_properties(nl_decompound_word_list: str | 
 
 def build_research_product_search_mapping_properties(nl_decompound_word_list: str | None = None) -> dict:
     return {
+        "sia_project_id": {
+            "type": "keyword"
+        },
         "research_themes": {
             "type": "keyword"
         },
