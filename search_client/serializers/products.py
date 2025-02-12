@@ -113,6 +113,7 @@ class ResearchProduct(Product):
     type: str | None = Field(default=None, validation_alias="technical_type",
                              deprecated="type is deprecated in favor or types")
     types: list[str] = Field(default_factory=list, validation_alias="technical_types")
+    sia_project_id: str | None = Field(default=None)
     research_object_type: str | None = Field(default=None)
     parties: list[str] = Field(default_factory=list, validation_alias="publishers")
     research_themes: list[str] = Field(default_factory=list)

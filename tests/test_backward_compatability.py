@@ -230,6 +230,7 @@ class TestPydanticToDictConversion(TestCase):
                 "nerds"
             ],
             "doi": "https://doi.org/10.12345",
+            "sia_project_id": None,
             "subtitle": None,
             "type": "document",
             "types": [],
@@ -354,8 +355,6 @@ class TestPydanticToDictConversion(TestCase):
             "metrics": None
         })
 
-    maxDiff = None
-
     def test_research_product_biology(self):
         data = generate_nl_product(topic="biology")
         research_product = ResearchProduct(**data)
@@ -413,6 +412,7 @@ class TestPydanticToDictConversion(TestCase):
             "is_part_of": [],
             "keywords": [],
             "doi": None,
+            "sia_project_id": None,
             "subtitle": None,
             "highlight": None,  # only gets added during actual search
             "type": "document",
@@ -727,6 +727,7 @@ class TestPydanticToDictConversion(TestCase):
                 "nerds"
             ],
             "doi": "https://doi.org/10.12345",
+            "sia_project_id": None,
             "subtitle": None,
             "highlight": None,  # only gets added during actual search
             "type": "document",
@@ -831,6 +832,7 @@ class TestPydanticToDictConversion(TestCase):
             "is_part_of": [],
             "keywords": [],
             "doi": None,
+            "sia_project_id": None,
             "subtitle": None,
             "highlight": None,  # only gets added during actual search
             "type": "document",
@@ -878,6 +880,7 @@ class TestPydanticToDictConversion(TestCase):
             "title": None,
             "authors": [],
             "keywords": [],
+            "sia_project_id": None,
             "language": None,
             "provider": None,
             "subtitle": None,
@@ -947,6 +950,7 @@ class TestPydanticToDictConversion(TestCase):
             "has_parts": [],
             "is_part_of": [],
             "keywords": [],
+            "sia_project_id": None,
             "doi": None,
             "subtitle": None,
             "highlight": None,
