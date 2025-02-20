@@ -2,7 +2,7 @@ from typing import Literal, Any
 from datetime import date, datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, field_serializer, field_validator
+from pydantic import BaseModel, Field, field_serializer, field_validator, TypeAdapter
 
 from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider
@@ -63,4 +63,8 @@ class Project(BaseModel):
     def convert_to_date(cls, value: Any) -> date:
         if isinstance(value, datetime):
             return value.date()
+        if isinstance(value, str):
+            dt_adapter = TypeAdapter(datetime)
+            parsed_dt = dt_adapter.validate_python(value)
+            return parsed_dt.date()
         return value

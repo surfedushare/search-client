@@ -16,7 +16,7 @@ PROJECTS = {
         "title": "Een wiskundig project",
         "project_status": "finished",
         "started_at": "1970-01-01",
-        "ended_at": "2020-01-01",
+        "ended_at": "2020-01-01 22:22:00+00:00",
         "coordinates": [],
         "goal": "Mission accomplished",
         "description": "Dit is de beschrijving van een project met wiskundig onderzoek",

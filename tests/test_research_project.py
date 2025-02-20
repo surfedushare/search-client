@@ -1,6 +1,10 @@
-from tests.base import SearchClientIntegrationTestCase
+from unittest import TestCase
+import json
+
 from search_client.constants import Platforms, Entities
 from search_client.serializers.projects import Project
+from search_client.test.factories.projects import generate_project
+from tests.base import SearchClientIntegrationTestCase
 
 
 class TestResearchProjectSearchClient(SearchClientIntegrationTestCase):
@@ -109,4 +113,38 @@ class TestResearchProjectSearchClient(SearchClientIntegrationTestCase):
         self.assertEqual(stats, {
             "documents": 2,
             "projects": 2
+        })
+
+
+class TestProjectModel(TestCase):
+
+    def test_dump_math_project(self):
+        data = generate_project(topic="math")
+        project = Project(**data)
+        project_json = project.model_dump_json()
+        project_dump = json.loads(project_json)
+        self.assertEqual(project_dump, {
+            "entity": "projects",
+            "srn": "edurep:project:1",
+            "set": "edurep",
+            "provider": "Kennisnet",
+            "state": "active",
+            "score": 0.0,
+            "external_id": "project:1",
+            "title": "Een wiskundig project",
+            "description": "Dit is de beschrijving van een project met wiskundig onderzoek",
+            "project_status": "finished",
+            "started_at": "1970-01-01",
+            "ended_at": "2020-01-01",
+            "coordinates": [],
+            "goal": "Mission accomplished",
+            "contacts": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
+            "owners": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
+            "persons": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
+            "keywords": ["nerds"],
+            "parties": ["Wikiwijs Maken"],
+            "products": ["sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"],
+            "themes": [],
+            "previews": None,
+            "sia_project_reference": None
         })
