@@ -35,6 +35,8 @@ class Project(BaseModel):
     ended_at: date | None = Field(default=None)
     coordinates: list[float] = Field(default_factory=list)
     goal: str | None = Field(default=None)
+    approach: str | None = Field(default=None)
+    results: str | None = Field(default=None)
     contacts: list[Contact] = Field(default_factory=list)
     owners: list[Contact] = Field(default_factory=list)
     persons: list[Contact] = Field(default_factory=list)
