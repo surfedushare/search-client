@@ -33,6 +33,12 @@ def build_projects_index_configuration() -> dict:
                 "goal": {
                     "type": "text"
                 },
+                "approach": {
+                    "type": "text"
+                },
+                "results": {
+                    "type": "text"
+                },
                 "keywords": {
                     "type": "text",
                     "fields": {

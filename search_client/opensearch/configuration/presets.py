@@ -23,7 +23,7 @@ _PUBLINOVA_PRESETS = {
         platform=Platforms.PUBLINOVA,
         entities={Entities.PROJECTS},
         filter_fields={"project_status", "provider"},
-        search_fields=["title", "description", "keywords", "keywords.folded", "goal"],
+        search_fields=["title", "description", "keywords", "keywords.folded", "goal", "approach", "results"],
         distance_feature_field=None,
         serializers={
             Entities.PROJECTS: Project

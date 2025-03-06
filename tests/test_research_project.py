@@ -138,6 +138,8 @@ class TestProjectModel(TestCase):
             "ended_at": "2020-01-01",
             "coordinates": [],
             "goal": "Mission accomplished",
+            "approach": None,
+            "results": None,
             "contacts": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
             "owners": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
             "persons": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
