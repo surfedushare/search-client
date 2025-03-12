@@ -19,6 +19,6 @@ pytest==8.3.4
 invoke==2.2.0
 ipython==8.34.0
 ipdb==0.13.13
-flake8==7.1.1
+flake8==7.1.2
 wheel==0.45.1
 devtools==0.12.2
