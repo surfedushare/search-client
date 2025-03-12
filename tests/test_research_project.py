@@ -148,5 +148,6 @@ class TestProjectModel(TestCase):
             "products": ["sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"],
             "themes": [],
             "previews": None,
-            "sia_project_reference": None
+            "sia_project_reference": None,
+            "photo_url": None,
         })

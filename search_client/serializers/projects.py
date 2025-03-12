@@ -2,7 +2,7 @@ from typing import Literal, Any
 from datetime import date, datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, field_serializer, field_validator, TypeAdapter
+from pydantic import BaseModel, Field, field_serializer, field_validator, TypeAdapter, HttpUrl
 
 from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider
@@ -46,6 +46,7 @@ class Project(BaseModel):
     themes: list[str] = Field(default_factory=list)
     previews: Previews | None = Field(default=None)
     sia_project_reference: str | None = Field(default=None)
+    photo_url: HttpUrl | None = Field(default=None)
 
     @field_serializer("provider")
     def serialize_provider(self, provider: Provider, _info) -> str:
