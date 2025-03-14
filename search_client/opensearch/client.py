@@ -210,20 +210,17 @@ class SearchClient:
         :param aggregate_filter_counts: Indicates whether counts for filters should be calculated
         :return:
         """
-        aggregate_filter_counts = aggregate_filter_counts or bool(drilldown_names)
 
+        body: dict = self.parse_search_body(search_text)
+
+        # Update query with pagination parameters
         start_record = page_size * (page - 1)
-        body: dict = {
-            'query': {
-                "bool": defaultdict(list)
-            },
-            'min_score': min_score,
-            'from': start_record,
-            'size': page_size,
-            'post_filter': {
-                "bool": defaultdict(list)
-            }
-        }
+        body.update({
+            "from": start_record,
+            "size": page_size,
+        })
+
+        # Update query with highlights
         if self.configuration.highlights is not None:
             body['highlight'] = {
                 'number_of_fragments': 1,
@@ -233,24 +230,8 @@ class SearchClient:
                 }
             }
 
+        # Update query with suggestions
         if search_text:
-            query_string = {
-                "simple_query_string": {
-                    "fields": self.configuration.search_fields,
-                    "query": search_text,
-                    "default_operator": "and"
-                }
-            }
-            body["query"]["bool"]["must"] += [query_string]
-            if self.configuration.distance_feature_field:
-                body["query"]["bool"]["should"].append({
-                    "distance_feature": {
-                        "field": self.configuration.distance_feature_field,
-                        "pivot": "90d",
-                        "origin": "now",
-                        "boost": 1.15
-                    }
-                })
             body["suggest"] = {
                 'did-you-mean-suggestion': {
                     'text': search_text,
@@ -266,23 +247,31 @@ class SearchClient:
                 }
             }
 
-        indices = self.parse_index_language(filters)
-
+        # Update query with aggregates
+        aggregate_filter_counts = aggregate_filter_counts or bool(drilldown_names)
         if aggregate_filter_counts:
             body["aggs"] = self.parse_aggregations(drilldown_names, filters)
 
-        filters = self.parse_filters(filters)
+        # Update query with filters
+        query_filters = self.parse_filters(filters)
         if filters:
-            body["post_filter"]["bool"]["must"] += filters
+            body["post_filter"] = {
+                "bool": {
+                    "must": query_filters
+                }
+            }
+        body["min_score"] = min_score
 
+        # Update query with ordering
         if ordering:
             body["sort"] = [
                 self.parse_ordering(ordering),
                 "_score"
             ]
-        # make query and parse
+
+        # Make query and parse
         result = self.client.search(
-            index=indices,
+            index=self.parse_index_language(filters),
             body=body
         )
         return self.parse_search_result(result)
@@ -440,6 +429,32 @@ class SearchClient:
             for hit in hits["hits"]
         ]
         return result
+
+    def parse_search_body(self, search_text: str) -> dict:
+        body: dict = {
+            'query': {
+                "bool": defaultdict(list)
+            }
+        }
+        if search_text:
+            query_string = {
+                "simple_query_string": {
+                    "fields": self.configuration.search_fields,
+                    "query": search_text,
+                    "default_operator": "and"
+                }
+            }
+            body["query"]["bool"]["must"] += [query_string]
+            if self.configuration.distance_feature_field:
+                body["query"]["bool"]["should"].append({
+                    "distance_feature": {
+                        "field": self.configuration.distance_feature_field,
+                        "pivot": "90d",
+                        "origin": "now",
+                        "boost": 1.15
+                    }
+                })
+        return body
 
     def parse_filters(self, filters: list[dict]) -> list[dict]:
         """
