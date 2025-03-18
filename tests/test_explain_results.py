@@ -35,7 +35,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+            "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 4.37734,
             "terms": [
                 {
@@ -65,7 +65,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde onderzoek")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+            "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 5.42148,
             "terms": [
                 {
@@ -110,7 +110,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "surfsharekit:def",
+            "srn": "surfsharekit:def",
             "total_score": 1.61699,
             "terms": [
                 {
@@ -124,14 +124,14 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
                     "relevancy": 1.0
                 }
             ],
-            "recency_bonus": 0.04595
+            "recency_bonus": 0.04594
         })
 
     def test_explain_result_biology_research(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie onderzoek")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "surfsharekit:def",
+            "srn": "surfsharekit:def",
             "total_score": 2.66113,
             "terms": [
                 {
@@ -161,7 +161,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
                     "relevancy": 0.39
                 }
             ],
-            "recency_bonus": 0.04595
+            "recency_bonus": 0.04594
         })
 
     def test_explain_result_no_search(self):
@@ -210,7 +210,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+            "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 4.37734,
             "terms": [
                 {
@@ -240,7 +240,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde didactiek")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
+            "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 5.16045,
             "terms": [
                 {
@@ -282,7 +282,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "surfsharekit:def",
+            "srn": "surfsharekit:def",
             "total_score": 1.61699,
             "terms": [
                 {
@@ -303,7 +303,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie didactiek")
         self.assertEqual(explain_result.model_dump(mode="json"), {
-            "id": "surfsharekit:def",
+            "srn": "surfsharekit:def",
             "total_score": 2.40009,
             "terms": [
                 {

@@ -321,7 +321,7 @@ class SearchClient:
         sorted_result_terms.sort(reverse=True)
 
         return SearchResultExplanation(
-            id=result["_id"],
+            srn=result["_id"],
             total_score=round(search_details["value"], precision),
             terms=sorted_result_terms,
             recency_bonus=round(recency_details["value"], precision),

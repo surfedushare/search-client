@@ -73,7 +73,7 @@ class SearchTermExplanation(BaseModel):
 
 
 class SearchResultExplanation(BaseModel):
-    id: str
+    srn: str
     total_score: float
     terms: list[SearchTermExplanation]
     recency_bonus: float
