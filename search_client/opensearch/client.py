@@ -7,8 +7,10 @@ from pydantic import BaseModel
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
 from search_client.constants import Platforms, Entities, EDUREP_LEGACY_ID_PREFIXES
+from search_client.exceptions import ResultNotFound
 from search_client.opensearch.configuration import (SearchConfiguration, build_presets_search_configuration,
                                                     MultilingualIndicesSearchConfiguration)
+from search_client.serializers.core import SearchResultExplanation, SearchTermExplanation
 
 
 @dataclass(frozen=True, slots=True)
@@ -275,6 +277,55 @@ class SearchClient:
             body=body
         )
         return self.parse_search_result(result)
+
+    def explain_result(self, identifier: str, search_text: str, precision: int = 5) -> SearchResultExplanation:
+        # Check inputs and state
+        if isinstance(self.configuration, MultilingualIndicesSearchConfiguration):
+            raise RuntimeError(
+                "Explaining results is not supported for multilingual indices use multilingual fields instead."
+            )
+        # Make explain query
+        result = self.client.explain(
+            id=identifier,
+            index=self.configuration.get_aliases(),
+            body=self.parse_search_body(search_text)
+        )
+        # Handle errors
+        match result["explanation"]["description"]:
+            case "*:*":
+                raise ResultNotFound("Result was not found in an empty search.")
+            case description if description.startswith("Failure to meet condition(s)"):
+                raise ResultNotFound("Result was not found in search results.")
+
+        # Parse result to something more readable
+        search_details, recency_details = result["explanation"]["details"]
+
+        def parse_terms(term_data: dict, terms: dict[str, SearchTermExplanation]) -> dict[str, SearchTermExplanation]:
+            if term_data["description"].startswith("sum of:"):
+                for data in term_data["details"]:
+                    terms.update(parse_terms(data, terms))
+            elif term_data["description"].startswith("weight("):
+                field, term = SearchTermExplanation.parse_explanation_description(term_data["description"])
+                value = round(term_data["value"], precision)
+                if term in terms:
+                    terms[term].fields[field] = value
+                else:
+                    terms[term] = SearchTermExplanation(term=term, fields={field: value})
+            return terms
+
+        result_terms = parse_terms(search_details, {})
+        sorted_result_terms = []
+        for result_term in result_terms.values():
+            result_term.update(search_details["value"], precision)
+            sorted_result_terms.append(result_term)
+        sorted_result_terms.sort(reverse=True)
+
+        return SearchResultExplanation(
+            id=result["_id"],
+            total_score=round(search_details["value"], precision),
+            terms=sorted_result_terms,
+            recency_bonus=round(recency_details["value"], precision),
+        )
 
     @staticmethod
     def clean_external_id(external_id: str) -> str:
