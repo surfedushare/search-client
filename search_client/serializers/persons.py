@@ -5,6 +5,8 @@ class Contact(BaseModel):
     name: str | None = Field(default=None)
     email: EmailStr | None = Field(default=None)
     external_id: str | None = Field(default=None)
+    is_external: bool | None = Field(default=None,
+                                     description="This means external contact for the Provider of a Project.")
 
     @model_validator(mode="after")
     def validate_identifier(self):

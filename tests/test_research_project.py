@@ -140,9 +140,15 @@ class TestProjectModel(TestCase):
             "goal": "Mission accomplished",
             "approach": None,
             "results": None,
-            "contacts": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
-            "owners": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
-            "persons": [{"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1"}],
+            "contacts": [
+                {"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1", "is_external": None}
+            ],
+            "owners": [
+                {"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1", "is_external": None}
+            ],
+            "persons": [
+                {"name": "Brian May", "email": "brian@queen.com", "external_id": "person:1", "is_external": None}
+            ],
             "keywords": ["nerds"],
             "parties": ["Wikiwijs Maken"],
             "products": ["sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"],
