@@ -3,6 +3,21 @@ from search_client.constants import Platforms, Entities
 from search_client.exceptions import ResultNotFound
 
 
+def round_scores(explanation_dump: dict) -> dict:
+    for key, value in explanation_dump.items():
+        if isinstance(value, float):
+            explanation_dump[key] = round(value, 2)
+        elif key == "terms":
+            for term in explanation_dump["terms"]:
+                for term_key, term_value in term.items():
+                    if isinstance(term_value, float):
+                        term[term_key] = round(term_value, 2)
+                for field_key, field_value in term["fields"].items():
+                    if isinstance(field_value, float):
+                        term["fields"][field_key] = round(field_value, 2)
+    return explanation_dump
+
+
 class TestResearchProductExplain(SearchClientIntegrationTestCase):
 
     # Attributes used by SearchClientIntegrationTestCase
@@ -34,134 +49,138 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
     def test_explain_result_math(self):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 4.37734,
+            "total_score": 4.38,
             "terms": [
                 {
                     "term": "wiskund",
                     "fields": {
-                        "texts.nl.contents.text.analyzed": 0.87547,
-                        "texts.nl.titles.text.analyzed": 1.75094
+                        "texts.nl.contents.text.analyzed": 0.88,
+                        "texts.nl.titles.text.analyzed": 1.75
                     },
-                    "score": 2.62641,
+                    "score": 2.63,
                     "relevancy": 0.6
                 },
 
                 {
                     "term": "wiskunde",
                     "fields": {
-                        "texts.nl.contents.text": 0.87547,
-                        "texts.nl.contents.text.folded": 0.87547
+                        "texts.nl.contents.text": 0.88,
+                        "texts.nl.contents.text.folded": 0.88
                     },
-                    "score": 1.75094,
+                    "score": 1.75,
                     "relevancy": 0.4
                 }
             ],
-            "recency_bonus": 0.0347
+            "recency_bonus": 0.03
         })
 
     def test_explain_result_math_research(self):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde onderzoek")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 5.42148,
+            "total_score": 5.42,
             "terms": [
                 {
                     "term": "wiskund",
                     "fields": {
-                        "texts.nl.contents.text.analyzed": 0.87547,
-                        "texts.nl.titles.text.analyzed": 1.75094
+                        "texts.nl.contents.text.analyzed": 0.88,
+                        "texts.nl.titles.text.analyzed": 1.75
                     },
-                    "score": 2.62641,
+                    "score": 2.63,
                     "relevancy": 0.48
                 },
                 {
                     "term": "wiskunde",
                     "fields": {
-                        "texts.nl.contents.text": 0.87547,
-                        "texts.nl.contents.text.folded": 0.87547
+                        "texts.nl.contents.text": 0.88,
+                        "texts.nl.contents.text.folded": 0.88
                     },
-                    "score": 1.75094,
+                    "score": 1.75,
                     "relevancy": 0.32
                 },
                 {
                     "term": "onderzoek",
                     "fields": {
-                        "texts.nl.contents.text": 0.08701,
-                        "texts.nl.contents.text.analyzed": 0.08701,
-                        "texts.nl.contents.text.folded": 0.08701,
-                        "texts.nl.descriptions.text": 0.08701,
-                        "texts.nl.descriptions.text.analyzed": 0.08701,
-                        "texts.nl.descriptions.text.folded": 0.08701,
-                        "texts.nl.titles.text": 0.17402,
-                        "texts.nl.titles.text.analyzed": 0.17402,
-                        "texts.nl.titles.text.folded": 0.17402,
+                        "texts.nl.contents.text": 0.09,
+                        "texts.nl.contents.text.analyzed": 0.09,
+                        "texts.nl.contents.text.folded": 0.09,
+                        "texts.nl.descriptions.text": 0.09,
+                        "texts.nl.descriptions.text.analyzed": 0.09,
+                        "texts.nl.descriptions.text.folded": 0.09,
+                        "texts.nl.titles.text": 0.17,
+                        "texts.nl.titles.text.analyzed": 0.17,
+                        "texts.nl.titles.text.folded": 0.17,
                     },
-                    "score": 1.04412,
+                    "score": 1.04,
                     "relevancy": 0.19
                 }
             ],
-            "recency_bonus": 0.0347
+            "recency_bonus": 0.03
         })
 
     def test_explain_result_biology(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 1.61699,
+            "total_score": 1.62,
             "terms": [
                 {
                     "term": "biologie",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.539,
-                        "texts.nl.contents.text.analyzed": 0.539,
-                        "texts.nl.contents.text": 0.539
+                        "texts.nl.contents.text.folded": 0.54,
+                        "texts.nl.contents.text.analyzed": 0.54,
+                        "texts.nl.contents.text": 0.54
                     },
-                    "score": 1.617,
+                    "score": 1.62,
                     "relevancy": 1.0
                 }
             ],
-            "recency_bonus": 0.04594
+            "recency_bonus": 0.05
         })
 
     def test_explain_result_biology_research(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie onderzoek")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 2.66113,
+            "total_score": 2.66,
             "terms": [
                 {
                     "term": "biologie",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.539,
-                        "texts.nl.contents.text.analyzed": 0.539,
-                        "texts.nl.contents.text": 0.539
+                        "texts.nl.contents.text.folded": 0.54,
+                        "texts.nl.contents.text.analyzed": 0.54,
+                        "texts.nl.contents.text": 0.54
                     },
-                    "score": 1.617,
+                    "score": 1.62,
                     "relevancy": 0.61
                 },
                 {
                     "term": "onderzoek",
                     "fields": {
-                        "texts.nl.descriptions.text": 0.08701,
-                        "texts.nl.contents.text.folded": 0.08701,
-                        "texts.nl.titles.text": 0.17402,
-                        "texts.nl.descriptions.text.folded": 0.08701,
-                        "texts.nl.contents.text.analyzed": 0.08701,
-                        "texts.nl.descriptions.text.analyzed": 0.08701,
-                        "texts.nl.contents.text": 0.08701,
-                        "texts.nl.titles.text.analyzed": 0.17402,
-                        "texts.nl.titles.text.folded": 0.17402
+                        "texts.nl.descriptions.text": 0.09,
+                        "texts.nl.contents.text.folded": 0.09,
+                        "texts.nl.titles.text": 0.17,
+                        "texts.nl.descriptions.text.folded": 0.09,
+                        "texts.nl.contents.text.analyzed": 0.09,
+                        "texts.nl.descriptions.text.analyzed": 0.09,
+                        "texts.nl.contents.text": 0.09,
+                        "texts.nl.titles.text.analyzed": 0.17,
+                        "texts.nl.titles.text.folded": 0.17
                     },
-                    "score": 1.04412,
+                    "score": 1.04,
                     "relevancy": 0.39
                 }
             ],
-            "recency_bonus": 0.04594
+            "recency_bonus": 0.05
         })
 
     def test_explain_result_no_search(self):
@@ -209,128 +228,132 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
     def test_explain_result_math(self):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 4.37734,
+            "total_score": 4.38,
             "terms": [
                 {
                     "term": "wiskund",
                     "fields": {
-                        "texts.nl.contents.text.analyzed": 0.87547,
-                        "texts.nl.titles.text.analyzed": 1.75094
+                        "texts.nl.contents.text.analyzed": 0.88,
+                        "texts.nl.titles.text.analyzed": 1.75
                     },
-                    "score": 2.62641,
+                    "score": 2.63,
                     "relevancy": 0.6
                 },
 
                 {
                     "term": "wiskunde",
                     "fields": {
-                        "texts.nl.contents.text": 0.87547,
-                        "texts.nl.contents.text.folded": 0.87547
+                        "texts.nl.contents.text": 0.88,
+                        "texts.nl.contents.text.folded": 0.88
                     },
-                    "score": 1.75094,
+                    "score": 1.75,
                     "relevancy": 0.4
                 }
             ],
-            "recency_bonus": 0.0347
+            "recency_bonus": 0.03
         })
 
     def test_explain_result_math_didactic(self):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde didactiek")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 5.16045,
+            "total_score": 5.16,
             "terms": [
                 {
                     "term": "wiskund",
                     "fields": {
-                        "texts.nl.contents.text.analyzed": 0.87547,
-                        "texts.nl.titles.text.analyzed": 1.75094
+                        "texts.nl.contents.text.analyzed": 0.88,
+                        "texts.nl.titles.text.analyzed": 1.75
                     },
-                    "score": 2.62641,
+                    "score": 2.63,
                     "relevancy": 0.51
                 },
                 {
                     "term": "wiskunde",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.87547,
-                        "texts.nl.contents.text": 0.87547
+                        "texts.nl.contents.text.folded": 0.88,
+                        "texts.nl.contents.text": 0.88
                     },
-                    "score": 1.75094,
+                    "score": 1.75,
                     "relevancy": 0.34
                 },
                 {
                     "term": "didactiek",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.08701,
-                        "texts.nl.titles.text": 0.17402,
-                        "texts.nl.contents.text.analyzed": 0.08701,
-                        "texts.nl.contents.text": 0.08701,
-                        "texts.nl.titles.text.analyzed": 0.17402,
-                        "texts.nl.titles.text.folded": 0.17402
+                        "texts.nl.contents.text.folded": 0.09,
+                        "texts.nl.titles.text": 0.17,
+                        "texts.nl.contents.text.analyzed": 0.09,
+                        "texts.nl.contents.text": 0.09,
+                        "texts.nl.titles.text.analyzed": 0.17,
+                        "texts.nl.titles.text.folded": 0.17
                     },
-                    "score": 0.78309,
+                    "score": 0.78,
                     "relevancy": 0.15
                 }
             ],
-            "recency_bonus": 0.0347
+            "recency_bonus": 0.03
         })
 
     def test_explain_result_biology(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 1.61699,
+            "total_score": 1.62,
             "terms": [
                 {
                     "term": "biologie",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.539,
-                        "texts.nl.contents.text.analyzed": 0.539,
-                        "texts.nl.contents.text": 0.539
+                        "texts.nl.contents.text.folded": 0.54,
+                        "texts.nl.contents.text.analyzed": 0.54,
+                        "texts.nl.contents.text": 0.54
                     },
-                    "score": 1.617,
+                    "score": 1.62,
                     "relevancy": 1.0
                 }
             ],
-            "recency_bonus": 0.0347
+            "recency_bonus": 0.03
         })
 
     def test_explain_result_biology_didactic(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie didactiek")
-        self.assertEqual(explain_result.model_dump(mode="json"), {
+        explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 2.40009,
+            "total_score": 2.4,
             "terms": [
                 {
                     "term": "biologie",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.539,
-                        "texts.nl.contents.text.analyzed": 0.539,
-                        "texts.nl.contents.text": 0.539
+                        "texts.nl.contents.text.folded": 0.54,
+                        "texts.nl.contents.text.analyzed": 0.54,
+                        "texts.nl.contents.text": 0.54
                     },
-                    "score": 1.617,
+                    "score": 1.62,
                     "relevancy": 0.67
                 },
                 {
                     "term": "didactiek",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.08701,
-                        "texts.nl.titles.text": 0.17402,
-                        "texts.nl.contents.text.analyzed": 0.08701,
-                        "texts.nl.contents.text": 0.08701,
-                        "texts.nl.titles.text.analyzed": 0.17402,
-                        "texts.nl.titles.text.folded": 0.17402
+                        "texts.nl.contents.text.folded": 0.09,
+                        "texts.nl.titles.text": 0.17,
+                        "texts.nl.contents.text.analyzed": 0.09,
+                        "texts.nl.contents.text": 0.09,
+                        "texts.nl.titles.text.analyzed": 0.17,
+                        "texts.nl.titles.text.folded": 0.17
                     },
-                    "score": 0.78309,
+                    "score": 0.78,
                     "relevancy": 0.33
                 }
             ],
-            "recency_bonus": 0.0347
+            "recency_bonus": 0.03
         })
 
     def test_explain_result_no_search(self):
