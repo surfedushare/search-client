@@ -24,7 +24,7 @@ class TestResearcherModel(TestCase):
         data = generate_person()
         researcher = Researcher(**data)
         self.assertEqual(researcher.model_dump(mode="json"), {
-            "entity": "projects",
+            "entity": "persons",
             "srn": "sharekit:person:d5e05c12-0648-4129-9386-408d47b6f8c0",
             "set": "nppo",
             "provider": "sharekit",
@@ -60,7 +60,7 @@ class TestPersonModel(TestCase):
         data = generate_person()
         person = Person(**data)
         self.assertEqual(person.model_dump(mode="json"), {
-            "entity": "projects",
+            "entity": "persons",
             "srn": "sharekit:person:d5e05c12-0648-4129-9386-408d47b6f8c0",
             "set": "nppo",
             "provider": "sharekit",

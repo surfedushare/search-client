@@ -8,6 +8,7 @@ class Platforms(Enum):
 
 
 class Entities(Enum):
+    PERSONS = "persons"
     PRODUCTS = "products"
     PROJECTS = "projects"
     TESTING = "testing"

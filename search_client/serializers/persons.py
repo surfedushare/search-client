@@ -33,7 +33,7 @@ class Author(BaseModel):
 
 class Person(BaseModel):
 
-    entity: Literal[Entities.PROJECTS] = Field(default=Entities.PROJECTS, init=False)
+    entity: Literal[Entities.PROJECTS] = Field(default=Entities.PERSONS, init=False)
     srn: str
     set: str
     provider: Provider | str | None = Field(default=None)
