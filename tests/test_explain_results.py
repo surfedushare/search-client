@@ -231,26 +231,25 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 4.38,
+            "total_score": 7.0,
             "terms": [
+                {
+                    "term": "wiskunde",
+                    "fields": {
+                        "texts.nl.contents.text.folded": 2.63,
+                        "texts.nl.contents.text": 2.63
+                    },
+                    "score": 5.25,
+                    "relevancy": 0.75
+                },
                 {
                     "term": "wiskund",
                     "fields": {
                         "texts.nl.contents.text.analyzed": 0.88,
-                        "texts.nl.titles.text.analyzed": 1.75
-                    },
-                    "score": 2.63,
-                    "relevancy": 0.6
-                },
-
-                {
-                    "term": "wiskunde",
-                    "fields": {
-                        "texts.nl.contents.text": 0.88,
-                        "texts.nl.contents.text.folded": 0.88
+                        "texts.nl.titles.text.analyzed": 0.88
                     },
                     "score": 1.75,
-                    "relevancy": 0.4
+                    "relevancy": 0.25
                 }
             ],
             "recency_bonus": 0.03
@@ -262,38 +261,38 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 5.16,
+            "total_score": 8.57,
             "terms": [
+                {
+                    "term": "wiskunde",
+                    "fields": {
+                        "texts.nl.contents.text.folded": 2.63,
+                        "texts.nl.contents.text": 2.63
+                    },
+                    "score": 5.25,
+                    "relevancy": 0.61
+                },
                 {
                     "term": "wiskund",
                     "fields": {
                         "texts.nl.contents.text.analyzed": 0.88,
-                        "texts.nl.titles.text.analyzed": 1.75
-                    },
-                    "score": 2.63,
-                    "relevancy": 0.51
-                },
-                {
-                    "term": "wiskunde",
-                    "fields": {
-                        "texts.nl.contents.text.folded": 0.88,
-                        "texts.nl.contents.text": 0.88
+                        "texts.nl.titles.text.analyzed": 0.88
                     },
                     "score": 1.75,
-                    "relevancy": 0.34
+                    "relevancy": 0.2
                 },
                 {
                     "term": "didactiek",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.09,
-                        "texts.nl.titles.text": 0.17,
+                        "texts.nl.contents.text.folded": 0.26,
+                        "texts.nl.titles.text": 0.44,
                         "texts.nl.contents.text.analyzed": 0.09,
-                        "texts.nl.contents.text": 0.09,
-                        "texts.nl.titles.text.analyzed": 0.17,
-                        "texts.nl.titles.text.folded": 0.17
+                        "texts.nl.contents.text": 0.26,
+                        "texts.nl.titles.text.analyzed": 0.09,
+                        "texts.nl.titles.text.folded": 0.44
                     },
-                    "score": 0.78,
-                    "relevancy": 0.15
+                    "score": 1.57,
+                    "relevancy": 0.18
                 }
             ],
             "recency_bonus": 0.03
@@ -305,16 +304,16 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 1.62,
+            "total_score": 3.77,
             "terms": [
                 {
                     "term": "biologie",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.54,
+                        "texts.nl.contents.text.folded": 1.62,
                         "texts.nl.contents.text.analyzed": 0.54,
-                        "texts.nl.contents.text": 0.54
+                        "texts.nl.contents.text": 1.62
                     },
-                    "score": 1.62,
+                    "score": 3.77,
                     "relevancy": 1.0
                 }
             ],
@@ -327,30 +326,30 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 2.4,
+            "total_score": 5.34,
             "terms": [
                 {
                     "term": "biologie",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.54,
+                        "texts.nl.contents.text.folded": 1.62,
                         "texts.nl.contents.text.analyzed": 0.54,
-                        "texts.nl.contents.text": 0.54
+                        "texts.nl.contents.text": 1.62
                     },
-                    "score": 1.62,
-                    "relevancy": 0.67
+                    "score": 3.77,
+                    "relevancy": 0.71
                 },
                 {
                     "term": "didactiek",
                     "fields": {
-                        "texts.nl.contents.text.folded": 0.09,
-                        "texts.nl.titles.text": 0.17,
+                        "texts.nl.contents.text.folded": 0.26,
+                        "texts.nl.titles.text": 0.44,
                         "texts.nl.contents.text.analyzed": 0.09,
-                        "texts.nl.contents.text": 0.09,
-                        "texts.nl.titles.text.analyzed": 0.17,
-                        "texts.nl.titles.text.folded": 0.17
+                        "texts.nl.contents.text": 0.26,
+                        "texts.nl.titles.text.analyzed": 0.09,
+                        "texts.nl.titles.text.folded": 0.44
                     },
-                    "score": 0.78,
-                    "relevancy": 0.33
+                    "score": 1.57,
+                    "relevancy": 0.29
                 }
             ],
             "recency_bonus": 0.03
