@@ -1,6 +1,9 @@
+from unittest import TestCase
+
 from tests.base import SearchClientIntegrationTestCase
 from search_client.constants import Platforms, Entities
 from search_client.exceptions import ResultNotFound
+from search_client.serializers.core import SearchTermExplanation
 
 
 def round_scores(explanation_dump: dict) -> dict:
@@ -364,3 +367,29 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         with self.assertRaises(ResultNotFound):
             self.instance.explain_result(identifier, "not-found")
+
+
+class TestSearchTermExplanation(TestCase):
+
+    explanation_descriptions = [
+        "weight(Synonym(texts.nl.contents.text.analyzed:gevende texts.nl.contents.text.analyzed:leiding texts.nl.contents.text.analyzed:leidinggevende) in 574) [PerFieldSimilarity], result of:",  # noqa: E501
+        "weight(texts.nl.descriptions.text.folded:leidinggevende in 574) [PerFieldSimilarity], result of:"
+    ]
+    expected_fields = [
+        "texts.nl.contents.text.analyzed",
+        "texts.nl.descriptions.text.folded",
+    ]
+    expected_terms = [
+        "gevende | leiding | leidinggevende",
+        "leidinggevende",
+    ]
+
+    def test_parse_explanation_description(self):
+        for ix, test_description in enumerate(self.explanation_descriptions):
+            field, term = SearchTermExplanation.parse_explanation_description(test_description)
+            self.assertEqual(term, self.expected_terms[ix])
+            self.assertEqual(field, self.expected_fields[ix])
+
+    def test_parse_explanation_descriptions_no_match(self):
+        self.assertRaises(ValueError, SearchTermExplanation.parse_explanation_description, "")
+        self.assertRaises(ValueError, SearchTermExplanation.parse_explanation_description, "sum of:")

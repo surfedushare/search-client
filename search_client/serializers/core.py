@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import ClassVar, Pattern
 from enum import Enum
 import re
 
@@ -47,7 +47,9 @@ class SearchTermExplanation(BaseModel):
     score: float | None = Field(default=None)
     relevancy: float | None = Field(default=None)
 
-    _explanation_description_pattern: ClassVar[str] = re.compile(r"^weight\((?P<field>.+):(?P<term>.+) in \d+\)")
+    _explanation_description_pattern: ClassVar[Pattern[str]] = re.compile(
+        r"(?P<field>\w+(?:\.\w+)*):(?P<term>[^\s)]+)"
+    )
 
     def update(self, total_score: float, score_precision: int = 5) -> None:
         self.score = round(sum(self.fields.values()), score_precision)
@@ -55,14 +57,18 @@ class SearchTermExplanation(BaseModel):
 
     @classmethod
     def parse_explanation_description(cls, description: str) -> tuple[str, str]:
-        match = cls._explanation_description_pattern.match(description)
-        if not match:
+        matches = cls._explanation_description_pattern.finditer(description)
+        matches = list(matches)
+        if not matches:
             raise ValueError(f"Expected weight description but got: {description}")
-        # closing_parenthesis = description.find(" in 0)")
-        # clean_description = description[:closing_parenthesis].replace("weight(", "")
-        # split_description = clean_description.split(":")
-        # assert len(split_description) == 2, f"Expected description to contain 2 part but got: {split_description}"
-        return match.group("field"), match.group("term")
+        # Concatenate matches to a single field and term
+        field = None
+        term = ""
+        for match in matches:
+            field = match.group("field")
+            term += match.group("term") + " | "
+        term = term.strip(" | ")
+        return field, term
 
     def __lt__(self, other: SearchTermExplanation) -> bool:
         if self.score is None:
