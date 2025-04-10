@@ -11,6 +11,8 @@ class TestIsValidPresetSearchConfiguration(TestCase):
     def test_get_all_preset_keys(self):
         presets = get_all_preset_keys()
         self.assertEqual(presets, [
+            "organizations", "organizations:default",
+            "persons", "persons:default",
             "products", "products:default", "products:multilingual-indices",
             "projects", "projects:default",
         ])
