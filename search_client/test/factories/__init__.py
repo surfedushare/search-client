@@ -2,3 +2,4 @@ from search_client.test.factories.learning_material import generate_nl_material,
 from search_client.test.factories.research_product import generate_nl_product, generate_product
 from search_client.test.factories.projects import generate_project
 from search_client.test.factories.organizations import generate_organization
+from search_client.test.factories.persons import generate_person

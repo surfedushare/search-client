@@ -7,8 +7,9 @@ from search_client.opensearch.configuration import (
     build_product_search_configuration,
     ProjectSearchConfiguration,
     OrganizationSearchConfiguration,
+    PersonSearchConfiguration
 )
-from search_client.serializers import Project, Organization
+from search_client.serializers import Project, Organization, Researcher
 
 
 _EDUSOURCES_PRESETS = {
@@ -38,6 +39,16 @@ _PUBLINOVA_PRESETS = {
         distance_feature_field=None,
         serializers={
             Entities.ORGANIZATIONS: Organization
+        }
+    ),
+    "persons:default": PersonSearchConfiguration(
+        platform=Platforms.PUBLINOVA,
+        entities={Entities.PERSONS},
+        filter_fields=set(),
+        search_fields=["name", "description"],
+        distance_feature_field=None,
+        serializers={
+            Entities.PERSONS: Researcher
         }
     )
 }

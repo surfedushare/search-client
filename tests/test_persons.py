@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from search_client.serializers.persons import Contact, Researcher, Person
-from search_client.test.factories.persons import generate_person
+from search_client.test.factories import generate_person
 
 
 class TestContactModel(TestCase):
