@@ -39,6 +39,9 @@ def build_organizations_index_configuration() -> dict:
                         }
                     }
                 },
+                "type": {
+                    "type": "keyword"
+                },
                 ##########################################
                 # Required fields for search client
                 ##########################################
