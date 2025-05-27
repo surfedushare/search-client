@@ -53,6 +53,11 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 4.38,
@@ -76,14 +81,18 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
                     "score": 1.75,
                     "relevancy": 0.4
                 }
-            ],
-            "recency_bonus": 0.03
+            ]
         })
 
     def test_explain_result_math_research(self):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde onderzoek")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 5.42,
@@ -122,14 +131,18 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
                     "score": 1.04,
                     "relevancy": 0.19
                 }
-            ],
-            "recency_bonus": 0.03
+            ]
         })
 
     def test_explain_result_biology(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
             "total_score": 1.62,
@@ -144,14 +157,18 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
                     "score": 1.62,
                     "relevancy": 1.0
                 }
-            ],
-            "recency_bonus": 0.05
+            ]
         })
 
     def test_explain_result_biology_research(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie onderzoek")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
             "total_score": 2.66,
@@ -182,8 +199,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
                     "score": 1.04,
                     "relevancy": 0.39
                 }
-            ],
-            "recency_bonus": 0.05
+            ]
         })
 
     def test_explain_result_no_search(self):
