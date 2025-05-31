@@ -34,7 +34,7 @@ _PUBLINOVA_PRESETS = {
     "organizations:default": OrganizationSearchConfiguration(
         platform=Platforms.PUBLINOVA,
         entities={Entities.ORGANIZATIONS},
-        filter_fields=set(),
+        filter_fields={"type"},
         search_fields=["name", "description"],
         distance_feature_field=None,
         serializers={
