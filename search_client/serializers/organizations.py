@@ -23,6 +23,7 @@ class Organization(BaseOrganization):
     set: str
     provider: Provider | str | None = Field(default=None)
     state: EntityStates = Field(default=EntityStates.ACTIVE)
+    score: float = Field(default=0)
 
     description: str | None = Field(default=None)
 
