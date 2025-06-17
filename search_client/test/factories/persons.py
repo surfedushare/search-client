@@ -5,7 +5,13 @@ PERSONS = {
         "provider": "sharekit",
         "external_id": "d5e05c12-0648-4129-9386-408d47b6f8c0",
         "name": "Brian May",
-        "themes": ["Queen"]
+        "themes": ["Queen"],
+        "socials": [
+            {
+                "type": "myspace",
+                "url": "https://myspace.com/brianmay"
+            }
+        ]
     }
 }
 

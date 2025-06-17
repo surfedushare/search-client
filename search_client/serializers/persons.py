@@ -6,6 +6,12 @@ from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider
 
 
+
+class SocialLink(BaseModel):
+    type: str
+    url: HttpUrl
+
+
 class Contact(BaseModel):
     name: str | None = Field(default=None)
     email: EmailStr | None = Field(default=None)
@@ -50,6 +56,7 @@ class Person(BaseModel):
     email: EmailStr | None = Field(default=None)
     phone: str | None = Field(default=None)
     photo_url: HttpUrl | None = Field(default=None)
+    socials: list[SocialLink] = Field(default_factory=list)
 
     external_id: str | None = Field(default=None, description="The id of the person in the source system.")
     isni: str | None = Field(default=None)
