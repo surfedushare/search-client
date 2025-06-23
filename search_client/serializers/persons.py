@@ -6,7 +6,6 @@ from search_client.constants import Entities
 from search_client.serializers.core import EntityStates, Provider
 
 
-
 class SocialLink(BaseModel):
     type: str
     url: HttpUrl
