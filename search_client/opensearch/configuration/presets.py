@@ -24,7 +24,10 @@ _PUBLINOVA_PRESETS = {
         platform=Platforms.PUBLINOVA,
         entities={Entities.PROJECTS},
         filter_fields={"project_status", "provider"},
-        search_fields=["title", "description", "keywords", "keywords.folded", "goal", "approach", "results"],
+        search_fields=[
+            "title", "description", "keywords", "keywords.folded", "goal", "approach", "results",
+            "provider.filter_search",
+        ],
         distance_feature_field=None,
         serializers={
             Entities.PROJECTS: Project
@@ -34,7 +37,7 @@ _PUBLINOVA_PRESETS = {
         platform=Platforms.PUBLINOVA,
         entities={Entities.ORGANIZATIONS},
         filter_fields={"type"},
-        search_fields=["name", "description"],
+        search_fields=["name", "description", "provider.filter_search"],
         distance_feature_field=None,
         serializers={
             Entities.ORGANIZATIONS: Organization
@@ -44,7 +47,7 @@ _PUBLINOVA_PRESETS = {
         platform=Platforms.PUBLINOVA,
         entities={Entities.PERSONS},
         filter_fields=set(),
-        search_fields=["name", "description"],
+        search_fields=["name", "description", "provider.filter_search"],
         distance_feature_field=None,
         serializers={
             Entities.PERSONS: Researcher

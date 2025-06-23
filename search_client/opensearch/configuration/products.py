@@ -73,6 +73,8 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "authors.name.folded",
             "parties.name.folded",
             "projects.name.folded",
+
+            "provider.filter_search"
         ]
     else:
         raise ValueError(f"Can't build product search configuration for platform: {platform}")

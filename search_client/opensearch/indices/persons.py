@@ -53,7 +53,12 @@ def build_persons_index_configuration() -> dict:
                     "analyzer": "trigram"
                 },
                 "provider": {  # a cross-entity filter field
-                    "type": "keyword"
+                    "type": "keyword",
+                    "fields": {
+                        "filter_search": {  # dirty fix to allow "filtering" by provider for Publinova through search
+                            "type": "text",
+                        }
+                    }
                 },
             }
         }
