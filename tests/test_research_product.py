@@ -406,3 +406,16 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
             "_source": self.get_document_factory(Entities.PRODUCTS)(),
         }
         self.assertRaises(ValueError,  self.instance.parse_search_hit, [hit])
+
+
+class TestResearchProductMultilingualIndicesSearchClient(TestResearchProductSearchClient):
+
+    # Attributes used by SearchClientIntegrationTestCase
+    platform = Platforms.PUBLINOVA
+    presets = ["products:multilingual-indices"]
+
+    # Attributes for test cases in this file
+    aggregation_key = "drilldowns"
+    datetime_field = "publisher_date"
+    highlight_key = "text"
+    has_integer_stats = True

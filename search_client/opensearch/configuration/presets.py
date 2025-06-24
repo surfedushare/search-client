@@ -19,6 +19,7 @@ _EDUSOURCES_PRESETS = {
 
 
 _PUBLINOVA_PRESETS = {
+    "products:multilingual-indices": build_multilingual_indices_search_configuration(Platforms.PUBLINOVA),
     "products:default": build_product_search_configuration(Platforms.PUBLINOVA),
     "projects:default": ProjectSearchConfiguration(
         platform=Platforms.PUBLINOVA,
