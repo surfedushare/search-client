@@ -346,9 +346,9 @@ def generate_material(educational_levels=None, title=None, description=None, tec
                       copyright=None, publisher_date=None, topic="math", external_id=None):
     copy = MATERIALS[topic].copy()
     if title:
-        copy["title"] = title
+        copy["texts"]["nl"]["titles"][0]["text"] = title
     if description:
-        copy["description"] = description
+        copy["texts"]["nl"]["descriptions"][0]["text"] = description
     if external_id:
         copy["external_id"] = external_id
     if educational_levels:
@@ -363,5 +363,5 @@ def generate_material(educational_levels=None, title=None, description=None, tec
         copy["copyright"] = copyright
     if publisher_date:
         copy["publisher_date"] = publisher_date
-        copy["publication_date"] = publisher_date
+        copy["published_at"] = publisher_date
     return copy

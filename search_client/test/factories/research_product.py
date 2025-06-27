@@ -291,9 +291,9 @@ def generate_product(title=None, description=None, technical_type=None, source=N
                      publisher_date=None, topic="math", external_id=None):
     copy = PRODUCTS[topic].copy()
     if title:
-        copy["title"] = title
+        copy["texts"]["nl"]["titles"][0]["text"] = title
     if description:
-        copy["description"] = description
+        copy["texts"]["nl"]["descriptions"][0]["text"] = description
     if external_id:
         copy["external_id"] = external_id
     if technical_type:

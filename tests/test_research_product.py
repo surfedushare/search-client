@@ -16,6 +16,7 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
     datetime_field = "publisher_date"
     highlight_key = "texts:contents"
     has_integer_stats = False
+    more_like_this_recommendation = "De wiskunde van Pythagoras"
 
     @classmethod
     def setUpClass(cls):
@@ -355,14 +356,14 @@ class TestResearchProductSearchClient(SearchClientIntegrationTestCase):
     def test_more_like_this(self):
         more_like_this = self.instance.more_like_this("surfsharekit:abc", "nl", is_external_identifier=False)
         self.assertEqual(more_like_this["results_total"]["value"], 4)
-        self.assertEqual(more_like_this["results"][0].title, "Onderzoek over wiskundig denken")
+        self.assertEqual(more_like_this["results"][0].title, self.more_like_this_recommendation)
         none_like_this = self.instance.more_like_this("surfsharekit:does-not-exist", "nl", is_external_identifier=False)
         self.assertEqual(none_like_this["results_total"]["value"], 0)
         self.assertEqual(none_like_this["results"], [])
         # Using external_id as input (legacy)
         legacy_like_this = self.instance.more_like_this("abc", "nl")
         self.assertEqual(legacy_like_this["results_total"]["value"], 4)
-        self.assertEqual(legacy_like_this["results"][0].title, "Onderzoek over wiskundig denken")
+        self.assertEqual(more_like_this["results"][0].title, self.more_like_this_recommendation)
         legacy_none_like_this = self.instance.more_like_this("does-not-exist", "nl")
         self.assertEqual(legacy_none_like_this["results_total"]["value"], 0)
         self.assertEqual(legacy_none_like_this["results"], [])
@@ -419,3 +420,4 @@ class TestResearchProductMultilingualIndicesSearchClient(TestResearchProductSear
     datetime_field = "publisher_date"
     highlight_key = "text"
     has_integer_stats = True
+    more_like_this_recommendation = "Onderzoek over wiskundig denken"
