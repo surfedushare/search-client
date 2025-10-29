@@ -502,7 +502,7 @@ class SearchClient:
                         "field": self.configuration.distance_feature_field,
                         "pivot": "90d",
                         "origin": "now",
-                        "boost": 1.15
+                        "boost": 2
                     }
                 })
         return body

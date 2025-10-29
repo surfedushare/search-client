@@ -270,7 +270,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "relevancy": 0.25
                 }
             ],
-            "recency_bonus": 0.03
+            "recency_bonus": 0.06
         })
 
     def test_explain_result_math_didactic(self):
@@ -313,7 +313,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "relevancy": 0.16
                 }
             ],
-            "recency_bonus": 0.03
+            "recency_bonus": 0.06
         })
 
     def test_explain_result_biology(self):
@@ -335,7 +335,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "relevancy": 1.0
                 }
             ],
-            "recency_bonus": 0.03
+            "recency_bonus": 0.06
         })
 
     def test_explain_result_biology_didactic(self):
@@ -370,7 +370,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "relevancy": 0.5
                 }
             ],
-            "recency_bonus": 0.03
+            "recency_bonus": 0.06
         })
 
     def test_explain_result_no_search(self):
