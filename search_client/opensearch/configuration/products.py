@@ -52,6 +52,9 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "sectors.en^2", "sectors.en.analyzed^2", "sectors.en.folded^2",
         ]
     elif platform is Platforms.PUBLINOVA:
+        filter_fields |= {
+            "research_object_type", "research_themes"
+        }
         serializer = ResearchProduct
         search_fields = [
             "texts.nl.titles.text^2", "texts.nl.titles.text.analyzed^2", "texts.nl.titles.text.folded^2",
