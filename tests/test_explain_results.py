@@ -60,7 +60,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         )
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 4.33,
+            "total_score": 4.38,
             "terms": [
                 {
                     "term": "wiskund",
@@ -94,7 +94,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         )
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 6.54,
+            "total_score": 6.6,
             "terms": [
                 {
                     "term": "wiskund",
@@ -144,7 +144,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         )
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 1.62,
+            "total_score": 1.69,
             "terms": [
                 {
                     "term": "biologie",
@@ -170,7 +170,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         )
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 3.83,
+            "total_score": 3.9,
             "terms": [
                 {
                     "term": "onderzoek",
@@ -249,7 +249,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 6.98,
+            "total_score": 7.03,
             "terms": [
                 {
                     "term": "wiskunde",
@@ -279,7 +279,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
-            "total_score": 10.74,
+            "total_score": 10.8,
             "terms": [
                 {
                     "term": "wiskunde",
@@ -322,7 +322,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 3.77,
+            "total_score": 3.83,
             "terms": [
                 {
                     "term": "biologie",
@@ -344,7 +344,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 7.54,
+            "total_score": 7.59,
             "terms": [
                 {
                     "term": "biologie",

@@ -322,7 +322,7 @@ class SearchClient:
 
         return SearchResultExplanation(
             srn=result["_id"],
-            total_score=round(search_details["value"], precision),
+            total_score=round(result["explanation"]["value"], precision),
             terms=sorted_result_terms,
             recency_bonus=round(recency_details["value"], precision),
         )
