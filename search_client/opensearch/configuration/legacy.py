@@ -48,7 +48,7 @@ def build_multilingual_indices_search_configuration(platform: Platforms) -> Sear
     elif platform is Platforms.PUBLINOVA:
         document_type = DocumentTypes.RESEARCH_PRODUCT
         serializer = ResearchProduct
-        filter_fields |= {"research_object_type", "research_themes", "has_material"}
+        filter_fields |= {"research_object_type", "research_themes"}
     else:
         raise ValueError(f"Can't build product search configuration for platform: {platform}")
     return MultilingualIndicesSearchConfiguration(
