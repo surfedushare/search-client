@@ -58,17 +58,20 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "texts.nl.titles.text^5", "texts.nl.titles.text.analyzed", "texts.nl.titles.text.folded^5",
             "texts.nl.subtitles.text^5", "texts.nl.subtitles.text.analyzed", "texts.nl.subtitles.text.folded^5",
             "texts.nl.contents.text^3", "texts.nl.contents.text.analyzed", "texts.nl.contents.text.folded^3",
-            "texts.nl.descriptions.text^3", "texts.nl.descriptions.text.analyzed", "texts.nl.descriptions.text.folded^3",
+            "texts.nl.descriptions.text^3", "texts.nl.descriptions.text.analyzed",
+            "texts.nl.descriptions.text.folded^3",
 
             "texts.en.titles.text^5", "texts.en.titles.text.analyzed", "texts.en.titles.text.folded^5",
             "texts.en.subtitles.text^5", "texts.en.subtitles.text.analyzed", "texts.en.subtitles.text.folded^5",
             "texts.en.contents.text^3", "texts.en.contents.text.analyzed", "texts.en.contents.text.folded^3",
-            "texts.en.descriptions.text^3", "texts.en.descriptions.text.analyzed", "texts.en.descriptions.text.folded^3",
+            "texts.en.descriptions.text^3", "texts.en.descriptions.text.analyzed",
+            "texts.en.descriptions.text.folded^3",
 
             "texts.unk.titles.text^5", "texts.unk.titles.text.analyzed", "texts.unk.titles.text.folded^5",
             "texts.unk.subtitles.text^5", "texts.unk.subtitles.text.analyzed", "texts.unk.subtitles.text.folded^5",
             "texts.unk.contents.text^3", "texts.unk.contents.text.analyzed", "texts.unk.contents.text.folded^3",
-            "texts.unk.descriptions.text^3", "texts.unk.descriptions.text.analyzed", "texts.unk.descriptions.text.folded^3",
+            "texts.unk.descriptions.text^3", "texts.unk.descriptions.text.analyzed",
+            "texts.unk.descriptions.text.folded^3",
 
             "keywords^4", "keywords.folded^4",
             "authors.name.folded^2",
