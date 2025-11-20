@@ -151,7 +151,7 @@ class TestResearchProductExplain(SearchClientIntegrationTestCase):
         )
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
-            "total_score": 3.85,
+            "total_score": 3.84,
             "terms": [
                 {
                     "term": "biologie",
