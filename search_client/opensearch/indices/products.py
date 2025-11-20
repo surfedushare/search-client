@@ -585,6 +585,9 @@ def build_research_product_search_mapping_properties(nl_decompound_word_list: st
         "research_object_type": {
             "type": "keyword"
         },
+        "has_material": {
+            "type": "keyword"
+        },
         "parties": {
             "type": "text",
             "fields": {
