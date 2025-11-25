@@ -15,6 +15,7 @@ class BaseOrganization(BaseModel):
 class GenericOrganization(BaseModel):
     name: str
     srn: str | None = Field(default=None)  # outside of education context a global identifier will often be missing
+    ror: str | None = Field(default=None, description="Research Organization Registry identifier")
 
 
 class Organization(BaseOrganization):
