@@ -129,6 +129,8 @@ class ResearchProduct(Product):
     def serialize_subtitle(self, subtitle: str, _info):
         if not subtitle:
             return
+        if self.title is None:
+            return subtitle
         return subtitle if subtitle not in self.title else None
 
     def _list_first_author(self):
