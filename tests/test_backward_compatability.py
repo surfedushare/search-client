@@ -738,6 +738,7 @@ class TestPydanticToDictConversion(TestCase):
             "parties": [
                 "Wikiwijs Maken"
             ],
+            "published_in": None,
             "research_themes": [
                 "exact_informatica"
             ],
@@ -843,6 +844,7 @@ class TestPydanticToDictConversion(TestCase):
             "parties": [
                 "Wikiwijs Maken"
             ],
+            "published_in": None,
             "research_themes": [
                 "aarde_milieu"
             ],
