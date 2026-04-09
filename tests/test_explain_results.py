@@ -258,6 +258,11 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
 
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
@@ -281,14 +286,19 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "score": 1.73,
                     "relevancy": 0.25
                 }
-            ],
-            "recency_bonus": 0.06
+            ]
         })
 
     def test_explain_result_math_didactic(self):
         identifier = "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10"
         explain_result = self.instance.explain_result(identifier, "wiskunde didactiek")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
+
         self.assertEqual(explain_result_dump, {
             "srn": "sharekit:edusources:3522b79c-928c-4249-a7f7-d2bcb3077f10",
             "total_score": 10.8,
@@ -324,14 +334,19 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "score": 1.73,
                     "relevancy": 0.16
                 }
-            ],
-            "recency_bonus": 0.06
+            ]
         })
 
     def test_explain_result_biology(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
+
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
             "total_score": 3.83,
@@ -346,14 +361,19 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "score": 3.77,
                     "relevancy": 1.0
                 }
-            ],
-            "recency_bonus": 0.06
+            ]
         })
 
     def test_explain_result_biology_didactic(self):
         identifier = "surfsharekit:def"
         explain_result = self.instance.explain_result(identifier, "biologie didactiek")
         explain_result_dump = round_scores(explain_result.model_dump(mode="json"))
+        recency_bonus = explain_result_dump.pop("recency_bonus")
+        self.assertIsInstance(
+            recency_bonus, float,
+            "Expected recency bonus to change over time, but always be a float."
+        )
+
         self.assertEqual(explain_result_dump, {
             "srn": "surfsharekit:def",
             "total_score": 7.59,
@@ -381,8 +401,7 @@ class TestLearningMaterialSearchClient(SearchClientIntegrationTestCase):
                     "score": 3.77,
                     "relevancy": 0.5
                 }
-            ],
-            "recency_bonus": 0.06
+            ]
         })
 
     def test_explain_result_no_search(self):

@@ -600,6 +600,15 @@ def build_research_product_search_mapping_properties(nl_decompound_word_list: st
                     "analyzer": "folding"
                 }
             }
+        },
+        "published_in": {
+            "type": "text",
+            "fields": {
+                "folded": {
+                    "type": "text",
+                    "analyzer": "folding"
+                }
+            }
         }
     }
 

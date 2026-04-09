@@ -118,6 +118,7 @@ class ResearchProduct(Product):
     parties: list[str] = Field(default_factory=list, validation_alias="publishers")
     research_themes: list[str] = Field(default_factory=list)
     projects: list[str] = Field(default_factory=list)
+    published_in: str | None = Field(default=None)
 
     @field_serializer("doi")
     def serialize_doi(self, doi: str, _info):

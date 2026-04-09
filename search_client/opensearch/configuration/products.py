@@ -77,6 +77,7 @@ def build_product_search_configuration(platform: Platforms) -> SearchConfigurati
             "authors.name.folded^2",
             "parties.name.folded^2",
             "projects.name.folded^2",
+            "published_in^2", "published_in.folded^2",
             "publisher_year^3",
 
             "provider.filter_search"
