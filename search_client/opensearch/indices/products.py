@@ -604,10 +604,6 @@ def build_research_product_search_mapping_properties(nl_decompound_word_list: st
         "published_in": {
             "type": "text",
             "fields": {
-                "keyword": {
-                    "type": "keyword",
-                    "ignore_above": 256
-                },
                 "folded": {
                     "type": "text",
                     "analyzer": "folding"
